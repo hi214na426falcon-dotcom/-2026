@@ -1,0 +1,25 @@
+# binbot 既定設定 (CLI 引数で上書き可能)
+# 実運用では payout と horizon を必ず対象業者の実値に合わせること。
+
+data:
+  synth: ou          # ou(平均回帰) / gbm(ランダム) / または data: でCSV指定
+  n: 20000
+  seed: 7
+
+backtest:
+  horizon: 5         # 満期までのバー数 (1分足なら5分)
+  payout: 0.85       # 勝った時の倍率。国内業者は実値が異なるので要確認
+  tie: loss          # 同値の扱い。loss=保守的(勝率を水増ししない)
+  one_position: true
+
+walkforward:
+  train_bars: 6000
+  test_bars: 2000
+  min_trades: 25
+
+papertrade:
+  balance: 100000
+  stake: 1.0
+  risk_pct: 0.0      # >0 で残高比例ステーク
+  warmup: 200
+  lookback: 500

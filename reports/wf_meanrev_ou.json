@@ -1,0 +1,117 @@
+{
+  "mode": "walkforward",
+  "strategy": "mean_reversion",
+  "source": "synth:ou",
+  "windows": [
+    {
+      "train_start": "2023-01-01 00:00:00+00:00",
+      "test_start": "2023-01-05 04:00:00+00:00",
+      "test_end": "2023-01-06 13:19:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 2.5,
+        "rsi_hi": 72,
+        "rsi_lo": 32
+      },
+      "train_score": 0.13846153846153847,
+      "oos_trades": 11
+    },
+    {
+      "train_start": "2023-01-02 09:20:00+00:00",
+      "test_start": "2023-01-06 13:20:00+00:00",
+      "test_end": "2023-01-07 22:39:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 1.5,
+        "rsi_hi": 72,
+        "rsi_lo": 28
+      },
+      "train_score": 0.1716666666666666,
+      "oos_trades": 28
+    },
+    {
+      "train_start": "2023-01-03 18:40:00+00:00",
+      "test_start": "2023-01-07 22:40:00+00:00",
+      "test_end": "2023-01-09 07:59:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 2.5,
+        "rsi_hi": 68,
+        "rsi_lo": 28
+      },
+      "train_score": 0.09999999999999995,
+      "oos_trades": 13
+    },
+    {
+      "train_start": "2023-01-05 04:00:00+00:00",
+      "test_start": "2023-01-09 08:00:00+00:00",
+      "test_end": "2023-01-10 17:19:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 2.5,
+        "rsi_hi": 72,
+        "rsi_lo": 32
+      },
+      "train_score": 0.20250000000000004,
+      "oos_trades": 8
+    },
+    {
+      "train_start": "2023-01-06 13:20:00+00:00",
+      "test_start": "2023-01-10 17:20:00+00:00",
+      "test_end": "2023-01-12 02:39:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 2.5,
+        "rsi_hi": 68,
+        "rsi_lo": 32
+      },
+      "train_score": 0.21931818181818177,
+      "oos_trades": 11
+    },
+    {
+      "train_start": "2023-01-07 22:40:00+00:00",
+      "test_start": "2023-01-12 02:40:00+00:00",
+      "test_end": "2023-01-13 11:59:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 2.5,
+        "rsi_hi": 68,
+        "rsi_lo": 32
+      },
+      "train_score": 0.18589743589743585,
+      "oos_trades": 11
+    },
+    {
+      "train_start": "2023-01-09 08:00:00+00:00",
+      "test_start": "2023-01-13 12:00:00+00:00",
+      "test_end": "2023-01-14 21:19:00+00:00",
+      "params": {
+        "num_std": 1.8,
+        "z_thresh": 2.0,
+        "rsi_hi": 72,
+        "rsi_lo": 28
+      },
+      "train_score": 0.23333333333333328,
+      "oos_trades": 24
+    }
+  ],
+  "stats": {
+    "n_trades": 106,
+    "n_push": 0,
+    "wins": 60,
+    "losses": 46,
+    "win_rate": 0.5660377358490566,
+    "win_rate_ci95": [
+      0.47101182829146454,
+      0.6564444360018451
+    ],
+    "payout": 0.85,
+    "break_even_winrate": 0.5405405405405405,
+    "expectancy": 0.04716981132075473,
+    "edge_vs_breakeven": 0.02549719530851613,
+    "total_pnl": 5.000000000000001,
+    "profit_factor": 1.108695652173913,
+    "max_drawdown": 10.8,
+    "avg_trades_per_day": 11.179960448253132
+  }
+}

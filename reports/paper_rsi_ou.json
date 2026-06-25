@@ -1,0 +1,26 @@
+{
+  "mode": "papertrade",
+  "strategy": "rsi",
+  "source": "synth:ou",
+  "start_balance": 100000.0,
+  "end_balance": 153700.0,
+  "stats": {
+    "n_trades": 468,
+    "n_push": 0,
+    "wins": 282,
+    "losses": 186,
+    "win_rate": 0.6025641025641025,
+    "win_rate_ci95": [
+      0.5575648133877458,
+      0.6458932962829571
+    ],
+    "payout": 0.85,
+    "break_even_winrate": 0.5405405405405405,
+    "expectancy": 114.74358974358974,
+    "edge_vs_breakeven": 0.06202356202356207,
+    "total_pnl": 53700.0,
+    "profit_factor": 1.288709677419355,
+    "max_drawdown": 15400.0,
+    "avg_trades_per_day": 34.231726520038606
+  }
+}
