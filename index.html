@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>走る主務｜Garage Athlete オーナー候補</title>
+<meta name="description" content="ラグビー10年＆主務経験、バイク好きのフリーター。“バイク乗り×アスリート飯”の居場所を作るため、移動販売から挑戦。低糖質・高タンパクの“身体が喜ぶメシ”を届けます。" />
+<style>
+  :root {
+    --accent: #249f80;
+    --accent-dark: #1c7d65;
+    --ink: #1d2b28;
+    --muted: #5f706c;
+    --bg: #f4f7f6;
+    --card: #ffffff;
+    --line: #e4eae8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
+      "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---- Header ---- */
+  .hero {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    padding: 56px 20px 64px;
+    text-align: center;
+  }
+  .hero .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.85);
+    object-fit: cover;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  .hero h1 {
+    font-size: 1.55rem;
+    margin: 18px 0 10px;
+    letter-spacing: 0.02em;
+  }
+  .hero p {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .hero .profile-link {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 10px 26px;
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .hero .profile-link:hover { background: #fff; color: var(--accent-dark); }
+
+  /* ---- Feed ---- */
+  .feed {
+    max-width: 760px;
+    margin: -32px auto 64px;
+    padding: 0 16px;
+  }
+  .section-label {
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 40px 4px 14px;
+  }
+  .card {
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 18px rgba(29, 43, 40, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(29, 43, 40, 0.12);
+  }
+  .card .thumb {
+    width: 100%;
+    aspect-ratio: 1.91 / 1;
+    object-fit: cover;
+    display: block;
+    background: #eef2f1;
+  }
+  .card .thumb.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 2rem;
+    font-weight: 800;
+  }
+  .card .body { padding: 20px 22px 22px; }
+  .card .date {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .card h2 {
+    font-size: 1.12rem;
+    line-height: 1.55;
+    margin: 8px 0 10px;
+  }
+  .card:hover h2 { color: var(--accent-dark); }
+  .card .excerpt {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin: 0 0 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent-dark);
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  .card .more::after { content: "→"; transition: transform 0.2s; }
+  .card:hover .more::after { transform: translateX(4px); }
+
+  /* ---- Footer ---- */
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 0 20px 48px;
+  }
+  footer a { color: var(--accent-dark); font-weight: 600; }
+
+  @media (max-width: 480px) {
+    .hero { padding: 44px 16px 56px; }
+    .hero h1 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <img
+      class="avatar"
+      src="https://assets.st-note.com/production/uploads/images/230192308/profile_f7f59e6485f090c1e2200f20deb47ab7.png?fit=bounds&format=jpeg&quality=85&width=330"
+      alt="走る主務｜Garage Athlete オーナー候補" />
+    <h1>走る主務｜Garage Athlete オーナー候補</h1>
+    <p>
+      ラグビー10年＆主務経験、バイク好きのフリーター。<br />
+      “バイク乗り×アスリート飯”の居場所を作るため、移動販売から挑戦。<br />
+      低糖質・高タンパクの“身体が喜ぶメシ”を届けます。
+    </p>
+    <a class="profile-link" href="https://note.com/human_holly7624" target="_blank" rel="noopener">
+      noteのプロフィールを見る
+    </a>
+  </header>
+
+  <main class="feed">
+    <p class="section-label">最新の記事</p>
+
+    <!-- Item 1 -->
+    <a class="card" href="https://note.com/human_holly7624/n/nb2809e01070b" target="_blank" rel="noopener">
+      <div class="thumb placeholder">走</div>
+      <div class="body">
+        <span class="date">2026年2月27日</span>
+        <h2>【挫折】歓喜の渦の中で、僕は透明人間だった</h2>
+        <p class="excerpt">② 花園のピッチに立てなかった瞬間 — 冬の近鉄花園ラグビー場。</p>
+        <span class="more">続きをみる</span>
+      </div>
+    </a>
+
+    <!-- Item 2 -->
+    <a class="card" href="https://note.com/human_holly7624/n/n4583d555e739" target="_blank" rel="noopener">
+      <img
+        class="thumb"
+        loading="lazy"
+        src="https://assets.st-note.com/production/uploads/images/254723976/rectangle_large_type_2_9bc5f7a98ff9c93187f53b0ad4e77a7e.png?width=800"
+        alt="【覚悟】花園に出られなかった僕が、アスリートのための「秘密基地」を作る理由" />
+      <div class="body">
+        <span class="date">2026年2月26日</span>
+        <h2>【覚悟】花園に出られなかった僕が、アスリートのための「秘密基地」を作る理由</h2>
+        <p class="excerpt">① 導入：なぜ、今さら「花園」の話から始めるのか —「お前は何のために、そこに立っているんだ？」</p>
+        <span class="more">続きをみる</span>
+      </div>
+    </a>
+
+    <!-- Item 3 -->
+    <a class="card" href="https://note.com/human_holly7624/n/ndb125d9ff8c3" target="_blank" rel="noopener">
+      <img
+        class="thumb"
+        loading="lazy"
+        src="https://assets.st-note.com/production/uploads/images/253913668/rectangle_large_type_2_d447f6411160cceb02d1a8f4989fe47f.png?width=800"
+        alt="【自己紹介】花園準優勝のスタンドで泣いた僕が、アスリートとバイク乗りのための「秘密基地」を創る理由" />
+      <div class="body">
+        <span class="date">2026年2月23日</span>
+        <h2>【自己紹介】花園準優勝のスタンドで泣いた僕が、アスリートとバイク乗りのための「秘密基地」を創る理由</h2>
+        <p class="excerpt">①なぜ、最も思い出したくない「花園」の話から始めるのか —「あの時、ピッチに立っていたら、今の自分はどうなっていただろうか」</p>
+        <span class="more">続きをみる</span>
+      </div>
+    </a>
+  </main>
+
+  <footer>
+    © 走る主務｜Garage Athlete オーナー候補 ・
+    <a href="https://note.com/human_holly7624" target="_blank" rel="noopener">note.com/human_holly7624</a>
+  </footer>
+</body>
+</html>
