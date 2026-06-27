@@ -5,29 +5,23 @@ note.com 下書き自動入力スクリプト
 使い方:
   python publish_note.py drafts/01_原体験.md
 
-事前準備:
-  同じフォルダの .env ファイルに以下を書く
-    NOTE_EMAIL=your@email.com
-    NOTE_PASSWORD=yourpassword
+仕組み:
+  - 初回だけ、開いたブラウザで自分でnote.comにログインする（手動）。
+  - ログイン状態は .note_browser_data フォルダに保存されるので、
+    2回目以降はログイン不要で、いきなり記事入力まで自動で進む。
+  - タイトルと本文を自動入力 → 「公開する」ボタンを押すだけの状態で止まる。
 
-動作:
-  ブラウザが開いてnote.comにログイン → タイトルと本文を自動入力 →
-  「公開する」ボタンを押すだけの状態で止まる（自分でクリックして投稿）
+メール/パスワードをスクリプトに渡す必要はありません。
 """
 
 import sys
-import os
 import time
 from pathlib import Path
 
-# .envファイルを自動で読み込む
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass  # python-dotenv未インストールの場合は環境変数から読む
-
 from playwright.sync_api import sync_playwright
+
+# ログイン状態を保存するフォルダ（このフォルダがあればログイン継続）
+USER_DATA_DIR = str(Path(__file__).parent / ".note_browser_data")
 
 
 def extract_title_and_body(filepath: str) -> tuple:
@@ -47,17 +41,20 @@ def extract_title_and_body(filepath: str) -> tuple:
     return title, body
 
 
+def type_body(page, body: str):
+    """本文を1行ずつ入力する（ProseMirrorエディタに段落として入る）"""
+    lines = body.split("\n")
+    for i, line in enumerate(lines):
+        if line:
+            page.keyboard.insert_text(line)
+        if i < len(lines) - 1:
+            page.keyboard.press("Enter")
+
+
 def main():
     if len(sys.argv) < 2:
         print("使い方: python publish_note.py <下書きファイルのパス>")
         print("例:     python publish_note.py drafts/01_原体験.md")
-        sys.exit(1)
-
-    email = os.environ.get("NOTE_EMAIL")
-    password = os.environ.get("NOTE_PASSWORD")
-
-    if not email or not password:
-        print("エラー: .envファイルにNOTE_EMAILとNOTE_PASSWORDを設定してください。")
         sys.exit(1)
 
     draft_path = sys.argv[1]
@@ -71,62 +68,78 @@ def main():
     print("ブラウザを起動しています...")
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        page = browser.new_page()
+        context = p.chromium.launch_persistent_context(
+            USER_DATA_DIR,
+            headless=False,
+            viewport={"width": 1280, "height": 900},
+        )
+        page = context.pages[0] if context.pages else context.new_page()
 
-        # ログイン
-        page.goto("https://note.com/login")
-        page.wait_for_selector('input[name="email"]', timeout=10000)
-        page.fill('input[name="email"]', email)
-        page.fill('input[name="password"]', password)
-        page.click('button[type="submit"]')
-        page.wait_for_url("**/note.com/**", timeout=15000)
-        time.sleep(2)
-        print("ログイン完了")
-
-        # 新規記事作成ページへ
+        # 新規記事ページを開く
         page.goto("https://note.com/notes/new")
-        time.sleep(3)
+        time.sleep(4)
+
+        # ログインしているか確認（ログインページに飛ばされたら手動ログイン）
+        if "login" in page.url or "signup" in page.url:
+            print("\n" + "="*54)
+            print("【初回のみ】開いたブラウザでnote.comにログインしてください。")
+            print("ログインが終わったら、この画面で Enter を押してください。")
+            print("（次回からはログイン不要で自動で進みます）")
+            print("="*54)
+            input("\nログインが終わったら Enter を押す > ")
+            page.goto("https://note.com/notes/new")
+            time.sleep(4)
 
         # タイトル入力
-        try:
-            title_el = page.locator(
-                'textarea[placeholder*="タイトル"], '
-                'input[placeholder*="タイトル"], '
-                '[data-testid="editor-title"]'
-            ).first
-            title_el.click()
-            title_el.fill(title)
-            time.sleep(1)
-            print("タイトル入力完了")
-        except Exception:
-            print("警告: タイトル欄を自動入力できませんでした。手動でタイトルを入力してください。")
+        title_ok = False
+        for sel in [
+            'textarea[placeholder="記事タイトル"]',
+            'textarea[placeholder*="タイトル"]',
+            'input[placeholder*="タイトル"]',
+            '[data-testid="editor-title"]',
+        ]:
+            try:
+                el = page.locator(sel).first
+                el.wait_for(state="visible", timeout=3000)
+                el.click()
+                page.keyboard.insert_text(title)
+                title_ok = True
+                print("タイトル入力完了")
+                break
+            except Exception:
+                continue
+        if not title_ok:
+            print("※ タイトルを自動入力できませんでした。手動で入力してください。")
 
-        # 本文入力（クリップボード経由でペースト）
-        try:
-            body_el = page.locator(
-                '.ProseMirror, '
-                '[contenteditable="true"]:not([data-testid="editor-title"])'
-            ).first
-            body_el.click()
-            page.evaluate(f"navigator.clipboard.writeText({repr(body)})")
-            time.sleep(0.5)
-            body_el.press("Control+a")
-            body_el.press("Control+v")
-            time.sleep(2)
-            print("本文入力完了")
-        except Exception:
-            print("警告: 本文を自動入力できませんでした。手動で本文を貼り付けてください。")
+        time.sleep(1)
 
-        print("\n" + "="*50)
+        # 本文入力
+        body_ok = False
+        for sel in [
+            '.ProseMirror',
+            '[contenteditable="true"]',
+        ]:
+            try:
+                el = page.locator(sel).first
+                el.wait_for(state="visible", timeout=3000)
+                el.click()
+                time.sleep(0.5)
+                type_body(page, body)
+                body_ok = True
+                print("本文入力完了")
+                break
+            except Exception:
+                continue
+        if not body_ok:
+            print("※ 本文を自動入力できませんでした。手動で貼り付けてください。")
+
+        print("\n" + "="*54)
         print("✅ 準備完了！")
-        print("「公開する」ボタンを押して投稿してください。")
-        print("（ウィンドウを閉じるとスクリプトが終了します）")
-        print("="*50 + "\n")
-
-        # ユーザーが投稿操作するまでウィンドウを保持（最大10分）
-        page.wait_for_timeout(600000)
-        browser.close()
+        print("内容を確認して「公開する」ボタンを押してください。")
+        print("（このPowerShell画面で Enter を押すとブラウザを閉じます）")
+        print("="*54)
+        input("\n投稿が終わったら Enter を押す > ")
+        context.close()
 
 
 if __name__ == "__main__":
