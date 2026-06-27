@@ -6,8 +6,9 @@ note.com 下書き自動入力スクリプト
   python publish_note.py drafts/01_原体験.md
 
 事前準備:
-  export NOTE_EMAIL="あなたのnote.comメールアドレス"
-  export NOTE_PASSWORD="あなたのnote.comパスワード"
+  同じフォルダの .env ファイルに以下を書く
+    NOTE_EMAIL=your@email.com
+    NOTE_PASSWORD=yourpassword
 
 動作:
   ブラウザが開いてnote.comにログイン → タイトルと本文を自動入力 →
@@ -18,6 +19,14 @@ import sys
 import os
 import time
 from pathlib import Path
+
+# .envファイルを自動で読み込む
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv未インストールの場合は環境変数から読む
+
 from playwright.sync_api import sync_playwright
 
 
@@ -48,9 +57,7 @@ def main():
     password = os.environ.get("NOTE_PASSWORD")
 
     if not email or not password:
-        print("エラー: 環境変数を設定してください。")
-        print("  export NOTE_EMAIL='your@email.com'")
-        print("  export NOTE_PASSWORD='yourpassword'")
+        print("エラー: .envファイルにNOTE_EMAILとNOTE_PASSWORDを設定してください。")
         sys.exit(1)
 
     draft_path = sys.argv[1]
@@ -64,10 +71,7 @@ def main():
     print("ブラウザを起動しています...")
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=False,
-            executable_path="/opt/pw-browsers/chromium"
-        )
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         # ログイン
@@ -105,7 +109,6 @@ def main():
                 '[contenteditable="true"]:not([data-testid="editor-title"])'
             ).first
             body_el.click()
-            # クリップボードに本文をセット
             page.evaluate(f"navigator.clipboard.writeText({repr(body)})")
             time.sleep(0.5)
             body_el.press("Control+a")
