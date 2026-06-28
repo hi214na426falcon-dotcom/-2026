@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
-note.com 下書き自動入力スクリプト
+note.com 下書き自動入力スクリプト（普段使いのChromeに後から接続する方式）
+
+なぜこの方式か:
+  note.comはログイン時にreCAPTCHAを出す。自動操作で立ち上げたブラウザは
+  ロボット判定されてログインできない。そこで「自分で普通にログインした
+  Chrome」に、このスクリプトを後から接続して記事だけ入力する。
 
 使い方:
-  python publish_note.py drafts/01_原体験.md
-
-仕組み:
-  - 初回だけ、開いたブラウザで自分でnote.comにログインする（手動）。
-  - ログイン状態は .note_browser_data フォルダに保存されるので、
-    2回目以降はログイン不要で、いきなり記事入力まで自動で進む。
-  - タイトルと本文を自動入力 → 「公開する」ボタンを押すだけの状態で止まる。
-
-メール/パスワードをスクリプトに渡す必要はありません。
+  ① start_chrome.bat をダブルクリック
+     → デバッグ用Chromeが開く。note.comに普通にログインする（初回だけ）。
+  ② PowerShellで実行:
+       python publish_note.py drafts/01_原体験.md
+     → ①のChromeに接続し、タイトルと本文を自動入力。
+       あとは「公開する」を押すだけの状態で止まる。
 """
 
 import sys
@@ -20,8 +22,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-# ログイン状態を保存するフォルダ（このフォルダがあればログイン継続）
-USER_DATA_DIR = str(Path(__file__).parent / ".note_browser_data")
+CDP_URL = "http://localhost:9222"
 
 
 def extract_title_and_body(filepath: str) -> tuple:
@@ -65,28 +66,34 @@ def main():
     title, body = extract_title_and_body(draft_path)
     print(f"\nタイトル: {title}")
     print(f"本文冒頭: {body[:40]}...\n")
-    print("ブラウザを起動しています...")
 
     with sync_playwright() as p:
-        context = p.chromium.launch_persistent_context(
-            USER_DATA_DIR,
-            headless=False,
-            viewport={"width": 1280, "height": 900},
-        )
-        page = context.pages[0] if context.pages else context.new_page()
+        # 先に起動済みのChrome（start_chrome.bat）に接続する
+        try:
+            browser = p.chromium.connect_over_cdp(CDP_URL)
+        except Exception:
+            print("="*54)
+            print("Chromeに接続できませんでした。")
+            print("先に start_chrome.bat をダブルクリックしてChromeを開き、")
+            print("note.comにログインしてから、もう一度実行してください。")
+            print("="*54)
+            sys.exit(1)
+
+        context = browser.contexts[0] if browser.contexts else browser.new_context()
+        page = context.new_page()
 
         # 新規記事ページを開く
         page.goto("https://note.com/notes/new")
         time.sleep(4)
 
-        # ログインしているか確認（ログインページに飛ばされたら手動ログイン）
+        # ログインしているか確認
         if "login" in page.url or "signup" in page.url:
-            print("\n" + "="*54)
-            print("【初回のみ】開いたブラウザでnote.comにログインしてください。")
-            print("ログインが終わったら、この画面で Enter を押してください。")
-            print("（次回からはログイン不要で自動で進みます）")
             print("="*54)
-            input("\nログインが終わったら Enter を押す > ")
+            print("まだログインしていないようです。")
+            print("開いているChromeでnote.comにログインしてから、")
+            print("このPowerShellで Enter を押してください。")
+            print("="*54)
+            input("\nログインが終わったら Enter > ")
             page.goto("https://note.com/notes/new")
             time.sleep(4)
 
@@ -115,10 +122,7 @@ def main():
 
         # 本文入力
         body_ok = False
-        for sel in [
-            '.ProseMirror',
-            '[contenteditable="true"]',
-        ]:
+        for sel in ['.ProseMirror', '[contenteditable="true"]']:
             try:
                 el = page.locator(sel).first
                 el.wait_for(state="visible", timeout=3000)
@@ -136,10 +140,7 @@ def main():
         print("\n" + "="*54)
         print("✅ 準備完了！")
         print("内容を確認して「公開する」ボタンを押してください。")
-        print("（このPowerShell画面で Enter を押すとブラウザを閉じます）")
         print("="*54)
-        input("\n投稿が終わったら Enter を押す > ")
-        context.close()
 
 
 if __name__ == "__main__":
