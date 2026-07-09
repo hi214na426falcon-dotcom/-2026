@@ -125,6 +125,40 @@ Opus4.8 に分散。時間帯が 4 つなら「Fable5×1 + Opus4.8×4」で 1 �
 
 ---
 
+## 8. 実データ導入 → 合格戦略 → 予測配信の流れ
+
+```
+ fetch_dukascopy.py        promote_strategy.py            predict_server.py
+ （実データ取得・整形）  →   （OOS合格ゲート）        →     （合格時のみ方向配信）
+ data/m1/<PAIR>.csv         backtest/results/              inference.py が
+                            approved_strategy.json          直近バーで方向を推論
+                            ※合格した時だけ生成
+```
+
+1. **データ取得（手元PCで実行）**: `data/fetch_dukascopy.py` が Dukascopy の
+   ティック(.bi5, LZMA)をダウンロードし 1 分足に集約して `data/m1/<PAIR>.csv` に保存。
+   月が 0 始まり等の仕様に対応済み。パーサは `--self-test`（ネット不要）で検証済み。
+   ```bash
+   python3 data/fetch_dukascopy.py --self-test          # まず自己テスト
+   python3 data/fetch_dukascopy.py --pair EURJPY --from 2023-07-01 --to 2026-07-01
+   ```
+   > ⚠️ **この開発環境では組織のエグレスポリシーで datafeed.dukascopy.com が遮断**
+   > されています（403）。実ダウンロードは通常ネットの手元PCで行ってください。
+
+2. **合格判定（昇格ゲート）**: `backtest/promote_strategy.py` が IS/OOS 分割で評価し、
+   **OOS で「エッジ+2pt以上・サンプル1000以上・最大DD20%以内」** を満たした時だけ
+   `approved_strategy.json` を生成する。**合成データは決して合格にしない。**
+   ```bash
+   python3 -m backtest.promote_strategy --pair EURJPY --strategy bollinger \
+       --period 20 --num-std 2.0 --expiry 3 --payout 1.90
+   ```
+   不合格なら「パラメータを弄って再判定しない」＝カーブフィッティング防止（絶対制約）。
+
+3. **予測配信**: `approved_strategy.json` ができると predict_server が
+   `backtest/inference.py` で直近バーに戦略を適用し、**現在バーにシグナルが立った時だけ**
+   `direction`/`confidence`（=OOS勝率）を返す。無いバーは「シグナル待機中」。
+   対象時間帯（JST夜/深夜）外や相場データ無しの時も方向は出さない（事故防止）。
+
 ## 7. 運用チェックリスト
 
 - [ ] `python3 -m unittest discover -s tests` が全緑

@@ -84,7 +84,11 @@ python3 -m unittest discover -s tests -v
 │   ├── engine.py                # バックテスト本体・成績指標（信頼区間/有意性つき）
 │   ├── sessions.py              # JST時間帯（夜17-24/深夜0-6）別の集計
 │   ├── money_mgmt.py            # 1000円固定＋3連勝ボーナス（逆マーチン）＋シミュレータ
+│   ├── inference.py             # 合格戦略から現在バーの方向を推論（先読みなし）
+│   ├── promote_strategy.py      # OOS合格ゲート→approved_strategy.json（合格時のみ）
 │   └── optimize.py              # 学習/検証分割による過剰最適化の実証
+├── data/
+│   └── fetch_dukascopy.py       # Dukascopy 1分足の取得・整形（自己テスト付き）
 ├── agents/                      # 通貨ペア・スカウト（マルチエージェント）
 │   ├── pair_stats.py            # ペア×時間帯の勝率/エッジを決定論的に計算
 │   ├── schedule_schema.py       # time→pair スケジュールのスキーマ・検証・現在スロット判定
@@ -96,13 +100,13 @@ python3 -m unittest discover -s tests -v
 │   ├── content.js              # webterminal上のオーバーレイ描画（DOM発注なし）
 │   ├── overlay.css
 │   └── server/
-│       ├── predict_server.py    # 推奨ペア/連勝/ボーナスを配信（ポート8765）
+│       ├── predict_server.py    # 推奨ペア/連勝/ボーナス/予測方向を配信（ポート8765）
+│       ├── live_feed.py         # 直近1分足の供給（data/m1のCSV末尾から）
 │       └── schedule.json        # run_scout.py が生成
-├── tests/
-│   ├── test_engine.py           # バックテスト中核の健全性テスト
-│   ├── test_sessions.py         # 時間帯分析テスト
-│   ├── test_money_mgmt.py       # 連勝/ボーナス/逆マーチンのテスト
-│   └── test_scout.py            # スカウト（オフライン）とスケジュールのテスト
+├── .github/workflows/ci.yml     # CI（全テスト＋自己テスト＋スモーク）
+├── tests/                       # 48件（全緑）
+│   ├── test_engine.py test_sessions.py test_money_mgmt.py test_scout.py
+│   └── test_inference.py test_promote.py test_datafeed.py test_predict_server.py
 └── docs/
     ├── binary-options-research.md  # 徹底調査レポート
     └── overlay-and-scout.md        # オーバーレイ＋スカウトの設計・運用手順
@@ -207,9 +211,12 @@ python3 run_backtest.py --strategy bollinger --expiry 3 --payout 1.90 \
 1. **今日**: オーバーレイ導入（`run_scout.py` → `predict_server.py` → 拡張読み込み）。
    実データ `data/m1/<PAIR>.csv` があればスカウトが実測エッジを算出。無ければデモ表示。
 2. **明日**: `python3 -m unittest discover -s tests` で全テスト緑を確認 →
-   実データで `run_backtest.py --jst-sessions --money-mgmt` を回し、
-   **OOS で損益分岐+2pt 以上・サンプル1000回以上** の合格戦略を探す。合格したら
-   `backtest/results/approved_strategy.json` を作ると予測方向の配信が有効化される。
+   実データ取得 `python3 data/fetch_dukascopy.py --pair EURJPY --from … --to …` →
+   `run_backtest.py --jst-sessions --money-mgmt` で感触を見る →
+   `python3 -m backtest.promote_strategy --pair EURJPY --strategy bollinger …` で
+   **OOS 合格ゲート**（+2pt/1000回/DD20%）を通す。合格した時だけ
+   `backtest/results/approved_strategy.json` が生成され、予測方向の配信が有効化される
+   （不合格ならパラメータを弄らず棄却＝カーブフィッティング防止）。
 2. **土曜〜**: まず**デモ（または最小額）**で運用開始。オーバーレイの推奨ペアで
    1,000 円固定 → 3 連勝でボーナスステージ。実弾増額は 4 週連続で損益分岐を上回ってから。
 

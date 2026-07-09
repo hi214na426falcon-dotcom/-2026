@@ -27,14 +27,21 @@ from urllib.parse import urlparse, parse_qs
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(os.path.dirname(THIS_DIR))
-if REPO_ROOT not in sys.path:
-    sys.path.insert(0, REPO_ROOT)
+for _p in (REPO_ROOT, THIS_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from backtest.money_mgmt import MoneyManager  # noqa: E402
+from backtest.inference import infer_direction  # noqa: E402
+from backtest.sessions import (  # noqa: E402
+    MASTER_SESSIONS_JST, hour_in_windows, parse_hour,
+)
 from agents.schedule_schema import current_slot as sched_current_slot  # noqa: E402
+import live_feed  # noqa: E402  （overlay/server 内の同階層モジュール）
 
 SCHEDULE_PATH = os.path.join(THIS_DIR, "schedule.json")
 APPROVED_PATH = os.path.join(REPO_ROOT, "backtest", "results", "approved_strategy.json")
+DATA_DIR = os.path.join(REPO_ROOT, "data", "m1")
 
 # 予測方向を出してよい approved_strategy.json の必須キー（README の想定スキーマ）。
 _APPROVED_REQUIRED = ("pair", "strategy", "expiry_min", "payout", "oos_passed")
@@ -60,24 +67,55 @@ def load_schedule():
     return _sched_cache["data"]
 
 
-def get_prediction(pair: str) -> dict:
-    """方向/確率を返す。合格戦略が無ければ必ず null（＝予測は出さない）。"""
-    base = {"pair": pair, "direction": None, "confidence": None,
-            "status": "検証済み戦略なし — 予測は表示できません"}
-    if not os.path.exists(APPROVED_PATH):
-        return base
+def load_approved(approved_path: str = None) -> dict:
+    """approved_strategy.json を読む（無効なら None）。"""
+    path = approved_path or APPROVED_PATH
+    if not os.path.exists(path):
+        return None
     try:
-        with open(APPROVED_PATH, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             approved = json.load(f)
     except (OSError, json.JSONDecodeError):
-        return base
+        return None
     if not all(k in approved for k in _APPROVED_REQUIRED) or not approved.get("oos_passed"):
-        base["status"] = "approved_strategy.json はあるが合格基準スキーマ未充足"
+        return None
+    return approved
+
+
+def get_prediction(pair: str, approved_path: str = None, data_dir: str = None) -> dict:
+    """方向/確率を返す。合格戦略＋相場データが揃った時のみ非null。
+
+    合格戦略が無ければ必ず null（＝予測は出さない・事故防止）。
+    """
+    base = {"pair": pair, "direction": None, "confidence": None,
+            "status": "検証済み戦略なし — 予測は表示できません"}
+    approved = load_approved(approved_path)
+    if approved is None:
+        if os.path.exists(approved_path or APPROVED_PATH):
+            base["status"] = "approved_strategy.json はあるが合格基準スキーマ未充足"
         return base
-    # ここに、合格したロジックの推論を接続する（現状は未接続 = 表示しない）。
-    # TODO: approved のロジックで direction/confidence を算出。
-    base["status"] = "合格戦略あり（推論未接続）"
-    return base
+
+    # 合格戦略は特定ペア専用。推奨ペアが違う時はそのペアの方向は出さない。
+    if pair != approved.get("pair"):
+        base["status"] = f"{approved.get('pair')} の合格戦略のみ有効（方向は非表示）"
+        return base
+
+    bars = live_feed.recent_bars(approved["pair"], data_dir or DATA_DIR)
+    if not bars:
+        base["status"] = "相場データなし（data/m1 にCSVを配置、またはライブ接続が必要）"
+        return base
+
+    # セッション外なら方向を出さない（合格戦略の対象時間帯だけ）
+    sessions = [tuple(s) for s in approved.get("sessions_jst", [])] or list(MASTER_SESSIONS_JST)
+    tz = approved.get("tz_offset_hours", 9)
+    last_hour = parse_hour(bars.get("last_time"), tz)
+    if last_hour is not None and not hour_in_windows(last_hour, sessions):
+        base["status"] = "対象時間帯外（夜17-24 / 深夜0-6 JST）"
+        return base
+
+    inf = infer_direction(approved, bars["closes"], bars["times"])
+    return {"pair": pair, "direction": inf["direction"],
+            "confidence": inf["confidence"], "status": inf["status"]}
 
 
 def build_state() -> dict:
