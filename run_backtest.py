@@ -27,7 +27,14 @@ import sys
 
 from backtest.data import generate_synthetic, load_csv
 from backtest.engine import format_report, run_backtest
+from backtest.money_mgmt import MoneyManager, simulate_money_management
 from backtest.optimize import format_optimize_report, optimize_rsi_demo
+from backtest.sessions import (
+    MASTER_SESSIONS_JST,
+    bucket_by_slot,
+    restrict_signals_to_sessions,
+    slot_label,
+)
 from backtest.strategies import STRATEGIES, strat_random
 
 
@@ -69,6 +76,9 @@ def build_series(args) -> "object":
 
 
 def run_one(series, name, signals, args):
+    if args.jst_sessions:
+        times = [b.time for b in series.bars]
+        signals = restrict_signals_to_sessions(times, signals, MASTER_SESSIONS_JST)
     res = run_backtest(
         series,
         signals,
@@ -81,8 +91,45 @@ def run_one(series, name, signals, args):
         name=name,
     )
     print(format_report(res))
+    if args.jst_sessions:
+        print_session_table(res, args)
+    if args.money_mgmt:
+        print_money_mgmt(res, args)
     print()
     return res
+
+
+def print_session_table(res, args):
+    """JST 時間帯ブロックごとの成績を出す。"""
+    buckets = bucket_by_slot(res.trades, payout=args.payout)
+    print("  --- JST時間帯別 ---")
+    for slot, st in buckets.items():
+        if st["trades"] == 0:
+            continue
+        print(f"    {slot_label(slot):>12} : 勝率 {st['win_rate']*100:5.1f}% "
+              f"edge {st['edge']*100:+5.1f}pt ({int(st['trades'])}件)"
+              f"{'  ✓有意' if st['significant_plus'] else ''}")
+
+
+def print_money_mgmt(res, args):
+    """フラットベット vs 3連勝ボーナス(逆マーチン) を比較表示する。"""
+    results = [t.result for t in res.trades]
+    if not results:
+        print("  --- 資金管理: 取引が無いため省略 ---")
+        return
+    flat = simulate_money_management(
+        results, payout=args.payout, start_balance=args.balance,
+        mm=MoneyManager(base_stake=args.stake, bonus_threshold=10**9),  # ボーナス無効=フラット
+    )
+    bonus = simulate_money_management(
+        results, payout=args.payout, start_balance=args.balance,
+        mm=MoneyManager(base_stake=args.stake),  # 3連勝ボーナス+逆マーチン
+    )
+    print("  --- 資金管理シミュレーション（同じ勝敗列で比較）---")
+    print(f"    フラット固定    : 損益 {flat.total_pnl:+,.0f}円  最大DD {flat.max_drawdown_pct*100:.1f}%")
+    print(f"    3連勝ボーナス   : 損益 {bonus.total_pnl:+,.0f}円  最大DD {bonus.max_drawdown_pct*100:.1f}%"
+          f"  (ボーナス突入 {bonus.bonus_entries}回, 最大連勝 {bonus.max_streak})")
+    print("    ※逆マーチンは勝率を上げない。勝ち越している時だけ利益を伸ばす道具。")
 
 
 def make_signals(name, series, args):
@@ -129,6 +176,16 @@ def main(argv=None) -> int:
     )
     p.add_argument("--drift", type=float, default=0.0, help="合成データのドリフト")
     p.add_argument("--vol", type=float, default=0.0008, help="合成データのボラティリティ")
+    p.add_argument(
+        "--jst-sessions",
+        action="store_true",
+        help="夜17〜24時＋深夜0〜6時(JST)にエントリーを限定し時間帯別成績も表示",
+    )
+    p.add_argument(
+        "--money-mgmt",
+        action="store_true",
+        help="フラット固定 vs 3連勝ボーナス(逆マーチン)の資金管理を比較表示",
+    )
     p.add_argument(
         "--no-optimize",
         action="store_true",

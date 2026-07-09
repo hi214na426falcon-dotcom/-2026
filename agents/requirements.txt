@@ -1,0 +1,5 @@
+# 通貨ペア・スカウトのマルチエージェント経路（Fable5→Opus4.8）用。
+# ★ 任意。未導入でも scout は決定論的なオフライン経路で動作する。
+#   導入し、ANTHROPIC_API_KEY を設定（または `ant auth login`）すると
+#   LLM 経路が自動的に有効になる。
+anthropic>=0.116.0

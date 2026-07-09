@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-09T14:53:50.306245+00:00",
+  "tz": "JST",
+  "mode": "offline",
+  "orchestrator_model": "claude-fable-5",
+  "worker_model": "claude-opus-4-8",
+  "strategy": {
+    "name": "bollinger",
+    "expiry_min": 3,
+    "payout": 1.9
+  },
+  "slots": [
+    {
+      "window": "17:00-20:00",
+      "hours": [
+        17,
+        18,
+        19
+      ],
+      "recommended_pair": "USDJPY",
+      "expected_win_rate": 0.6,
+      "edge_pt": 7.37,
+      "sample": 40,
+      "ci_low": 0.4482,
+      "ci_high": 0.7518,
+      "confidence": "デモ(合成データ)",
+      "ranking": [
+        {
+          "pair": "USDJPY",
+          "win_rate": 0.6,
+          "edge_pt": 7.37,
+          "trades": 40,
+          "ci_low": 0.4482,
+          "ci_high": 0.7518,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURJPY",
+          "win_rate": 0.6,
+          "edge_pt": 7.37,
+          "trades": 40,
+          "ci_low": 0.4482,
+          "ci_high": 0.7518,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "AUDJPY",
+          "win_rate": 0.5814,
+          "edge_pt": 5.51,
+          "trades": 43,
+          "ci_low": 0.4339,
+          "ci_high": 0.7289,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURUSD",
+          "win_rate": 0.5238,
+          "edge_pt": -0.25,
+          "trades": 42,
+          "ci_low": 0.3728,
+          "ci_high": 0.6749,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "GBPJPY",
+          "win_rate": 0.3846,
+          "edge_pt": -14.17,
+          "trades": 39,
+          "ci_low": 0.2319,
+          "ci_high": 0.5373,
+          "significant_plus": false,
+          "is_synthetic": true
+        }
+      ],
+      "rationale": "17:00-20:00(JST) は明確なエッジが未確認。参考順位のみ、実弾は見送り推奨。",
+      "go": false
+    },
+    {
+      "window": "20:00-24:00",
+      "hours": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "recommended_pair": "USDJPY",
+      "expected_win_rate": 0.5357,
+      "edge_pt": 0.94,
+      "sample": 56,
+      "ci_low": 0.4051,
+      "ci_high": 0.6663,
+      "confidence": "デモ(合成データ)",
+      "ranking": [
+        {
+          "pair": "USDJPY",
+          "win_rate": 0.5357,
+          "edge_pt": 0.94,
+          "trades": 56,
+          "ci_low": 0.4051,
+          "ci_high": 0.6663,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURJPY",
+          "win_rate": 0.5357,
+          "edge_pt": 0.94,
+          "trades": 56,
+          "ci_low": 0.4051,
+          "ci_high": 0.6663,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURUSD",
+          "win_rate": 0.5254,
+          "edge_pt": -0.09,
+          "trades": 59,
+          "ci_low": 0.398,
+          "ci_high": 0.6528,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "GBPJPY",
+          "win_rate": 0.451,
+          "edge_pt": -7.53,
+          "trades": 51,
+          "ci_low": 0.3144,
+          "ci_high": 0.5875,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "AUDJPY",
+          "win_rate": 0.4211,
+          "edge_pt": -10.53,
+          "trades": 57,
+          "ci_low": 0.2929,
+          "ci_high": 0.5492,
+          "significant_plus": false,
+          "is_synthetic": true
+        }
+      ],
+      "rationale": "20:00-24:00(JST) は明確なエッジが未確認。参考順位のみ、実弾は見送り推奨。",
+      "go": false
+    },
+    {
+      "window": "00:00-03:00",
+      "hours": [
+        0,
+        1,
+        2
+      ],
+      "recommended_pair": "GBPJPY",
+      "expected_win_rate": 0.5111,
+      "edge_pt": -1.52,
+      "sample": 45,
+      "ci_low": 0.3651,
+      "ci_high": 0.6572,
+      "confidence": "デモ(合成データ)",
+      "ranking": [
+        {
+          "pair": "GBPJPY",
+          "win_rate": 0.5111,
+          "edge_pt": -1.52,
+          "trades": 45,
+          "ci_low": 0.3651,
+          "ci_high": 0.6572,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "USDJPY",
+          "win_rate": 0.4808,
+          "edge_pt": -4.55,
+          "trades": 52,
+          "ci_low": 0.345,
+          "ci_high": 0.6166,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURJPY",
+          "win_rate": 0.4808,
+          "edge_pt": -4.55,
+          "trades": 52,
+          "ci_low": 0.345,
+          "ci_high": 0.6166,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "AUDJPY",
+          "win_rate": 0.4286,
+          "edge_pt": -9.77,
+          "trades": 42,
+          "ci_low": 0.2789,
+          "ci_high": 0.5782,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURUSD",
+          "win_rate": 0.3696,
+          "edge_pt": -15.68,
+          "trades": 46,
+          "ci_low": 0.2301,
+          "ci_high": 0.5091,
+          "significant_plus": false,
+          "is_synthetic": true
+        }
+      ],
+      "rationale": "00:00-03:00(JST) は明確なエッジが未確認。参考順位のみ、実弾は見送り推奨。",
+      "go": false
+    },
+    {
+      "window": "03:00-06:00",
+      "hours": [
+        3,
+        4,
+        5
+      ],
+      "recommended_pair": "AUDJPY",
+      "expected_win_rate": 0.5714,
+      "edge_pt": 4.51,
+      "sample": 49,
+      "ci_low": 0.4329,
+      "ci_high": 0.71,
+      "confidence": "デモ(合成データ)",
+      "ranking": [
+        {
+          "pair": "AUDJPY",
+          "win_rate": 0.5714,
+          "edge_pt": 4.51,
+          "trades": 49,
+          "ci_low": 0.4329,
+          "ci_high": 0.71,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURUSD",
+          "win_rate": 0.55,
+          "edge_pt": 2.37,
+          "trades": 40,
+          "ci_low": 0.3958,
+          "ci_high": 0.7042,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "USDJPY",
+          "win_rate": 0.5333,
+          "edge_pt": 0.7,
+          "trades": 45,
+          "ci_low": 0.3876,
+          "ci_high": 0.6791,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "EURJPY",
+          "win_rate": 0.5333,
+          "edge_pt": 0.7,
+          "trades": 45,
+          "ci_low": 0.3876,
+          "ci_high": 0.6791,
+          "significant_plus": false,
+          "is_synthetic": true
+        },
+        {
+          "pair": "GBPJPY",
+          "win_rate": 0.5,
+          "edge_pt": -2.63,
+          "trades": 52,
+          "ci_low": 0.3641,
+          "ci_high": 0.6359,
+          "significant_plus": false,
+          "is_synthetic": true
+        }
+      ],
+      "rationale": "03:00-06:00(JST) は明確なエッジが未確認。参考順位のみ、実弾は見送り推奨。",
+      "go": false
+    }
+  ],
+  "disclaimer": "この推奨はバックテスト統計に基づく参考情報です。実弾投入前にデモでのフォワードテストが必須。勝率は損益分岐（=1/ペイアウト）を安定して上回る場合のみ意味を持ちます。合成データ由来（is_synthetic=true）の数字は実運用の根拠になりません。"
+}

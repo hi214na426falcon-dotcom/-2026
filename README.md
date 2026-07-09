@@ -74,18 +74,38 @@ python3 -m unittest discover -s tests -v
 
 ```
 .
-├── run_backtest.py              # 実行用 CLI
+├── run_backtest.py              # バックテスト CLI（--jst-sessions / --money-mgmt 対応）
+├── run_scout.py                 # 通貨ペア・スカウト CLI（schedule.json 生成）
 ├── backtest/
 │   ├── __init__.py
 │   ├── data.py                  # 価格データ生成 / CSV 読み込み
 │   ├── indicators.py            # SMA / EMA / RSI / MACD / Bollinger
 │   ├── strategies.py            # シグナル生成戦略
 │   ├── engine.py                # バックテスト本体・成績指標（信頼区間/有意性つき）
+│   ├── sessions.py              # JST時間帯（夜17-24/深夜0-6）別の集計
+│   ├── money_mgmt.py            # 1000円固定＋3連勝ボーナス（逆マーチン）＋シミュレータ
 │   └── optimize.py              # 学習/検証分割による過剰最適化の実証
+├── agents/                      # 通貨ペア・スカウト（マルチエージェント）
+│   ├── pair_stats.py            # ペア×時間帯の勝率/エッジを決定論的に計算
+│   ├── schedule_schema.py       # time→pair スケジュールのスキーマ・検証・現在スロット判定
+│   ├── scout.py                 # Fable5(指示)→Opus4.8(実作業)。API無ければオフライン
+│   └── requirements.txt         # anthropic（任意。未導入でもオフライン動作）
+├── overlay/                     # Chrome拡張（表示専用）+ ローカル予測サーバー
+│   ├── manifest.json            # Manifest V3
+│   ├── background.js            # localhostへのフェッチ橋渡し（発注には触れない）
+│   ├── content.js              # webterminal上のオーバーレイ描画（DOM発注なし）
+│   ├── overlay.css
+│   └── server/
+│       ├── predict_server.py    # 推奨ペア/連勝/ボーナスを配信（ポート8765）
+│       └── schedule.json        # run_scout.py が生成
 ├── tests/
-│   └── test_engine.py           # 中核ロジックの健全性テスト
+│   ├── test_engine.py           # バックテスト中核の健全性テスト
+│   ├── test_sessions.py         # 時間帯分析テスト
+│   ├── test_money_mgmt.py       # 連勝/ボーナス/逆マーチンのテスト
+│   └── test_scout.py            # スカウト（オフライン）とスケジュールのテスト
 └── docs/
-    └── binary-options-research.md  # 徹底調査レポート（NotebookLM 研究の代替）
+    ├── binary-options-research.md  # 徹底調査レポート
+    └── overlay-and-scout.md        # オーバーレイ＋スカウトの設計・運用手順
 ```
 
 ---
@@ -115,6 +135,83 @@ time,open,high,low,close,volume
 - データ入手先は調査レポート第10章を参照（MetaTrader / Dukascopy / 各種 API）。
 
 ---
+
+## サインツール（Chrome オーバーレイ・表示専用）
+
+`overlay/` は webterminal（babaoption / theoption）の上に浮かぶ**予測表示専用**の
+Chrome 拡張（Manifest V3）です。**発注ボタン・入力欄には一切触れません。自動売買もしません。**
+
+パネルの表示内容:
+- **この時間帯（JST）の推奨通貨ペア** と **想定勝率・信頼度**（スカウトの `schedule.json` より）
+- **連勝数** と **🎉ボーナスステージ**（3連勝で点灯。逆マーチンの段 Lv も表示）
+- 予測方向（▲上/▼下）— **合格戦略が確定するまでは常に非表示**（事故防止）
+- 勝ち/負け/リセットの手動記録ボタン（連勝の判定に使用）
+
+起動手順:
+
+```bash
+# 1) スケジュール生成（オフラインでも動く）
+python3 run_scout.py
+
+# 2) 予測サーバー起動（別ターミナル）
+cd overlay/server && python3 predict_server.py       # http://localhost:8765
+
+# 3) Chrome → chrome://extensions → デベロッパーモードON
+#    → 「パッケージ化されていない拡張機能を読み込む」→ overlay フォルダを選択
+#    → babaoption / theoption の webterminal を開くと右上にパネルが出る
+```
+
+詳細な設計・運用手順は [`docs/overlay-and-scout.md`](docs/overlay-and-scout.md)。
+
+## 通貨ペア・スカウト（Fable5 → Opus4.8 マルチエージェント）
+
+「**どの時間帯にどの通貨ペアが有利か**」をバックテスト統計から調べ、`schedule.json` を生成します。
+
+- **オーケストレーター = Claude Fable 5**：統計を俯瞰し、各時間帯で精査すべきペアと
+  調査指示を決める（頭脳。呼び出しは最小限）。
+- **ワーカー = Claude Opus 4.8**：指示された 1 時間帯だけを担当し、根拠と GO/見送りを返す
+  （安価なモデルに実作業を寄せてコストパフォーマンスを出す）。
+- **API 鍵が無い環境では、例外を出さず決定論的な統計計算に自動フォールバック**します。
+  数値（勝率）は常に実測バックテスト由来で、モデルが創作することはありません。
+
+```bash
+python3 run_scout.py                 # 既定（オフラインでも動く）
+python3 run_scout.py --no-llm        # LLM を使わず決定論のみ
+python3 run_scout.py --strategy bollinger --expiry 3 --payout 1.90 --data-dir data/m1
+```
+
+有効化（任意）: `pip install -r agents/requirements.txt` して
+`ANTHROPIC_API_KEY` を設定（または `ant auth login`）すると LLM 経路が自動で有効になります。
+
+## 資金管理（1,000 円固定 ＋ 3 連勝ボーナス ＝ 逆マーチン）
+
+`backtest/money_mgmt.py` は、ひなの運用ルールを検証可能な形にしたものです。
+
+- 基本は **1 回 1,000 円の固定額**。
+- **3 連勝でボーナスステージに入り、逆マーチン**（勝った直後だけ増額）で勝ち分を伸ばす。
+- **負けたら即 1,000 円に戻る。** ＝ 負けを取り返す通常のマーチンゲール（倍賭け）は
+  構造的に発生しない（MASTER_PROMPT の絶対制約を担保）。増額は上限で頭打ち。
+
+バックテストで「フラット固定 vs 3連勝ボーナス」を同じ勝敗列で比較できます:
+
+```bash
+python3 run_backtest.py --strategy bollinger --expiry 3 --payout 1.90 \
+    --process meanrevert --jst-sessions --money-mgmt
+```
+
+> **正直な注意**: 逆マーチンは**勝率を上げません**。勝ち越している（勝率が損益分岐を
+> 上回っている）戦略の利益を伸ばす道具であり、負け越す戦略に使えば資金は減ります。
+
+## セットアップの流れ（今日 → 明日 → 土曜）
+
+1. **今日**: オーバーレイ導入（`run_scout.py` → `predict_server.py` → 拡張読み込み）。
+   実データ `data/m1/<PAIR>.csv` があればスカウトが実測エッジを算出。無ければデモ表示。
+2. **明日**: `python3 -m unittest discover -s tests` で全テスト緑を確認 →
+   実データで `run_backtest.py --jst-sessions --money-mgmt` を回し、
+   **OOS で損益分岐+2pt 以上・サンプル1000回以上** の合格戦略を探す。合格したら
+   `backtest/results/approved_strategy.json` を作ると予測方向の配信が有効化される。
+2. **土曜〜**: まず**デモ（または最小額）**で運用開始。オーバーレイの推奨ペアで
+   1,000 円固定 → 3 連勝でボーナスステージ。実弾増額は 4 週連続で損益分岐を上回ってから。
 
 ## 免責
 

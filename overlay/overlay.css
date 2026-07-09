@@ -1,0 +1,91 @@
+/* 表示専用オーバーレイのスタイル。ブローカー画面の上に浮かせる。 */
+#bin-sign-overlay {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 268px;
+  z-index: 2147483647;
+  font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  font-size: 13px;
+  color: #e8eef6;
+  background: rgba(18, 24, 34, 0.96);
+  border: 1px solid #2b3a4d;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  user-select: none;
+}
+
+#bin-sign-overlay.bso-bonus-on {
+  border-color: #ffcc33;
+  box-shadow: 0 0 0 2px rgba(255, 204, 51, 0.5), 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+.bso-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: linear-gradient(90deg, #1b2740, #223257);
+  cursor: move;
+}
+.bso-title { font-weight: 600; font-size: 12px; letter-spacing: 0.02em; }
+.bso-min { cursor: pointer; padding: 0 6px; opacity: 0.8; }
+.bso-min:hover { opacity: 1; }
+
+#bin-sign-overlay.bso-collapsed .bso-body { display: none; }
+
+.bso-body { padding: 8px 10px 10px; }
+
+.bso-conn { font-size: 11px; margin-bottom: 6px; opacity: 0.9; }
+.bso-ok { color: #57d38c; }
+.bso-warn { color: #ffb454; }
+
+.bso-section {
+  padding: 6px 0;
+  border-top: 1px solid #24303f;
+}
+.bso-section:first-of-type { border-top: none; }
+
+.bso-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #7d90a6; margin-bottom: 3px; }
+
+.bso-pair { font-size: 20px; font-weight: 700; color: #7fd0ff; }
+.bso-winrate { font-size: 12px; margin-top: 2px; }
+.bso-slotmeta { font-size: 11px; margin-top: 2px; }
+
+.bso-dir { font-size: 15px; font-weight: 600; }
+.bso-up { color: #57d38c; }
+.bso-down { color: #ff6b6b; }
+.bso-rationale { font-size: 11px; color: #b9c6d6; margin-top: 3px; line-height: 1.4; }
+
+.bso-streak { font-size: 13px; font-weight: 600; }
+.bso-bonus {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1b2740;
+  background: linear-gradient(90deg, #ffd34d, #ffb454);
+  border-radius: 6px;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.bso-btns { display: flex; gap: 6px; }
+.bso-btn {
+  flex: 1;
+  padding: 6px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+.bso-win { background: #2e9e63; }
+.bso-win:hover { background: #35b872; }
+.bso-loss { background: #c14545; }
+.bso-loss:hover { background: #d95252; }
+.bso-reset { background: #3a495c; }
+.bso-reset:hover { background: #47596f; }
+
+.bso-foot { margin-top: 8px; font-size: 10px; color: #6f8098; line-height: 1.4; }
