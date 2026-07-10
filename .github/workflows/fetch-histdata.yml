@@ -1,0 +1,38 @@
+name: Fetch FX data (HistData)
+
+# Dukascopy 時間別取得はスロットリング（約21秒/ファイル）で6時間制限に収まらないため、
+# 月次/年次一括 zip の HistData.com から取得する（数分で完了）。
+# merge の push は GITHUB_TOKEN のため再帰トリガーしない。
+
+on:
+  push:
+    branches: ["claude/strategy-backtest-promote-h7bv1r"]
+    paths: [".github/workflows/fetch-histdata.yml"]
+  workflow_dispatch:
+    inputs:
+      pair:
+        description: "通貨ペア (例 EURJPY)"
+        required: false
+        default: "EURJPY"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: histdata パッケージ導入
+        run: pip install histdata
+      - name: HistData M1 取得 → data/m1/<PAIR>.csv
+        run: python3 data/fetch_histdata.py "${{ inputs.pair || 'EURJPY' }}"
+      - name: コミット＆プッシュ（実行ブランチへ）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/m1/*.csv
+          git commit -m "Add real HistData 1m data for ${{ inputs.pair || 'EURJPY' }} (fetched by Actions)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
