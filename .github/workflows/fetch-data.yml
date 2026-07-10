@@ -5,6 +5,12 @@ name: Fetch FX data (Dukascopy)
 # 6分割並列でダウンロード → 結合 → data/m1/<PAIR>.csv を実行ブランチにコミット。
 
 on:
+  # workflow_dispatch はデフォルトブランチに無いと登録されないため、
+  # このファイル自身の push でも起動できるようにする（機能ブランチ用）。
+  # merge ジョブの push は GITHUB_TOKEN のため再帰トリガーしない。
+  push:
+    branches: ["claude/strategy-backtest-promote-h7bv1r"]
+    paths: [".github/workflows/fetch-data.yml"]
   workflow_dispatch:
     inputs:
       pair:
