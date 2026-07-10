@@ -1,0 +1,70 @@
+name: Fetch FX data (Dukascopy)
+
+# GitHub Actions ランナーは通常のインターネットに出られるため、
+# Claude 実行環境（エグレス遮断）の代わりに実データ取得をここで行う。
+# 6分割並列でダウンロード → 結合 → data/m1/<PAIR>.csv を実行ブランチにコミット。
+
+on:
+  workflow_dispatch:
+    inputs:
+      pair:
+        description: "通貨ペア (例 EURJPY)"
+        required: false
+        default: "EURJPY"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { part: p1, from: "2023-07-01", to: "2024-01-01" }
+          - { part: p2, from: "2024-01-01", to: "2024-07-01" }
+          - { part: p3, from: "2024-07-01", to: "2025-01-01" }
+          - { part: p4, from: "2025-01-01", to: "2025-07-01" }
+          - { part: p5, from: "2025-07-01", to: "2026-01-01" }
+          - { part: p6, from: "2026-01-01", to: "2026-07-01" }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dukascopy ティック取得 → 1分足 (GMT8-21 ≒ JST17-翌6時)
+        run: |
+          python3 data/fetch_dukascopy.py \
+            --pair "${{ inputs.pair || 'EURJPY' }}" \
+            --from "${{ matrix.from }}" --to "${{ matrix.to }}" \
+            --hours 8-21 --out "part_${{ matrix.part }}.csv"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fx-${{ matrix.part }}
+          path: part_*.csv
+          retention-days: 3
+
+  merge:
+    needs: fetch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: parts
+          merge-multiple: true
+      - name: 結合・時刻ソート・重複除去
+        run: |
+          PAIR="${{ inputs.pair || 'EURJPY' }}"
+          mkdir -p data/m1
+          { echo "time,open,high,low,close,volume";
+            tail -q -n +2 parts/part_*.csv | sort -t, -k1,1 -u; } \
+            > "data/m1/${PAIR}.csv"
+          echo "rows: $(wc -l < data/m1/${PAIR}.csv)"
+          head -3 "data/m1/${PAIR}.csv"; tail -2 "data/m1/${PAIR}.csv"
+      - name: コミット＆プッシュ（実行ブランチへ）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/m1/*.csv
+          git commit -m "Add real Dukascopy 1m data for ${{ inputs.pair || 'EURJPY' }} (fetched by Actions)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
