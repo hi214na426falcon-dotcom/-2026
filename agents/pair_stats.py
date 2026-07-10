@@ -62,15 +62,18 @@ class SlotStat:
 
 
 def find_pair_files(pair: str, data_dir: str) -> List[str]:
-    """data_dir 内の <PAIR>.csv / <PAIR>_*.csv を探す（大文字小文字無視）。"""
+    """data_dir 内の <PAIR>.csv(.gz) / <PAIR>_*.csv(.gz) を探す（大文字小文字無視）。"""
     if not os.path.isdir(data_dir):
         return []
     found: List[str] = []
-    for path in sorted(glob.glob(os.path.join(data_dir, "*.csv"))):
-        base = os.path.basename(path).lower()
-        p = pair.lower()
-        if base == f"{p}.csv" or base.startswith(f"{p}_") or base.startswith(f"{p}-"):
-            found.append(path)
+    for pattern in ("*.csv", "*.csv.gz"):
+        for path in sorted(glob.glob(os.path.join(data_dir, pattern))):
+            base = os.path.basename(path).lower()
+            if base.endswith(".gz"):
+                base = base[:-3]
+            p = pair.lower()
+            if base == f"{p}.csv" or base.startswith(f"{p}_") or base.startswith(f"{p}-"):
+                found.append(path)
     return found
 
 

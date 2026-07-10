@@ -1,0 +1,42 @@
+name: Fetch FX ticks (Dukascopy 15s bars)
+
+# 15秒取引（実質ペイアウト2.05倍）の検証用。1分足では15秒判定を正直に検証できない
+# ため、Dukascopy ティックを 15 秒足に集約して取得する。
+# スロットリング（約21.5秒/時間ファイル）のため直近3週間×GMT8-21時に限定
+# （294ファイル ≒ 105分/ペア、6時間制限内）。
+
+on:
+  push:
+    branches: ["claude/strategy-backtest-promote-h7bv1r"]
+    paths: [".github/workflows/fetch-ticks.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      matrix:
+        pair: [EURJPY, USDJPY]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dukascopy ティック → 15秒足 (直近3週間, GMT8-21)
+        run: |
+          python3 data/fetch_dukascopy.py --pair "${{ matrix.pair }}" \
+            --from 2026-06-19 --to 2026-07-10 --hours 8-21 \
+            --bar-seconds 15 --out "data/s15/${{ matrix.pair }}.csv"
+          gzip -9 "data/s15/${{ matrix.pair }}.csv"
+      - name: コミット＆プッシュ（実行ブランチへ）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/s15/*.csv.gz
+          git commit -m "Add real Dukascopy 15s bars for ${{ matrix.pair }} (3 weeks)"
+          for i in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+            git push origin HEAD:"${GITHUB_REF_NAME}" && break
+            sleep 10
+          done

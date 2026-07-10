@@ -67,18 +67,19 @@ def parse_ticks(raw: bytes, scale: int) -> List[Tuple[int, float, float]]:
 
 
 def ticks_to_minute_bars(
-    ticks: List[Tuple[int, float, float]], hour_start: datetime
+    ticks: List[Tuple[int, float, float]], hour_start: datetime,
+    bar_seconds: int = 60,
 ) -> List[Dict]:
-    """1時間ぶんのティックを1分足OHLCに集約する。"""
+    """1時間ぶんのティックを bar_seconds 秒足OHLCに集約する（既定 60 = 1分足）。"""
     buckets: Dict[int, List] = {}
     for ms, price, vol in ticks:
-        minute = ms // 60000
-        buckets.setdefault(minute, []).append((ms, price, vol))
+        bucket = ms // (bar_seconds * 1000)
+        buckets.setdefault(bucket, []).append((ms, price, vol))
     bars = []
-    for minute in sorted(buckets):
-        rows = sorted(buckets[minute])
+    for bucket in sorted(buckets):
+        rows = sorted(buckets[bucket])
         prices = [p for _, p, _ in rows]
-        t = hour_start + timedelta(minutes=minute)
+        t = hour_start + timedelta(seconds=bucket * bar_seconds)
         bars.append({
             "time": t.isoformat(),
             "open": prices[0],
@@ -108,15 +109,17 @@ def hour_url(pair: str, dt: datetime) -> str:
             f"{dt.day:02d}/{dt.hour:02d}h_ticks.bi5")
 
 
-def fetch_hour(pair: str, dt: datetime, retries: int = 3) -> Optional[List[Dict]]:
-    """1時間ぶんを取得して1分足に。取得不可なら None。"""
+def fetch_hour(pair: str, dt: datetime, retries: int = 3,
+               bar_seconds: int = 60) -> Optional[List[Dict]]:
+    """1時間ぶんを取得して bar_seconds 秒足に。取得不可なら None。"""
     url = hour_url(pair, dt)
     for attempt in range(retries):
         try:
             data = _http_get(url)
             raw = decompress_bi5(data)
             return ticks_to_minute_bars(parse_ticks(raw, pair_scale(pair)),
-                                        dt.replace(minute=0, second=0, microsecond=0))
+                                        dt.replace(minute=0, second=0, microsecond=0),
+                                        bar_seconds=bar_seconds)
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 return []  # その時間は取引なし（週末等）
@@ -136,7 +139,7 @@ def parse_hours_arg(s: Optional[str]) -> List[int]:
 
 
 def download(pair: str, dt_from: datetime, dt_to: datetime, hours: List[int],
-             out_path: str, delay: float = 0.1) -> int:
+             out_path: str, delay: float = 0.1, bar_seconds: int = 60) -> int:
     """期間×時間帯をダウンロードしCSVに追記保存。書けた行数を返す。"""
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     write_header = not os.path.exists(out_path) or os.path.getsize(out_path) == 0
@@ -149,7 +152,7 @@ def download(pair: str, dt_from: datetime, dt_to: datetime, hours: List[int],
         while day < dt_to:
             for h in hours:
                 dt = day.replace(hour=h)
-                bars = fetch_hour(pair, dt)
+                bars = fetch_hour(pair, dt, bar_seconds=bar_seconds)
                 if bars is None:
                     blocked += 1
                     if blocked <= 1:
@@ -193,6 +196,14 @@ def self_test() -> int:
     # 空データも安全
     assert ticks_to_minute_bars(parse_ticks(decompress_bi5(b""), scale),
                                 datetime(2024, 1, 1)) == []
+    # 15秒足の集約（1000ms/30000ms は別バケット、61000ms は 10:01:00）
+    bars15 = ticks_to_minute_bars(
+        parsed, datetime(2024, 1, 1, 10, tzinfo=timezone.utc), bar_seconds=15)
+    assert len(bars15) == 4, bars15
+    assert bars15[0]["time"].endswith("10:00:00+00:00"), bars15[0]
+    assert bars15[1]["time"].endswith("10:00:30+00:00"), bars15[1]
+    assert bars15[2]["time"].endswith("10:01:00+00:00"), bars15[2]
+    assert abs(bars15[0]["close"] - 1.10000) < 1e-9, bars15[0]
     print("=== fetch_dukascopy 自己テスト成功 ===")
     return 0
 
@@ -204,6 +215,8 @@ def main(argv=None) -> int:
     p.add_argument("--to", dest="dto", help="終了日 YYYY-MM-DD（排他）")
     p.add_argument("--hours", help="GMT時間帯 例 8-21 または 8,9,10（既定 全24時間）")
     p.add_argument("--out", help="出力CSV（既定 data/m1/<PAIR>.csv）")
+    p.add_argument("--bar-seconds", type=int, default=60,
+                   help="集約する足の秒数（既定 60=1分足。15秒取引の検証には 15）")
     p.add_argument("--self-test", action="store_true", help="パーサの自己テスト（ネット不要）")
     p.add_argument("--probe", action="store_true", help="1時間ぶんの接続確認だけ行う")
     args = p.parse_args(argv)
@@ -225,11 +238,12 @@ def main(argv=None) -> int:
         p.error("ダウンロードには --from と --to が必要です（または --self-test）")
     dt_from = datetime.strptime(args.dfrom, "%Y-%m-%d").replace(tzinfo=timezone.utc)
     dt_to = datetime.strptime(args.dto, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    subdir = "m1" if args.bar_seconds == 60 else f"s{args.bar_seconds}"
     out = args.out or os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                   "m1", f"{args.pair.upper()}.csv")
+                                   subdir, f"{args.pair.upper()}.csv")
     hours = parse_hours_arg(args.hours)
     print(f"[DL] {args.pair} {args.dfrom}..{args.dto} hours={hours[0]}-{hours[-1]} → {out}")
-    n = download(args.pair, dt_from, dt_to, hours, out)
+    n = download(args.pair, dt_from, dt_to, hours, out, bar_seconds=args.bar_seconds)
     print(f"[DL] 書き出し {n} 本 → {out}")
     return 0 if n > 0 else 1
 

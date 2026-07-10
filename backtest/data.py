@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import csv
+import gzip
 import math
 import random
 from dataclasses import dataclass, field
@@ -75,7 +76,8 @@ def load_csv(path: str, name: Optional[str] = None) -> Series:
     列が必要。open/high/low が無い場合は close で代用する。
     """
     bars: List[Bar] = []
-    with open(path, newline="", encoding="utf-8-sig") as f:
+    opener = gzip.open if path.endswith(".gz") else open
+    with opener(path, "rt", newline="", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         fns = reader.fieldnames or []
         kt = _find_key(fns, _TIME_KEYS)
