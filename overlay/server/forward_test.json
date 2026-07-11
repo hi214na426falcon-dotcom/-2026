@@ -1,7 +1,7 @@
 {
   "mode": "forward_test",
   "note": "検証中ルール（WF生存）。合格戦略ではない。少額/デモ限定・ペイアウト1.90以上のみ・発注は手動。",
-  "generated_at": "2026-07-11T22:31:33.422460+00:00",
+  "generated_at": "2026-07-11T23:15:33.288368+00:00",
   "picks": [
     {
       "pair": "AUDJPY",
@@ -61,6 +61,31 @@
       "recommended": false
     },
     {
+      "pair": "BTCUSD",
+      "strategy": "bollinger",
+      "params": {
+        "period": 30,
+        "num_std": 2.5
+      },
+      "invert": false,
+      "expiry_min": 3,
+      "slot_jst": "all",
+      "train": {
+        "days": 84,
+        "n": 1576,
+        "win_rate": 0.5857,
+        "lcb": 0.5612
+      },
+      "adopted": true,
+      "expected_oos_note": "WF実績ベースの期待勝率は53〜55%域（学習側の数字ではない）",
+      "data_last": "2026-07-11T21:59:00+00:00",
+      "wf_oos": {
+        "win_rate": 0.5373,
+        "n": 7277
+      },
+      "recommended": true
+    },
+    {
       "pair": "CADJPY",
       "strategy": "bollinger",
       "params": {
@@ -110,6 +135,34 @@
       "wf_oos": {
         "win_rate": 0.5477,
         "n": 3049
+      },
+      "recommended": true
+    },
+    {
+      "pair": "ETHUSD",
+      "strategy": "bollinger",
+      "params": {
+        "period": 20,
+        "num_std": 2.5
+      },
+      "invert": false,
+      "expiry_min": 3,
+      "slot_jst": [
+        0,
+        3
+      ],
+      "train": {
+        "days": 84,
+        "n": 369,
+        "win_rate": 0.6233,
+        "lcb": 0.5728
+      },
+      "adopted": true,
+      "expected_oos_note": "WF実績ベースの期待勝率は53〜55%域（学習側の数字ではない）",
+      "data_last": "2026-07-11T21:59:00+00:00",
+      "wf_oos": {
+        "win_rate": 0.554,
+        "n": 5852
       },
       "recommended": true
     },
