@@ -1,0 +1,39 @@
+name: Probe live-hour availability
+
+# Dukascopy が「現在進行中のGMT時間」のティックを配信するか実測する。
+# （live_pull.py のライブ性の裏取り。完了時間しか取れないなら遅延は最大60分）
+
+on:
+  push:
+    branches: ["claude/strategy-backtest-promote-h7bv1r"]
+    paths: [".github/workflows/probe-live.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: 現在時間・直前1時間の取得可否と最終バー時刻
+        run: |
+          python3 - <<'EOF'
+          import sys, os
+          sys.path.insert(0, 'data')
+          from datetime import datetime, timedelta, timezone
+          from fetch_dukascopy import fetch_hour
+          now = datetime.now(timezone.utc)
+          print(f"now = {now.isoformat()}")
+          for label, dt in (("現在時間", now), ("1時間前", now - timedelta(hours=1)),
+                            ("2時間前", now - timedelta(hours=2))):
+              h = dt.replace(minute=0, second=0, microsecond=0)
+              bars = fetch_hour("CHFJPY", h)
+              if bars is None:
+                  print(f"{label} {h.isoformat()}: 取得失敗")
+              elif not bars:
+                  print(f"{label} {h.isoformat()}: 空(404)")
+              else:
+                  print(f"{label} {h.isoformat()}: {len(bars)}本  最終バー {bars[-1]['time']}")
+          EOF
