@@ -58,8 +58,14 @@ def load_all(wf_dir: str):
         d = json.load(gzip.open(path, "rt"))
         if period_starts is None:
             period_starts = d["period_starts"]
-        elif d["period_starts"] != period_starts:
-            raise ValueError(f"期間グリッド不一致: {path}")
+        else:
+            # データ末尾の違い（例: FXは金曜まで・暗号資産は当日まで）で期間数が
+            # 異なることがある。共通プレフィックスが一致していれば短い方に揃える。
+            m = min(len(period_starts), len(d["period_starts"]))
+            if d["period_starts"][:m] != period_starts[:m]:
+                raise ValueError(f"期間グリッド不一致: {path}")
+            if len(d["period_starts"]) < len(period_starts):
+                period_starts = d["period_starts"]
         slots = d["slots"] + ["all"]
         for gi, cfg in enumerate(d["grid"]):
             per_slot = d["counts"][gi]
@@ -74,6 +80,9 @@ def load_all(wf_dir: str):
                          f"/{slot}")
                 arms.append({"pair": d["pair"], "cfg": cfg, "slot": slot,
                              "label": label, "periods": periods})
+    n_p = len(period_starts)
+    for a in arms:
+        a["periods"] = a["periods"][:n_p]
     return arms, period_starts, d["train_periods"]
 
 
