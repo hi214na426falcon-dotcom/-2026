@@ -7,52 +7,74 @@
   if (window.__binarySignOverlayLoaded) return;
   window.__binarySignOverlayLoaded = true;
 
-  const POLL_MS = 2500;
+  const POLL_MS = 2000;
 
   // --- パネル生成 -----------------------------------------------------------
   const panel = document.createElement("div");
   panel.id = "bin-sign-overlay";
   panel.innerHTML = `
     <div class="bso-header" id="bso-header">
-      <span class="bso-title">サインツール（表示専用）</span>
-      <span class="bso-min" id="bso-min" title="最小化">▁</span>
+      <span class="bso-dot" id="bso-dot"></span>
+      <span class="bso-title">BINARY SIGN<span class="bso-sub">フォワードテスト</span></span>
+      <span class="bso-min" id="bso-min" title="最小化">–</span>
     </div>
     <div class="bso-body" id="bso-body">
-      <div class="bso-conn" id="bso-conn">接続待ち…</div>
 
-      <div class="bso-section">
-        <div class="bso-label">この時間帯の推奨ペア（JST）</div>
-        <div class="bso-pair" id="bso-pair">―</div>
-        <div class="bso-winrate" id="bso-winrate"></div>
-        <div class="bso-slotmeta" id="bso-slotmeta"></div>
+      <div class="bso-bank">
+        <div class="bso-bank-row">
+          <div>
+            <div class="bso-label">残高</div>
+            <div class="bso-balance" id="bso-balance">¥5,000</div>
+          </div>
+          <div class="bso-bank-right">
+            <div class="bso-label">次のベット</div>
+            <div class="bso-stake" id="bso-stake">¥1,000</div>
+            <div class="bso-shots" id="bso-shots">残弾 5</div>
+          </div>
+        </div>
+        <div class="bso-bar"><div class="bso-bar-fill" id="bso-bar-fill"></div></div>
       </div>
 
       <div class="bso-section">
-        <div class="bso-label">予測</div>
-        <div class="bso-dir" id="bso-dir">検証済み戦略なし</div>
-        <div class="bso-rationale" id="bso-rationale"></div>
+        <div class="bso-label">今日のピック（WF生存ルール・検証中）</div>
+        <div class="bso-pick" id="bso-pick">―</div>
+        <div class="bso-pickmeta" id="bso-pickmeta"></div>
+      </div>
+
+      <div class="bso-signal-wrap">
+        <div class="bso-signal" id="bso-signal">待機中</div>
+        <div class="bso-signal-meta" id="bso-signal-meta"></div>
+      </div>
+
+      <div class="bso-section bso-fwd">
+        <div class="bso-label">フォワードテスト成績</div>
+        <div class="bso-score" id="bso-score">0勝 0敗</div>
+        <div class="bso-meter">
+          <div class="bso-meter-be" style="left:52.6%"></div>
+          <div class="bso-meter-fill" id="bso-meter-fill"></div>
+        </div>
+        <div class="bso-meter-label" id="bso-meter-label">損益分岐 52.6%（@1.90）</div>
       </div>
 
       <div class="bso-section" id="bso-bonus-wrap">
-        <div class="bso-streak" id="bso-streak">連勝: 0</div>
-        <div class="bso-bonus" id="bso-bonus"></div>
+        <span class="bso-streak" id="bso-streak">連勝 0</span>
+        <span class="bso-bonus" id="bso-bonus"></span>
       </div>
 
-      <div class="bso-section">
-        <div class="bso-label">結果を記録（手動）</div>
-        <div class="bso-btns">
-          <button class="bso-btn bso-win" id="bso-win">勝ち</button>
-          <button class="bso-btn bso-loss" id="bso-loss">負け</button>
-          <button class="bso-btn bso-reset" id="bso-reset">リセット</button>
-        </div>
+      <div class="bso-btns">
+        <button class="bso-btn bso-win" id="bso-win">勝ち</button>
+        <button class="bso-btn bso-loss" id="bso-loss">負け</button>
+        <button class="bso-btn bso-tie" id="bso-tie">同値</button>
+        <button class="bso-btn bso-reset" id="bso-reset" title="残高と成績を初期化">↺</button>
       </div>
 
-      <div class="bso-foot">発注は必ず手動。自動売買機能はありません。</div>
+      <div class="bso-foot">検証中ルール（期待勝率53〜55%）／ペイアウト1.90未満では打たない<br>発注は必ず手動。自動売買機能はありません。</div>
     </div>
   `;
   document.documentElement.appendChild(panel);
 
   const $ = (id) => document.getElementById(id);
+  const yen = (v) => "¥" + Math.round(v).toLocaleString("ja-JP");
 
   // --- 最小化 --------------------------------------------------------------
   $("bso-min").addEventListener("click", (e) => {
@@ -100,49 +122,74 @@
 
   // --- 描画 ----------------------------------------------------------------
   function render(state) {
-    const feed = state.feed_status || (state.connected === false ? "オフライン" : "オンライン");
-    $("bso-conn").textContent = "接続: " + feed;
-    $("bso-conn").className = "bso-conn " + (feed === "オンライン" ? "bso-ok" : "bso-warn");
+    const online = state.connected !== false;
+    $("bso-dot").className = "bso-dot " + (online ? "bso-dot-on" : "bso-dot-off");
 
-    const slot = state.current_slot;
-    if (slot) {
-      $("bso-pair").textContent = slot.recommended_pair || "―";
-      const wr = slot.expected_win_rate;
-      $("bso-winrate").textContent =
-        wr != null ? `想定勝率 ${(wr * 100).toFixed(1)}%（信頼度 ${slot.confidence || "―"}）` : "";
-      $("bso-slotmeta").textContent =
-        `${slot.window} / サンプル ${slot.sample || 0}件 / ` +
-        (slot.go ? "実弾GO可" : "見送り推奨");
-      $("bso-slotmeta").className = "bso-slotmeta " + (slot.go ? "bso-ok" : "bso-warn");
-      $("bso-rationale").textContent = slot.rationale || "";
+    // 残高・ベット
+    const bank = state.bank || {};
+    const bal = bank.balance != null ? bank.balance : 5000;
+    $("bso-balance").textContent = yen(bal);
+    $("bso-balance").className = "bso-balance " +
+      (bal > bank.bankroll_start ? "bso-plus" : bal < bank.bankroll_start ? "bso-minus" : "");
+    $("bso-stake").textContent = yen(bank.next_stake != null ? bank.next_stake : 1000);
+    $("bso-shots").textContent = `残弾 ${bank.shots_left != null ? bank.shots_left : 5}`;
+    const pct = Math.max(0, Math.min(100, (bal / (bank.bankroll_start || 5000)) * 100));
+    const fill = $("bso-bar-fill");
+    fill.style.width = pct + "%";
+    fill.className = "bso-bar-fill " + (pct >= 100 ? "bso-bar-up" : pct >= 40 ? "bso-bar-mid" : "bso-bar-low");
+    if (!bank.can_trade) $("bso-shots").textContent = "残高不足 — 停止";
+
+    // ピック
+    const fwd = state.forward || {};
+    const pick = fwd.pick;
+    if (pick) {
+      const inv = pick.invert ? "・反転" : "";
+      const slot = pick.slot_jst === "all" ? "全夜間" : `${pick.slot_jst[0]}-${pick.slot_jst[1]}時`;
+      $("bso-pick").textContent = `${pick.pair} / ${pick.strategy}${inv} / 判定${pick.expiry_min}分`;
+      $("bso-pickmeta").textContent =
+        `JST ${slot}・学習下限 ${(pick.train.lcb * 100).toFixed(1)}%・` +
+        `直近${pick.train.days}日 N=${pick.train.n}`;
     } else {
-      $("bso-pair").textContent = "―（対象時間帯外）";
-      $("bso-winrate").textContent = "";
-      $("bso-slotmeta").textContent = "推奨時間帯（夜17〜24時・深夜0〜6時）外です";
+      $("bso-pick").textContent = "―";
+      $("bso-pickmeta").textContent = "";
     }
 
-    // 予測（検証済み戦略があるときだけ方向を出す）
-    if (state.direction) {
-      const up = state.direction === "UP";
-      $("bso-dir").textContent = (up ? "▲ 上（High）" : "▼ 下（Low）") +
-        (state.confidence != null ? `  ${(state.confidence * 100).toFixed(0)}%` : "");
-      $("bso-dir").className = "bso-dir " + (up ? "bso-up" : "bso-down");
+    // シグナル
+    const sig = $("bso-signal");
+    if (fwd.direction === "UP") {
+      sig.textContent = "▲ HIGH";
+      sig.className = "bso-signal bso-up";
+    } else if (fwd.direction === "DOWN") {
+      sig.textContent = "▼ LOW";
+      sig.className = "bso-signal bso-down";
     } else {
-      $("bso-dir").textContent = state.status || "検証済み戦略なし（方向は非表示）";
-      $("bso-dir").className = "bso-dir";
+      sig.textContent = "待機中";
+      sig.className = "bso-signal bso-wait";
     }
+    $("bso-signal-meta").textContent = fwd.status || "";
 
-    // 連勝・ボーナスステージ
+    // フォワード成績
+    $("bso-score").textContent =
+      `${bank.w || 0}勝 ${bank.l || 0}敗` +
+      (bank.t ? ` ${bank.t}分` : "") +
+      (bank.pnl != null ? `　損益 ${bank.pnl >= 0 ? "+" : ""}${yen(bank.pnl).replace("¥", "¥")}` : "");
+    const wr = bank.win_rate;
+    const mf = $("bso-meter-fill");
+    mf.style.width = wr != null ? Math.min(100, wr * 100) + "%" : "0%";
+    mf.className = "bso-meter-fill " + (wr != null && wr > (bank.breakeven || 0.526) ? "bso-bar-up" : "bso-bar-low");
+    $("bso-meter-label").textContent = wr != null
+      ? `勝率 ${(wr * 100).toFixed(1)}%（損益分岐 52.6% @1.90）`
+      : "損益分岐 52.6%（@1.90）";
+
+    // 連勝・ボーナス
     const mm = state.money || {};
-    $("bso-streak").textContent = `連勝: ${mm.streak || 0}`;
+    $("bso-streak").textContent = `連勝 ${mm.streak || 0}`;
     if (mm.bonus_active) {
-      $("bso-bonus").textContent = `🎉 ボーナスステージ（逆マーチン Lv.${mm.bonus_level}）`;
-      $("bso-bonus").style.display = "block";
+      $("bso-bonus").textContent = `🎉 ボーナス Lv.${mm.bonus_level}`;
       panel.classList.add("bso-bonus-on");
     } else {
       const need = (mm.bonus_threshold || 3) - (mm.streak || 0);
       $("bso-bonus").textContent = need > 0 ? `あと${need}連勝でボーナス` : "";
-      $("bso-bonus").style.display = mm.bonus_active === undefined ? "none" : "block";
       panel.classList.remove("bso-bonus-on");
     }
   }
@@ -152,8 +199,10 @@
     if (resp.ok && resp.data) {
       render(resp.data);
     } else {
-      $("bso-conn").textContent = "接続: サーバー未起動（predict_server.py を起動してください）";
-      $("bso-conn").className = "bso-conn bso-warn";
+      $("bso-dot").className = "bso-dot bso-dot-off";
+      $("bso-signal").textContent = "サーバー未起動";
+      $("bso-signal").className = "bso-signal bso-wait";
+      $("bso-signal-meta").textContent = "predict_server.py を起動してください";
     }
   }
 
@@ -162,12 +211,14 @@
     if (resp.ok && resp.data) render(resp.data);
   }
   async function reset() {
+    if (!window.confirm("残高と成績を初期化します（記録はアーカイブされます）")) return;
     const resp = await call("/reset", "POST", {});
     if (resp.ok && resp.data) render(resp.data);
   }
 
   $("bso-win").addEventListener("click", () => report("win"));
   $("bso-loss").addEventListener("click", () => report("loss"));
+  $("bso-tie").addEventListener("click", () => report("tie"));
   $("bso-reset").addEventListener("click", reset);
 
   refresh();

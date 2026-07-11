@@ -10,3 +10,7 @@ venv/
 # OS / editor
 .DS_Store
 *.swp
+
+# フォワードテストの実行時ログ（コミットしない）
+overlay/server/forward_log.jsonl*
+data/m1/*_live.csv

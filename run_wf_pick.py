@@ -12,6 +12,7 @@
 
 使い方:  python3 run_wf_pick.py [PAIR ...]     （既定 CHFJPY USDJPY AUDJPY）
 """
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 
@@ -25,11 +26,11 @@ from agents.pair_stats import find_pair_files
 TRAIN_DAYS = 84
 
 
-def pick(pair: str, data_dir: str = "data/m1"):
+def pick(pair: str, data_dir: str = "data/m1", min_expiry: int = 1):
     files = find_pair_files(pair, data_dir)
     if not files:
         print(f"[{pair}] 実データなし")
-        return
+        return None
     bars = []
     for f in files:
         bars.extend(load_csv(f, name=pair).bars)
@@ -40,6 +41,8 @@ def pick(pair: str, data_dir: str = "data/m1"):
     best = None
     cache = {}
     for cfg in build_grid():
+        if cfg["expiry"] < min_expiry:
+            continue
         key = f"{cfg['strategy']}|{sorted(cfg['params'].items())}"
         if key not in cache:
             cache[key] = STRATEGIES[cfg["strategy"]](series, **cfg["params"])
@@ -72,25 +75,59 @@ def pick(pair: str, data_dir: str = "data/m1"):
     print(f"\n===== {pair}（データ末尾 {last.date()}, 直近{TRAIN_DAYS}日で選択）=====")
     if best is None:
         print("  学習取引数が足りるアームがありません")
-        return
+        return None
     lcb, wr, n, cfg, slot = best
     print(f"  最良アーム: {cfg['strategy']} {cfg['params']}"
           f"{'（逆張り反転）' if cfg['invert'] else ''} 判定{cfg['expiry']}分"
           f" / JST時間帯 {slot}")
     print(f"  直近84日: 勝率 {wr*100:.2f}% (N={n}, Wilson下限 {lcb*100:.2f}%)")
-    if lcb > BREAKEVEN_190:
+    adopted = lcb > BREAKEVEN_190
+    if adopted:
         print(f"  → 下限が損益分岐52.63%を超過。ルール上は【採用】"
               f"（ただし期待勝率は53〜55%域。1.80倍では打たないこと）")
     else:
         print(f"  → 下限が損益分岐に届かず。ルール上は【見送り】＝今は打たない")
+    return {
+        "pair": pair,
+        "strategy": cfg["strategy"],
+        "params": cfg["params"],
+        "invert": cfg["invert"],
+        "expiry_min": cfg["expiry"],
+        "slot_jst": (list(slot) if isinstance(slot, tuple) else "all"),
+        "train": {"days": TRAIN_DAYS, "n": n, "win_rate": round(wr, 4),
+                  "lcb": round(lcb, 4)},
+        "adopted": adopted,
+        "expected_oos_note": "WF実績ベースの期待勝率は53〜55%域（学習側の数字ではない）",
+        "data_last": series.bars[-1].time,
+    }
 
 
 def main() -> int:
-    pairs = [a.upper() for a in sys.argv[1:]] or ["CHFJPY", "USDJPY", "AUDJPY"]
+    args = [a for a in sys.argv[1:]]
+    emit = "--emit" in args
+    pairs = [a.upper() for a in args if not a.startswith("--")] or \
+        ["CHFJPY", "USDJPY", "AUDJPY"]
     print("ウォークフォワード生存ルールによる現在ピック"
           "（データが古い場合は fetch-histdata.yml で更新してから実行）")
-    for p in pairs:
-        pick(p)
+    # --emit（オーバーレイ配信用）はライブ取り込みの配信遅延を考慮し判定3分以上に限定
+    min_expiry = 3 if emit else 1
+    if emit:
+        print("[emit] ライブフィード遅延のため判定3分以上のアームに限定します")
+    picks = [p for p in (pick(pr, min_expiry=min_expiry) for pr in pairs) if p]
+    if emit:
+        import json
+        from datetime import timezone as _tz
+        out = os.path.join("overlay", "server", "forward_test.json")
+        payload = {
+            "mode": "forward_test",
+            "note": "検証中ルール（WF生存）。合格戦略ではない。少額/デモ限定・"
+                    "ペイアウト1.90以上のみ・発注は手動。",
+            "generated_at": datetime.now(_tz.utc).isoformat(),
+            "picks": [p for p in picks if p["adopted"]],
+        }
+        with open(out, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+        print(f"\n[EMIT] {out} に {len(payload['picks'])} 本のピックを書き出しました")
     print("\n※これは統計的選択であり将来の勝率を保証しない。デモでのフォワード"
           "テスト→少額、ペイアウト1.90以上の時間帯・商品に限定、資金管理は"
           "1,000円固定＋3連勝ボーナスのまま変えないこと。")

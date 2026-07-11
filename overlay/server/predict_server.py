@@ -41,6 +41,8 @@ import live_feed  # noqa: E402  （overlay/server 内の同階層モジュール
 
 SCHEDULE_PATH = os.path.join(THIS_DIR, "schedule.json")
 APPROVED_PATH = os.path.join(REPO_ROOT, "backtest", "results", "approved_strategy.json")
+FORWARD_PATH = os.path.join(THIS_DIR, "forward_test.json")
+FORWARD_LOG = os.path.join(THIS_DIR, "forward_log.jsonl")
 DATA_DIR = os.path.join(REPO_ROOT, "data", "m1")
 
 # 予測方向を出してよい approved_strategy.json の必須キー（README の想定スキーマ）。
@@ -49,6 +51,192 @@ _APPROVED_REQUIRED = ("pair", "strategy", "expiry_min", "payout", "oos_passed")
 _lock = threading.Lock()
 _mm = MoneyManager()
 _sched_cache = {"mtime": None, "data": None}
+_fwd_cache = {"mtime": None, "data": None}
+
+# --- フォワードテスト資金管理（5,000円・1,000円固定＋3連勝ボーナス） --------
+BANKROLL_START = 5000.0
+PAYOUT_DEFAULT = 1.90
+BREAKEVEN = 1.0 / PAYOUT_DEFAULT
+_bank = {"balance": BANKROLL_START, "n": 0, "w": 0, "l": 0, "t": 0,
+         "pnl": 0.0}
+
+
+def _replay_forward_log() -> None:
+    """再起動してもフォワードテストの記録が残るようログを読み戻す。"""
+    if not os.path.exists(FORWARD_LOG):
+        return
+    try:
+        with open(FORWARD_LOG, "r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    e = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                r = e.get("result")
+                if r not in ("win", "loss", "tie"):
+                    continue
+                _bank["n"] += 1
+                _bank["w"] += r == "win"
+                _bank["l"] += r == "loss"
+                _bank["t"] += r == "tie"
+                _bank["pnl"] += float(e.get("pnl", 0.0))
+                _mm.record(r)
+        _bank["balance"] = BANKROLL_START + _bank["pnl"]
+    except OSError:
+        pass
+
+
+def _wilson_lcb(w: int, n: int) -> float:
+    if n == 0:
+        return 0.0
+    import math
+    z = 1.96
+    p = w / n
+    denom = 1 + z * z / n
+    centre = p + z * z / (2 * n)
+    rad = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+    return (centre - rad) / denom
+
+
+def load_forward():
+    """forward_test.json（run_wf_pick.py --emit が生成）を読む。"""
+    try:
+        mtime = os.path.getmtime(FORWARD_PATH)
+    except OSError:
+        return None
+    if _fwd_cache["mtime"] != mtime:
+        try:
+            with open(FORWARD_PATH, "r", encoding="utf-8") as f:
+                _fwd_cache["data"] = json.load(f)
+            _fwd_cache["mtime"] = mtime
+        except (OSError, json.JSONDecodeError):
+            return _fwd_cache["data"]
+    return _fwd_cache["data"]
+
+
+def _active_pick(now_jst_hour: int):
+    """現在のJST時間に有効なピック（学習LCB最大）を返す。"""
+    fwd = load_forward()
+    if not fwd:
+        return None
+    best = None
+    for p in fwd.get("picks", []):
+        slot = p.get("slot_jst")
+        if slot != "all":
+            a, b = slot
+            if not (a <= now_jst_hour < b):
+                continue
+        lcb = (p.get("train") or {}).get("lcb", 0)
+        if best is None or lcb > (best.get("train") or {}).get("lcb", 0):
+            best = p
+    return best
+
+
+def forward_signal(now_jst_hour: int = None, data_dir: str = None) -> dict:
+    """フォワードテスト・モードのシグナル。合格ゲートとは別枠＝『検証中』表示。"""
+    from datetime import datetime, timezone, timedelta
+    if now_jst_hour is None:
+        now_jst_hour = datetime.now(timezone(timedelta(hours=9))).hour
+    base = {"mode": "forward_test", "pick": None, "direction": None,
+            "status": "ピックなし（run_wf_pick.py --emit を実行）"}
+    pick = _active_pick(now_jst_hour)
+    if pick is None:
+        fwd = load_forward()
+        if fwd and fwd.get("picks"):
+            base["status"] = "現在のJST時間帯に有効なピックなし（時間帯外）"
+        return base
+    base["pick"] = pick
+    bars = live_feed.recent_bars(pick["pair"], data_dir or DATA_DIR)
+    if not bars or len(bars.get("closes", [])) < 40:
+        base["status"] = ("相場データ待ち — live_pull.py を起動してください "
+                          f"(python3 overlay/server/live_pull.py --pair {pick['pair']})")
+        return base
+    from backtest.strategies import STRATEGIES, UP, DOWN
+    try:
+        fn = STRATEGIES[pick["strategy"]]
+        from backtest.data import Bar, Series
+        closes = bars["closes"]
+        times = bars["times"]
+        sbars = [Bar(time=times[i] if i < len(times) else None,
+                     open=c, high=c, low=c, close=float(c))
+                 for i, c in enumerate(closes)]
+        sig = fn(Series(sbars, name=pick["pair"]), **(pick.get("params") or {}))
+        last = sig[-1] if sig else None
+        if pick.get("invert") and last is not None:
+            last = UP if last == DOWN else DOWN
+    except Exception as e:
+        base["status"] = f"シグナル計算エラー: {e}"
+        return base
+    base["source"] = bars.get("source")
+    base["last_bar"] = bars.get("last_time")
+    if last is None:
+        base["status"] = "シグナル待機中（条件不成立）"
+    else:
+        base["direction"] = last
+        base["status"] = "シグナル発生（検証中ルール・少額/デモのみ）"
+    return base
+
+
+def bank_snapshot() -> dict:
+    """フォワードテストの残高・成績スナップショット。"""
+    stake = min(_mm.next_stake, _bank["balance"])
+    decided = _bank["w"] + _bank["l"]
+    wr = _bank["w"] / decided if decided else None
+    return {
+        "bankroll_start": BANKROLL_START,
+        "balance": round(_bank["balance"], 0),
+        "next_stake": round(max(0.0, stake), 0),
+        "shots_left": int(_bank["balance"] // _mm.base_stake),
+        "can_trade": _bank["balance"] >= _mm.base_stake,
+        "n": _bank["n"], "w": _bank["w"], "l": _bank["l"], "t": _bank["t"],
+        "win_rate": round(wr, 4) if wr is not None else None,
+        "win_rate_lcb": round(_wilson_lcb(_bank["w"], decided), 4) if decided else None,
+        "breakeven": round(BREAKEVEN, 4),
+        "pnl": round(_bank["pnl"], 0),
+        "payout": PAYOUT_DEFAULT,
+    }
+
+
+def record_forward(result: str, payout: float = None) -> dict:
+    """結果を記録し、残高・連勝・ログを更新する。"""
+    from datetime import datetime, timezone
+    payout = payout or PAYOUT_DEFAULT
+    stake = min(_mm.next_stake, _bank["balance"])
+    if stake < 1:
+        return {"error": "残高不足。フォワードテスト終了（リセットで再開）"}
+    pnl = stake * (payout - 1.0) if result == "win" else (
+        -stake if result == "loss" else 0.0)
+    _bank["n"] += 1
+    _bank["w"] += result == "win"
+    _bank["l"] += result == "loss"
+    _bank["t"] += result == "tie"
+    _bank["pnl"] += pnl
+    _bank["balance"] += pnl
+    _mm.record(result)
+    try:
+        with open(FORWARD_LOG, "a", encoding="utf-8") as f:
+            f.write(json.dumps({
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "result": result, "stake": stake, "payout": payout,
+                "pnl": pnl, "balance": _bank["balance"],
+            }, ensure_ascii=False) + "\n")
+    except OSError:
+        pass
+    return bank_snapshot()
+
+
+def reset_bank() -> None:
+    """残高と成績を初期化（ログはアーカイブして消さない）。"""
+    _bank.update({"balance": BANKROLL_START, "n": 0, "w": 0, "l": 0, "t": 0,
+                  "pnl": 0.0})
+    _mm.reset()
+    if os.path.exists(FORWARD_LOG):
+        from datetime import datetime, timezone
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+        try:
+            os.replace(FORWARD_LOG, FORWARD_LOG + "." + stamp)
+        except OSError:
+            pass
 
 
 def load_schedule():
@@ -126,6 +314,8 @@ def build_state() -> dict:
     pred = get_prediction(pair)
     with _lock:
         money = _mm.snapshot()
+        fwd = forward_signal()
+        bank = bank_snapshot()
     return {
         "feed_status": "オンライン",
         "connected": True,
@@ -135,6 +325,8 @@ def build_state() -> dict:
         "confidence": pred["confidence"],
         "status": pred["status"],
         "money": money,
+        "forward": fwd,
+        "bank": bank,
     }
 
 
@@ -166,6 +358,10 @@ class Handler(BaseHTTPRequestHandler):
             q = parse_qs(parsed.query)
             pair = (q.get("pair", ["USDJPY"])[0]) or "USDJPY"
             self._send(200, get_prediction(pair))
+        elif parsed.path == "/forward":
+            with _lock:
+                self._send(200, {"signal": forward_signal(),
+                                 "bank": bank_snapshot()})
         elif parsed.path in ("/", "/health"):
             self._send(200, {"ok": True, "service": "binary-sign predict server"})
         else:
@@ -186,11 +382,14 @@ class Handler(BaseHTTPRequestHandler):
                 self._send(400, {"error": "result は win/loss/tie"})
                 return
             with _lock:
-                _mm.record(result)
+                out = record_forward(result, body.get("payout"))
+            if "error" in out:
+                self._send(409, out)
+                return
             self._send(200, build_state())
         elif parsed.path == "/reset":
             with _lock:
-                _mm.reset()
+                reset_bank()
             self._send(200, build_state())
         else:
             self._send(404, {"error": "not found"})
@@ -202,6 +401,15 @@ def main(argv=None) -> int:
     p.add_argument("--host", default="127.0.0.1")
     args = p.parse_args(argv)
 
+    _replay_forward_log()
+    if _bank["n"]:
+        print(f"[サーバー] フォワードテスト記録を復元: {_bank['n']}戦 "
+              f"{_bank['w']}勝{_bank['l']}敗 残高 {_bank['balance']:,.0f}円")
+    fwd = load_forward()
+    if fwd:
+        print(f"[サーバー] forward_test.json 読込 OK（ピック {len(fwd.get('picks', []))} 本）")
+    else:
+        print("[サーバー] forward_test.json 未生成。`python3 run_wf_pick.py --emit` を実行してください。")
     sched = load_schedule()
     if sched:
         print(f"[サーバー] schedule.json 読込 OK（mode={sched.get('mode')}, "

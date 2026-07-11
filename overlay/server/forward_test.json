@@ -1,0 +1,76 @@
+{
+  "mode": "forward_test",
+  "note": "検証中ルール（WF生存）。合格戦略ではない。少額/デモ限定・ペイアウト1.90以上のみ・発注は手動。",
+  "generated_at": "2026-07-11T07:14:50.715341+00:00",
+  "picks": [
+    {
+      "pair": "CHFJPY",
+      "strategy": "bollinger",
+      "params": {
+        "period": 30,
+        "num_std": 2.5
+      },
+      "invert": false,
+      "expiry_min": 5,
+      "slot_jst": [
+        17,
+        20
+      ],
+      "train": {
+        "days": 84,
+        "n": 182,
+        "win_rate": 0.6264,
+        "lcb": 0.5542
+      },
+      "adopted": true,
+      "expected_oos_note": "WF実績ベースの期待勝率は53〜55%域（学習側の数字ではない）",
+      "data_last": "2026-06-26T21:58:00+00:00"
+    },
+    {
+      "pair": "USDJPY",
+      "strategy": "bollinger",
+      "params": {
+        "period": 20,
+        "num_std": 2.5
+      },
+      "invert": false,
+      "expiry_min": 5,
+      "slot_jst": [
+        17,
+        20
+      ],
+      "train": {
+        "days": 84,
+        "n": 233,
+        "win_rate": 0.5923,
+        "lcb": 0.5282
+      },
+      "adopted": true,
+      "expected_oos_note": "WF実績ベースの期待勝率は53〜55%域（学習側の数字ではない）",
+      "data_last": "2026-06-26T21:58:00+00:00"
+    },
+    {
+      "pair": "AUDJPY",
+      "strategy": "bollinger",
+      "params": {
+        "period": 10,
+        "num_std": 2.5
+      },
+      "invert": false,
+      "expiry_min": 3,
+      "slot_jst": [
+        20,
+        24
+      ],
+      "train": {
+        "days": 84,
+        "n": 150,
+        "win_rate": 0.6467,
+        "lcb": 0.5674
+      },
+      "adopted": true,
+      "expected_oos_note": "WF実績ベースの期待勝率は53〜55%域（学習側の数字ではない）",
+      "data_last": "2026-06-26T21:58:00+00:00"
+    }
+  ]
+}
