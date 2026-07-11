@@ -102,11 +102,23 @@ def pick(pair: str, data_dir: str = "data/m1", min_expiry: int = 1):
     }
 
 
+def discover_pairs(data_dir: str = "data/m1"):
+    """data/m1 にデータがある全ペアを検出（FXも暗号資産も同列に扱う）。"""
+    import glob as _glob
+    names = set()
+    for p in _glob.glob(os.path.join(data_dir, "*.csv*")):
+        base = os.path.basename(p).split(".")[0]
+        base = base.replace("_live", "").split("_")[0].upper()
+        if base:
+            names.add(base)
+    return sorted(names)
+
+
 def main() -> int:
     args = [a for a in sys.argv[1:]]
     emit = "--emit" in args
     pairs = [a.upper() for a in args if not a.startswith("--")] or \
-        ["CHFJPY", "USDJPY", "AUDJPY"]
+        discover_pairs()
     print("ウォークフォワード生存ルールによる現在ピック"
           "（データが古い場合は fetch-histdata.yml で更新してから実行）")
     # --emit（オーバーレイ配信用）はライブ取り込みの配信遅延を考慮し判定3分以上に限定
