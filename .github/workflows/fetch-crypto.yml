@@ -1,0 +1,36 @@
+name: Fetch crypto data (Coinbase)
+
+# ザオプションの土日取引（BTC/ETH）検証用。Coinbase 公開APIから1分足3年分を取得。
+# merge の push は GITHUB_TOKEN のため再帰トリガーしない。
+
+on:
+  push:
+    branches: ["claude/strategy-backtest-promote-h7bv1r"]
+    paths: [".github/workflows/fetch-crypto.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [BTCUSD, ETHUSD]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Coinbase 1分足取得 → data/m1/<NAME>.csv.gz
+        run: python3 data/fetch_crypto.py "${{ matrix.name }}"
+      - name: コミット＆プッシュ（実行ブランチへ）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/m1/${{ matrix.name }}.csv.gz
+          git commit -m "Add real Coinbase 1m data for ${{ matrix.name }}"
+          for i in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+            git push origin HEAD:"${GITHUB_REF_NAME}" && break
+            sleep 10
+          done
