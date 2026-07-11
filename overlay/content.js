@@ -68,6 +68,9 @@
         <button class="bso-btn bso-reset" id="bso-reset" title="残高と成績を初期化">↺</button>
       </div>
 
+      <button class="bso-btn bso-capture" id="bso-capture"
+        title="クリック後、画面上のレート表示（数字）をクリックすると、その価格を1秒ごとに読み取ってシグナル計算に使います（読み取り専用）">⌖ レート取得</button>
+
       <div class="bso-foot">検証中ルール（期待勝率53〜55%）／ペイアウト1.90未満では打たない<br>発注は必ず手動。自動売買機能はありません。</div>
     </div>
   `;
@@ -220,6 +223,61 @@
   $("bso-loss").addEventListener("click", () => report("loss"));
   $("bso-tie").addEventListener("click", () => report("tie"));
   $("bso-reset").addEventListener("click", reset);
+
+  // --- 画面レート読み取り（読み取り専用・発注要素には触れない） -------------
+  // 「⌖ レート取得」→ 画面上のレート数字をクリックで指定 → 1秒ごとに
+  // textContent を読み、現在ピックのペアの価格として /tick に送る。
+  // 指定クリックは capture 段階で吸収するため、ページ側のボタンは発火しない。
+  let capEl = null;
+  let capTimer = null;
+  let currentPickPair = null;
+
+  function parsePrice(el) {
+    if (!el || !el.isConnected) return null;
+    const m = (el.textContent || "").replace(/[,\s]/g, "").match(/\d+(?:\.\d+)?/);
+    if (!m) return null;
+    const v = parseFloat(m[0]);
+    return Number.isFinite(v) && v > 0 ? v : null;
+  }
+
+  function startCaptureLoop() {
+    if (capTimer) clearInterval(capTimer);
+    capTimer = setInterval(async () => {
+      const price = parsePrice(capEl);
+      if (price == null || !currentPickPair) return;
+      $("bso-capture").textContent = `⌖ 取得中 ${price}`;
+      await call("/tick", "POST", { pair: currentPickPair, price });
+    }, 1000);
+  }
+
+  $("bso-capture").addEventListener("click", () => {
+    $("bso-capture").textContent = "⌖ レート数字をクリック…";
+    const onPick = (e) => {
+      // パネル自身のクリックは無視して選び直し
+      if (panel.contains(e.target)) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.removeEventListener("click", onPick, true);
+      capEl = e.target;
+      const price = parsePrice(capEl);
+      if (price == null) {
+        $("bso-capture").textContent = "⌖ 数字が読めません — 別の場所を";
+        capEl = null;
+        return;
+      }
+      capEl.style.outline = "2px solid #7dd3fc";
+      setTimeout(() => { if (capEl) capEl.style.outline = ""; }, 1500);
+      startCaptureLoop();
+    };
+    document.addEventListener("click", onPick, true);
+  });
+
+  const origRender = render;
+  render = function (state) {
+    currentPickPair = state.forward && state.forward.pick
+      ? state.forward.pick.pair : null;
+    origRender(state);
+  };
 
   refresh();
   setInterval(refresh, POLL_MS);

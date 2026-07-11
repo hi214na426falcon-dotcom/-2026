@@ -214,6 +214,17 @@
   color: #8b93a7;
 }
 
+#bin-sign-overlay .bso-capture {
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 7px 0;
+  background: rgba(125, 211, 252, 0.10);
+  border: 1px dashed rgba(125, 211, 252, 0.4);
+  color: #7dd3fc;
+  font-size: 11px;
+}
+#bin-sign-overlay .bso-capture:hover { background: rgba(125, 211, 252, 0.2); }
+
 #bin-sign-overlay .bso-foot {
   font-size: 9px;
   line-height: 1.5;

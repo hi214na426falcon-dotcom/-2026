@@ -98,6 +98,31 @@ def _wilson_lcb(w: int, n: int) -> float:
     return (centre - rad) / denom
 
 
+# --- 画面レート読み取り（DOMティック）バッファ ------------------------------
+# content.js の「レート取得」が1秒ごとに送ってくる価格を1分足に集約する。
+# 完了時間のCSV（live_pull）を種にして、最新分をこのバッファで上書き延長する。
+_ticks = {}  # pair -> {iso_minute: close}
+_TICK_KEEP_MIN = 600
+
+
+def record_tick(pair: str, price: float) -> int:
+    from datetime import datetime, timezone
+    minute = datetime.now(timezone.utc).replace(
+        second=0, microsecond=0).isoformat()
+    buf = _ticks.setdefault(pair.upper(), {})
+    buf[minute] = float(price)
+    if len(buf) > _TICK_KEEP_MIN:
+        for k in sorted(buf)[:len(buf) - _TICK_KEEP_MIN]:
+            del buf[k]
+    return len(buf)
+
+
+def tick_minutes(pair: str):
+    """DOMティック由来の (iso_minute, close) を時刻順で返す。"""
+    buf = _ticks.get(pair.upper()) or {}
+    return sorted(buf.items())
+
+
 def load_forward():
     """forward_test.json（run_wf_pick.py --emit が生成）を読む。"""
     try:
@@ -147,10 +172,32 @@ def forward_signal(now_jst_hour: int = None, data_dir: str = None) -> dict:
         return base
     base["pick"] = pick
     bars = live_feed.recent_bars(pick["pair"], data_dir or DATA_DIR)
+    # DOMティック（画面レート読み取り）があれば、CSVより新しい分を継ぎ足す
+    ticks = tick_minutes(pick["pair"])
+    if ticks:
+        if bars:
+            last_csv = bars["times"][-1] if bars["times"] else None
+            add = [(t, c) for t, c in ticks if last_csv is None or t > last_csv]
+            bars = {"times": bars["times"] + [t for t, _ in add],
+                    "closes": bars["closes"] + [c for _, c in add],
+                    "last_time": (add[-1][0] if add else bars["last_time"]),
+                    "source": (bars.get("source") or "") + "+画面レート"}
+        else:
+            bars = {"times": [t for t, _ in ticks],
+                    "closes": [c for _, c in ticks],
+                    "last_time": ticks[-1][0], "source": "画面レート"}
     if not bars or len(bars.get("closes", [])) < 40:
-        base["status"] = ("相場データ待ち — live_pull.py を起動してください "
-                          f"(python3 overlay/server/live_pull.py --pair {pick['pair']})")
+        base["status"] = ("相場データ待ち — live_pull.py を起動するか、"
+                          "パネルの「⌖レート取得」で画面の価格をクリック指定")
         return base
+    # 鮮度: 最終バーが古いままなら警告（古いデータでのシグナルは事故のもと）
+    try:
+        from datetime import datetime, timezone
+        last_dt = datetime.fromisoformat(bars["last_time"])
+        age = (datetime.now(timezone.utc) - last_dt).total_seconds()
+        base["age_sec"] = int(age)
+    except (TypeError, ValueError):
+        base["age_sec"] = None
     from backtest.strategies import STRATEGIES, UP, DOWN
     try:
         fn = STRATEGIES[pick["strategy"]]
@@ -169,8 +216,12 @@ def forward_signal(now_jst_hour: int = None, data_dir: str = None) -> dict:
         return base
     base["source"] = bars.get("source")
     base["last_bar"] = bars.get("last_time")
+    stale = base.get("age_sec") is not None and base["age_sec"] > 180
     if last is None:
         base["status"] = "シグナル待機中（条件不成立）"
+    elif stale:
+        base["status"] = (f"シグナル条件成立だがデータが{base['age_sec']}秒前 — "
+                          "鮮度不足のため打たない（レート取得を有効に）")
     else:
         base["direction"] = last
         base["status"] = "シグナル発生（検証中ルール・少額/デモのみ）"
@@ -376,7 +427,20 @@ class Handler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             body = {}
 
-        if parsed.path == "/result":
+        if parsed.path == "/tick":
+            pair = body.get("pair")
+            try:
+                price = float(body.get("price"))
+            except (TypeError, ValueError):
+                self._send(400, {"error": "price が数値ではありません"})
+                return
+            if not pair or not (0 < price < 1e7):
+                self._send(400, {"error": "pair/price が不正"})
+                return
+            with _lock:
+                n = record_tick(pair, price)
+            self._send(200, {"ok": True, "minutes": n})
+        elif parsed.path == "/result":
             result = body.get("result")
             if result not in ("win", "loss", "tie"):
                 self._send(400, {"error": "result は win/loss/tie"})

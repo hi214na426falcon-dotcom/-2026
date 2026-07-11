@@ -155,22 +155,22 @@ Chrome 拡張（Manifest V3）です。**発注ボタン・入力欄には一切
 - 勝ち/負け/同値の記録ボタン（サーバー側に永続化。再起動しても消えない）
 - 予測方向の**合格戦略チャネル**は別枠のまま（approved_strategy.json が無い限り非表示）
 
-フォワードテスト起動手順（4ステップ）:
+フォワードテスト起動手順（2ステップ）:
 
 ```bash
-# 1) 今日のピックを生成（判定3分以上に自動限定）
-python3 run_wf_pick.py --emit
+# 1) 全部まとめて起動（ピック生成→ライブ取り込み→予測サーバー）
+python3 start_forward_test.py
 
-# 2) ライブ価格の取り込み（別ターミナルで回しっぱなし。手元PC用）
-python3 overlay/server/live_pull.py --pair CHFJPY USDJPY AUDJPY
-
-# 3) 予測サーバー起動（別ターミナル）
-cd overlay/server && python3 predict_server.py       # http://localhost:8765
-
-# 4) Chrome → chrome://extensions → デベロッパーモードON
+# 2) Chrome → chrome://extensions → デベロッパーモードON
 #    → 「パッケージ化されていない拡張機能を読み込む」→ overlay フォルダを選択
 #    → babaoption / theoption の webterminal を開くと右上にパネルが出る
 ```
+
+**ライブ価格は「⌖ レート取得」が本命**: パネルのボタンを押して、画面上の
+レート数字（ピックのペアのもの）をクリックすると、その表示を1秒ごとに読み取って
+シグナル計算に使う（遅延ゼロ・読み取り専用・発注要素には触れない）。
+Dukascopy 経由の `live_pull.py` は完了時間の裏埋め用で、遅延があるため
+シグナルの鮮度が3分を超えると「鮮度不足のため打たない」と表示される。
 
 > フォワードテストの鉄則: **ペイアウト1.90以上の商品・時間帯のみ**（1.80では
 > 全戦略が構造的に負ける）。期待勝率は53〜55%域（学習側の6割超は将来の数字では
