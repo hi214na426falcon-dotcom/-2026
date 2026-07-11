@@ -140,20 +140,26 @@ def load_forward():
 
 
 def _active_pick(now_jst_hour: int):
-    """現在のJST時間に有効なピック（学習LCB最大）を返す。"""
+    """現在のJST時間に有効なピックを返す。
+
+    優先順位: WF実績が損益分岐超のペア（recommended）を最優先し、
+    その中で学習LCB最大。推奨ペアが無い時だけ非推奨から選ぶ（⚠付きで表示）。
+    """
     fwd = load_forward()
     if not fwd:
         return None
     best = None
+    best_key = None
     for p in fwd.get("picks", []):
         slot = p.get("slot_jst")
         if slot != "all":
             a, b = slot
             if not (a <= now_jst_hour < b):
                 continue
-        lcb = (p.get("train") or {}).get("lcb", 0)
-        if best is None or lcb > (best.get("train") or {}).get("lcb", 0):
-            best = p
+        key = (bool(p.get("recommended")),
+               (p.get("train") or {}).get("lcb", 0))
+        if best is None or key > best_key:
+            best, best_key = p, key
     return best
 
 

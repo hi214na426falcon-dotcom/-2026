@@ -148,10 +148,13 @@
     if (pick) {
       const inv = pick.invert ? "・反転" : "";
       const slot = pick.slot_jst === "all" ? "全夜間" : `${pick.slot_jst[0]}-${pick.slot_jst[1]}時`;
-      $("bso-pick").textContent = `${pick.pair} / ${pick.strategy}${inv} / 判定${pick.expiry_min}分`;
+      const warn = pick.recommended === false ? "⚠ " : "";
+      $("bso-pick").textContent = `${warn}${pick.pair} / ${pick.strategy}${inv} / 判定${pick.expiry_min}分`;
+      const wf = pick.wf_oos && pick.wf_oos.win_rate != null
+        ? `WF実績 ${(pick.wf_oos.win_rate * 100).toFixed(1)}%` : "WF未検証";
       $("bso-pickmeta").textContent =
-        `JST ${slot}・学習下限 ${(pick.train.lcb * 100).toFixed(1)}%・` +
-        `直近${pick.train.days}日 N=${pick.train.n}`;
+        `JST ${slot}・${wf}・学習下限 ${(pick.train.lcb * 100).toFixed(1)}%` +
+        (pick.recommended === false ? "・実績が損益分岐未満＝推奨外" : "");
     } else {
       $("bso-pick").textContent = "―";
       $("bso-pickmeta").textContent = "";

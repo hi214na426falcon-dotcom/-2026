@@ -126,6 +126,27 @@ def main() -> int:
     if emit:
         print("[emit] ライブフィード遅延のため判定3分以上のアームに限定します")
     picks = [p for p in (pick(pr, min_expiry=min_expiry) for pr in pairs) if p]
+    # 各ペアの3年ウォークフォワードOOS実績（条件付き採用方針）を裏書きする。
+    # 直近84日のゲートを通っても、実績が損益分岐未満のペアは「推奨外」と明示。
+    try:
+        from run_walkforward_analysis import load_all, evaluate_policy
+        arms, period_starts, train_periods = load_all("results/wf")
+        n_p = len(period_starts)
+        for p in picks:
+            r = evaluate_policy(arms, n_p, train_periods,
+                                per_pair=p["pair"], conditional=True)
+            if r["N"]:
+                wr = r["W"] / r["N"]
+                p["wf_oos"] = {"win_rate": round(wr, 4), "n": r["N"]}
+                p["recommended"] = bool(wr > BREAKEVEN_190)
+            else:
+                p["wf_oos"] = None
+                p["recommended"] = False
+    except Exception as e:
+        print(f"[warn] WF実績の裏書きに失敗（未検証扱い）: {e}", file=sys.stderr)
+        for p in picks:
+            p.setdefault("wf_oos", None)
+            p.setdefault("recommended", False)
     if emit:
         import json
         from datetime import timezone as _tz
