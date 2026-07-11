@@ -6,6 +6,7 @@ LLM 経路（Fable5→Opus4.8）はネットワーク・課金が絡むためユ
 
 import os
 import sys
+import tempfile
 import unittest
 from datetime import datetime, timezone, timedelta
 
@@ -24,12 +25,16 @@ JST = timezone(timedelta(hours=9))
 
 class TestPairStats(unittest.TestCase):
     def test_analyze_pair_returns_slots(self):
-        res = analyze_pair("USDJPY", strategy="bollinger", expiry_min=3,
-                           process="meanrevert", slots=[(20, 24), (0, 3)])
+        # 実データの有無に依存しないよう、空ディレクトリを指定して
+        # 合成フォールバック経路を密閉的に検証する
+        with tempfile.TemporaryDirectory() as empty_dir:
+            res = analyze_pair("USDJPY", strategy="bollinger", expiry_min=3,
+                               process="meanrevert", slots=[(20, 24), (0, 3)],
+                               data_dir=empty_dir)
         self.assertIn((20, 24), res)
         for st in res.values():
             self.assertIsInstance(st, SlotStat)
-            self.assertTrue(st.is_synthetic)  # 実データが無い環境
+            self.assertTrue(st.is_synthetic)  # 実データを与えていないので合成
 
     def test_ranking_sorts_by_edge(self):
         # 手作りの統計でランキングの並びを検証
