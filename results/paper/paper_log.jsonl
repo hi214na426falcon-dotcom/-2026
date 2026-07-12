@@ -4,3 +4,11 @@
 {"pair": "BTCUSD", "entry_time": "2026-07-12T09:17:00+00:00", "direction": "UP", "entry": 63784.44, "exit_time": "2026-07-12T09:20:00+00:00", "exit": 63778.25, "result": "loss", "pnl": -1000.0}
 {"pair": "BTCUSD", "entry_time": "2026-07-12T09:41:00+00:00", "direction": "DOWN", "entry": 63962.08, "exit_time": "2026-07-12T09:44:00+00:00", "exit": 63962.01, "result": "win", "pnl": 899.9999999999999}
 {"pair": "BTCUSD", "entry_time": "2026-07-12T10:40:00+00:00", "direction": "UP", "entry": 63810.31, "exit_time": "2026-07-12T10:43:00+00:00", "exit": 63803.19, "result": "loss", "pnl": -1000.0}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T11:34:00+00:00", "direction": "DOWN", "entry": 63951.16, "exit_time": "2026-07-12T11:37:00+00:00", "exit": 63969.93, "result": "loss", "pnl": -1000.0}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T12:10:00+00:00", "direction": "DOWN", "entry": 64016.78, "exit_time": "2026-07-12T12:13:00+00:00", "exit": 64065.18, "result": "loss", "pnl": -1000.0}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T12:13:00+00:00", "direction": "DOWN", "entry": 64065.18, "exit_time": "2026-07-12T12:16:00+00:00", "exit": 64063.98, "result": "win", "pnl": 899.9999999999999}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T13:19:00+00:00", "direction": "DOWN", "entry": 64044.16, "exit_time": "2026-07-12T13:22:00+00:00", "exit": 63995.29, "result": "win", "pnl": 899.9999999999999}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T13:47:00+00:00", "direction": "UP", "entry": 63950.0, "exit_time": "2026-07-12T13:50:00+00:00", "exit": 63974.72, "result": "win", "pnl": 899.9999999999999}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T14:10:00+00:00", "direction": "UP", "entry": 63929.95, "exit_time": "2026-07-12T14:13:00+00:00", "exit": 63958.44, "result": "win", "pnl": 899.9999999999999}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T14:32:00+00:00", "direction": "DOWN", "entry": 64003.65, "exit_time": "2026-07-12T14:35:00+00:00", "exit": 64005.75, "result": "loss", "pnl": -1000.0}
+{"pair": "BTCUSD", "entry_time": "2026-07-12T14:46:00+00:00", "direction": "DOWN", "entry": 64158.4, "exit_time": "2026-07-12T14:49:00+00:00", "exit": 64144.4, "result": "win", "pnl": 899.9999999999999}
