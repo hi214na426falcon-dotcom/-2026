@@ -1,0 +1,370 @@
+<style>
+  :root{
+    --bg-0:#070a12; --bg-1:#0b0f1c; --panel:rgba(17,21,34,.78);
+    --stroke:rgba(125,211,252,.22); --stroke-2:rgba(255,255,255,.07);
+    --ink:#e8ecf6; --muted:#8b93a7; --faint:#5b6478;
+    --cyan:#7dd3fc; --violet:#c084fc; --green:#34d399; --rose:#fb7185;
+    --amber:#fbbf24;
+    --mono:ui-monospace,"SF Mono",Menlo,"DejaVu Sans Mono",monospace;
+    --sans:system-ui,"Hiragino Sans","Yu Gothic UI","Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0}
+  .wrap{
+    min-height:100dvh;
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(125,211,252,.10), transparent 60%),
+      radial-gradient(900px 600px at 0% 110%, rgba(192,132,252,.10), transparent 55%),
+      linear-gradient(160deg,var(--bg-1),var(--bg-0));
+    color:var(--ink); font-family:var(--sans);
+    display:flex; flex-direction:column; align-items:center;
+    padding:20px 14px 60px; gap:16px;
+  }
+  .panel{
+    width:100%; max-width:430px;
+    background:var(--panel); border:1px solid var(--stroke);
+    border-radius:18px; overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.55), 0 0 30px rgba(60,180,255,.06);
+    backdrop-filter:blur(16px) saturate(1.2);
+  }
+  .panel.bonus{border-color:rgba(251,191,36,.5); box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 34px rgba(251,191,36,.22)}
+  .hd{
+    display:flex; align-items:center; gap:9px; padding:13px 15px;
+    background:linear-gradient(90deg,rgba(56,189,248,.14),rgba(168,85,247,.12));
+    border-bottom:1px solid var(--stroke-2);
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green);animation:pulse 2.4s infinite}
+  @keyframes pulse{50%{opacity:.45}}
+  @media (prefers-reduced-motion:reduce){.dot{animation:none}}
+  .brand{font-weight:800;letter-spacing:.14em;font-size:13px;
+    background:linear-gradient(90deg,var(--cyan),var(--violet));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand small{font-weight:600;letter-spacing:.06em;color:var(--muted);-webkit-text-fill-color:var(--muted);font-size:10px;margin-left:7px}
+  .clock{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .body{padding:14px}
+  .lbl{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+
+  .bank{background:rgba(255,255,255,.035);border:1px solid var(--stroke-2);border-radius:12px;padding:12px;margin-bottom:12px}
+  .bank-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:9px}
+  .bal{font-family:var(--mono);font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+  .bal.up{color:var(--green);text-shadow:0 0 14px rgba(52,211,153,.35)}
+  .bal.down{color:var(--rose)}
+  .right{text-align:right}
+  .stake{font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .shots{font-size:10px;color:var(--muted);margin-top:2px}
+  .bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar>i{display:block;height:100%;transition:width .45s ease}
+
+  .pick{background:rgba(125,211,252,.06);border:1px solid var(--stroke);border-radius:12px;padding:11px 12px;margin-bottom:12px}
+  .pick.off{background:rgba(255,255,255,.03);border-color:var(--stroke-2)}
+  .pick-top{display:flex;align-items:baseline;gap:8px}
+  .pick-pair{font-size:17px;font-weight:800;letter-spacing:.02em}
+  .pick-tag{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(52,211,153,.14);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+  .pick-meta{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .pick-meta b{color:var(--ink);font-weight:700}
+
+  .meter-wrap{margin-bottom:12px}
+  .meter{position:relative;height:9px;border-radius:5px;background:rgba(255,255,255,.08);overflow:visible}
+  .meter>i{display:block;height:100%;border-radius:5px;transition:width .45s ease}
+  .be{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--amber);box-shadow:0 0 7px rgba(251,191,36,.85);z-index:2}
+  .meter-lbl{font-size:10px;color:var(--muted);margin-top:5px;display:flex;justify-content:space-between}
+  .win-fill.good{background:linear-gradient(90deg,var(--green),var(--cyan))}
+  .win-fill.bad{background:linear-gradient(90deg,var(--rose),var(--amber))}
+
+  .streak{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px}
+  .streak .chip{padding:3px 11px;border-radius:20px;font-weight:700;background:rgba(125,211,252,.12);border:1px solid rgba(125,211,252,.25)}
+  .streak .bns{color:var(--amber);font-size:11px}
+
+  .payout{display:flex;align-items:center;gap:7px;margin-bottom:12px}
+  .payout .lbl{margin:0}
+  .seg{display:flex;gap:4px;margin-left:auto}
+  .seg button{font-family:var(--mono);font-size:11px;padding:4px 8px;border-radius:7px;border:1px solid var(--stroke-2);
+    background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer}
+  .seg button.on{background:linear-gradient(135deg,rgba(125,211,252,.25),rgba(192,132,252,.2));color:var(--ink);border-color:var(--stroke)}
+  .warn{font-size:10.5px;color:var(--amber);margin-bottom:10px;display:none}
+  .warn.show{display:block}
+
+  .btns{display:flex;gap:6px;margin-bottom:8px}
+  .btn{flex:1;padding:11px 0;border:none;border-radius:9px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;
+    font-family:var(--sans);transition:transform .07s ease,filter .15s ease}
+  .btn:hover{filter:brightness(1.13)}
+  .btn:active{transform:scale(.96)}
+  .btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .btn[disabled]{opacity:.4;cursor:not-allowed;filter:grayscale(.5)}
+  .b-win{background:linear-gradient(135deg,#059669,#34d399)}
+  .b-loss{background:linear-gradient(135deg,#be123c,#fb7185)}
+  .b-tie{background:linear-gradient(135deg,#475569,#94a3b8)}
+  .mini{display:flex;gap:6px;margin-bottom:12px}
+  .mini button{flex:1;padding:7px 0;border:1px solid var(--stroke-2);border-radius:8px;background:rgba(255,255,255,.04);
+    color:var(--muted);font-size:11px;cursor:pointer;font-family:var(--sans)}
+  .mini button:hover{color:var(--ink)}
+  .mini button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+  .log{max-height:150px;overflow-y:auto;border-top:1px solid var(--stroke-2);margin-top:2px}
+  .log-row{display:flex;align-items:center;gap:8px;padding:6px 2px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}
+  .log-row .r{width:34px;font-weight:800;font-size:10px;padding:1px 0;text-align:center;border-radius:5px}
+  .r.win{background:rgba(52,211,153,.16);color:var(--green)}
+  .r.loss{background:rgba(251,113,133,.16);color:var(--rose)}
+  .r.tie{background:rgba(148,163,184,.16);color:#cbd5e1}
+  .log-row .t{color:var(--faint);font-family:var(--mono)}
+  .log-row .p{margin-left:auto;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .p.pos{color:var(--green)} .p.neg{color:var(--rose)}
+  .empty{color:var(--faint);font-size:11px;padding:12px 2px;text-align:center}
+
+  .foot{font-size:9.5px;line-height:1.6;color:var(--faint);text-align:center;
+    border-top:1px solid var(--stroke-2);padding:10px 14px}
+  .refcard{width:100%;max-width:430px;background:var(--panel);border:1px solid var(--stroke-2);border-radius:16px;
+    overflow:hidden;backdrop-filter:blur(16px)}
+  .refcard h2{margin:0;padding:12px 15px;font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:700;
+    text-transform:uppercase;border-bottom:1px solid var(--stroke-2)}
+  table{width:100%;border-collapse:collapse;font-size:11.5px}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.045)}
+  th{font-size:10px;letter-spacing:.06em;color:var(--faint);text-transform:uppercase;font-weight:600}
+  td{color:var(--ink)}
+  td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+  tr.active td{background:rgba(125,211,252,.07)}
+  .wf{color:var(--green);font-family:var(--mono)}
+  .note{width:100%;max-width:430px;font-size:11px;color:var(--muted);line-height:1.7;text-align:center}
+</style>
+
+<div class="wrap">
+  <div class="panel" id="panel">
+    <div class="hd">
+      <span class="dot"></span>
+      <span class="brand">BINARY SIGN<small>フォワードテスト</small></span>
+      <span class="clock" id="clock">--:--:--</span>
+    </div>
+    <div class="body">
+
+      <div class="bank">
+        <div class="bank-row">
+          <div>
+            <div class="lbl">残高</div>
+            <div class="bal" id="bal">¥5,000</div>
+          </div>
+          <div class="right">
+            <div class="lbl">次のベット</div>
+            <div class="stake" id="stake">¥1,000</div>
+            <div class="shots" id="shots">残弾 5</div>
+          </div>
+        </div>
+        <div class="bar"><i id="balbar"></i></div>
+      </div>
+
+      <div class="lbl">今の時間帯の推奨ピック（JST）</div>
+      <div class="pick" id="pick">
+        <div class="pick-top"><span class="pick-pair" id="pickPair">―</span><span class="pick-tag" id="pickTag">推奨</span></div>
+        <div class="pick-meta" id="pickMeta"></div>
+      </div>
+
+      <div class="meter-wrap">
+        <div class="lbl">フォワード成績</div>
+        <div class="meter"><span class="be" id="beTick"></span><i class="win-fill" id="winFill"></i></div>
+        <div class="meter-lbl"><span id="scoreTxt">0勝 0敗</span><span id="beTxt">損益分岐 52.6%</span></div>
+      </div>
+
+      <div class="streak">
+        <span class="chip" id="streak">連勝 0</span>
+        <span class="bns" id="bonus"></span>
+      </div>
+
+      <div class="payout">
+        <span class="lbl">ペイアウト</span>
+        <div class="seg" id="seg">
+          <button data-p="1.80">1.80</button>
+          <button data-p="1.85">1.85</button>
+          <button data-p="1.90" class="on">1.90</button>
+          <button data-p="2.05">2.05</button>
+        </div>
+      </div>
+      <div class="warn" id="warn">⚠ 1.85未満は検証上マイナス。この倍率では打たない判断を。</div>
+
+      <div class="btns">
+        <button class="btn b-win"  id="bWin">勝ち</button>
+        <button class="btn b-loss" id="bLoss">負け</button>
+        <button class="btn b-tie"  id="bTie">同値</button>
+      </div>
+      <div class="mini">
+        <button id="bUndo">↩ 取り消し</button>
+        <button id="bReset">↺ リセット</button>
+      </div>
+
+      <div class="lbl">記録</div>
+      <div class="log" id="log"></div>
+    </div>
+    <div class="foot">
+      検証中ルール（実績ベース期待勝率 53〜55%）／記録はこのブラウザに保存<br>
+      ライブの ▲/▼ サインは Chrome 拡張（webterminal上で画面レート直読み）専用。発注は必ず手動。
+    </div>
+  </div>
+
+  <div class="refcard">
+    <h2>今夜の推奨ピック一覧</h2>
+    <div style="overflow-x:auto">
+      <table id="refTable">
+        <thead><tr><th>JST時間帯</th><th>ペア</th><th>設定</th><th class="num">判定</th><th class="num">WF実績</th></tr></thead>
+        <tbody id="refBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    これは<strong>資金管理と記録</strong>のためのスタンドアロン版です。1晩のN（取引数）は小さく運が支配的。
+    判断は複数週の集計が損益分岐（金の線）を超えるかで。<br>1.90以上の商品・時間帯のみ／1,000円固定／5連敗＝残高0で終了・取り返さない。
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var PICKS = [
+    {pair:"CHFJPY",strat:"bollinger",params:"30,2.5",exp:5,slot:[17,20],wf:.5477},
+    {pair:"USDJPY",strat:"bollinger",params:"20,2.5",exp:5,slot:[17,20],wf:.5455},
+    {pair:"AUDJPY",strat:"bollinger",params:"10,2.5",exp:3,slot:[20,24],wf:.5408},
+    {pair:"BTCUSD",strat:"bollinger",params:"30,2.5",exp:3,slot:"all",wf:.5373},
+    {pair:"ETHUSD",strat:"bollinger",params:"20,2.5",exp:3,slot:[0,3],wf:.5540}
+  ];
+  var START=5000, BASE=1000, LADDER=[1.5,2.0,3.0], THRESH=3, KEY="binsign_fwd_v2";
+  var $=function(id){return document.getElementById(id);};
+  var yen=function(v){return "¥"+Math.round(v).toLocaleString("ja-JP");};
+
+  var mem={history:[],payout:1.90};
+  function load(){
+    try{var s=localStorage.getItem(KEY); if(s) mem=JSON.parse(s);}catch(e){}
+    if(!mem.history)mem.history=[]; if(!mem.payout)mem.payout=1.90;
+  }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){} }
+
+  // 履歴から資金管理状態を再計算（逆マーチン: 3連勝でボーナス、負けでリセット、天井で利確）
+  function derive(){
+    var bal=START,streak=0,lvl=0,n=0,w=0,l=0,t=0;
+    for(var i=0;i<mem.history.length;i++){
+      var h=mem.history[i]; n++; bal+=h.pnl;
+      if(h.result==="win"){w++; streak++; lvl=streak>=THRESH?Math.min(streak-THRESH+1,LADDER.length):0;
+        if(lvl>=LADDER.length){streak=0;lvl=0;}}
+      else if(h.result==="loss"){l++; streak=0; lvl=0;}
+      else{t++;}
+    }
+    var raw = lvl<=0?BASE:BASE*LADDER[Math.min(lvl,LADDER.length)-1];
+    var stake=Math.max(0,Math.min(raw,bal));
+    return {bal:bal,streak:streak,lvl:lvl,n:n,w:w,l:l,t:t,stake:stake};
+  }
+
+  function activePick(){
+    var h=(new Date().getUTCHours()+9)%24, best=null;
+    for(var i=0;i<PICKS.length;i++){
+      var p=PICKS[i], ok = p.slot==="all" ? (h>=17||h<6) : (h>=p.slot[0]&&h<p.slot[1]);
+      if(ok && (!best||p.wf>best.wf)) best=p;
+    }
+    return best;
+  }
+
+  function record(result){
+    var d=derive();
+    if(d.stake<1){return;}
+    var pnl = result==="win" ? d.stake*(mem.payout-1) : (result==="loss" ? -d.stake : 0);
+    mem.history.push({result:result,stake:d.stake,pnl:pnl,ts:Date.now(),payout:mem.payout});
+    save(); render();
+  }
+
+  function fmtSlot(s){return s==="all"?"全夜間":s[0]+"–"+s[1]+"時";}
+
+  function render(){
+    var d=derive(), be=1/mem.payout;
+    // 残高
+    var bal=$("bal"); bal.textContent=yen(d.bal);
+    bal.className="bal"+(d.bal>START?" up":d.bal<START?" down":"");
+    $("stake").textContent=yen(d.stake);
+    $("shots").textContent = d.bal<1 ? "残高0 — 終了" : "残弾 "+Math.floor(d.bal/BASE);
+    var pct=Math.max(0,Math.min(100,d.bal/START*100));
+    var bb=$("balbar"); bb.style.width=pct+"%";
+    bb.style.background = pct>=100?"linear-gradient(90deg,#34d399,#7dd3fc)":pct>=40?"linear-gradient(90deg,#fbbf24,#7dd3fc)":"linear-gradient(90deg,#fb7185,#fbbf24)";
+    // ピック
+    var p=activePick(), pk=$("pick");
+    if(p){
+      pk.className="pick"; $("pickTag").style.display="";
+      $("pickPair").textContent=p.pair;
+      $("pickMeta").innerHTML="<b>"+p.strat+"("+p.params+")</b> 判定"+p.exp+"分 ・ JST"+fmtSlot(p.slot)+
+        " ・ WF実績 <b>"+(p.wf*100).toFixed(1)+"%</b>";
+    }else{
+      pk.className="pick off"; $("pickTag").style.display="none";
+      $("pickPair").textContent="推奨時間帯外";
+      $("pickMeta").textContent="JST 17–24時（BTCは夜通し）・深夜0–3時(ETH)が対象。記録は今も可能。";
+    }
+    // 成績メーター
+    var dec=d.w+d.l, wr=dec?d.w/dec:null;
+    $("scoreTxt").textContent=d.w+"勝 "+d.l+"敗"+(d.t?(" "+d.t+"分"):"")+
+      (mem.history.length?("　"+(d.bal-START>=0?"+":"")+yen(d.bal-START).replace("¥","¥")):"");
+    $("beTick").style.left=(be*100)+"%";
+    $("beTxt").textContent="損益分岐 "+(be*100).toFixed(1)+"%";
+    var wf=$("winFill");
+    wf.style.width=(wr==null?0:Math.min(100,wr*100))+"%";
+    wf.className="win-fill "+((wr!=null&&wr>be)?"good":"bad");
+    // 連勝・ボーナス
+    $("streak").textContent="連勝 "+d.streak;
+    var bon=$("bonus");
+    if(d.lvl>0){bon.textContent="🎉 ボーナス Lv."+d.lvl+"（x"+LADDER[Math.min(d.lvl,LADDER.length)-1]+"）";$("panel").classList.add("bonus");}
+    else{var need=THRESH-d.streak; bon.textContent=need>0?("あと"+need+"連勝でボーナス"):"";$("panel").classList.remove("bonus");}
+    // ペイアウト警告・ボタン活性
+    $("warn").className="warn"+(mem.payout<1.85?" show":"");
+    var dead=d.bal<1;
+    $("bWin").disabled=dead; $("bLoss").disabled=dead; $("bTie").disabled=dead;
+    // 記録
+    var log=$("log");
+    if(!mem.history.length){log.innerHTML='<div class="empty">まだ記録がありません。シグナルでエントリー→結果をタップ。</div>';}
+    else{
+      var rows="";
+      for(var i=mem.history.length-1;i>=0;i--){
+        var h=mem.history[i], dt=new Date(h.ts);
+        var jst=new Date(dt.getTime()+9*3600*1000);
+        var hh=("0"+jst.getUTCHours()).slice(-2)+":"+("0"+jst.getUTCMinutes()).slice(-2);
+        var rl=h.result==="win"?"win":h.result==="loss"?"loss":"tie";
+        var rt=h.result==="win"?"勝":h.result==="loss"?"負":"分";
+        rows+='<div class="log-row"><span class="r '+rl+'">'+rt+'</span>'+
+          '<span class="t">'+hh+'</span><span style="color:var(--muted)">'+yen(h.stake)+' @'+h.payout.toFixed(2)+'</span>'+
+          '<span class="p '+(h.pnl>=0?"pos":"neg")+'">'+(h.pnl>=0?"+":"")+yen(h.pnl)+'</span></div>';
+      }
+      log.innerHTML=rows;
+    }
+  }
+
+  // 参照テーブル
+  (function(){
+    var order=PICKS.slice().sort(function(a,b){
+      var sa=a.slot==="all"?99:a.slot[0], sb=b.slot==="all"?99:b.slot[0]; return sa-sb;});
+    var h=(new Date().getUTCHours()+9)%24, body="";
+    for(var i=0;i<order.length;i++){var p=order[i];
+      var on = p.slot==="all"?(h>=17||h<6):(h>=p.slot[0]&&h<p.slot[1]);
+      body+='<tr class="'+(on?"active":"")+'"><td>'+fmtSlot(p.slot)+'</td><td><b>'+p.pair+'</b></td>'+
+        '<td>'+p.strat+'('+p.params+')</td><td class="num">'+p.exp+'分</td>'+
+        '<td class="num wf">'+(p.wf*100).toFixed(1)+'%</td></tr>';
+    }
+    $("refBody").innerHTML=body;
+  })();
+
+  function tickClock(){
+    var n=new Date(), j=new Date(n.getTime()+((n.getTimezoneOffset()+540)*60000));
+    var s=("0"+j.getHours()).slice(-2)+":"+("0"+j.getMinutes()).slice(-2)+":"+("0"+j.getSeconds()).slice(-2);
+    $("clock").textContent=s+" JST";
+  }
+
+  $("bWin").addEventListener("click",function(){record("win");});
+  $("bLoss").addEventListener("click",function(){record("loss");});
+  $("bTie").addEventListener("click",function(){record("tie");});
+  $("bUndo").addEventListener("click",function(){mem.history.pop();save();render();});
+  $("bReset").addEventListener("click",function(){
+    if(window.confirm("残高と記録を初期化しますか？")){mem.history=[];save();render();}});
+  Array.prototype.forEach.call(document.querySelectorAll("#seg button"),function(b){
+    b.addEventListener("click",function(){
+      Array.prototype.forEach.call(document.querySelectorAll("#seg button"),function(x){x.classList.remove("on");});
+      b.classList.add("on"); mem.payout=parseFloat(b.dataset.p); save(); render();
+    });
+  });
+
+  load();
+  Array.prototype.forEach.call(document.querySelectorAll("#seg button"),function(x){
+    x.classList.toggle("on", parseFloat(x.dataset.p)===mem.payout);});
+  render(); tickClock(); setInterval(tickClock,1000);
+  setInterval(render,60000); // 時間帯（推奨ピック）の更新
+})();
+</script>
