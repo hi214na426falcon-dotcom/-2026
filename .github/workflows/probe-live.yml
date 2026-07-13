@@ -37,3 +37,5 @@ jobs:
               else:
                   print(f"{label} {h.isoformat()}: {len(bars)}本  最終バー {bars[-1]['time']}")
           EOF
+
+# re-run 20260713T073036Z
