@@ -27,3 +27,4 @@
 {"pair": "BTCUSD", "entry_time": "2026-07-13T16:17:00+00:00", "direction": "UP", "entry": 62380.91, "exit_time": "2026-07-13T16:20:00+00:00", "exit": 62251.8, "result": "loss", "pnl": -1000.0}
 {"pair": "BTCUSD", "entry_time": "2026-07-13T16:20:00+00:00", "direction": "UP", "entry": 62251.8, "exit_time": "2026-07-13T16:23:00+00:00", "exit": 62243.94, "result": "loss", "pnl": -1000.0}
 {"pair": "ETHUSD", "entry_time": "2026-07-13T16:19:00+00:00", "direction": "UP", "entry": 1772.43, "exit_time": "2026-07-13T16:22:00+00:00", "exit": 1772.14, "result": "loss", "pnl": -1000.0}
+{"pair": "BTCUSD", "entry_time": "2026-07-13T17:24:00+00:00", "direction": "UP", "entry": 62122.41, "exit_time": "2026-07-13T17:27:00+00:00", "exit": 62115.99, "result": "loss", "pnl": -1000.0}
