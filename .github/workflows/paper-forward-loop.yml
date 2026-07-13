@@ -1,0 +1,45 @@
+name: Paper forward loop (self-contained)
+
+# 省エネ運用: セッションを何度も起こす代わりに、GitHub の無料ランナーで
+# 1回の起動が最大 ~5.5 時間ループし続け、数分ごとに紙上取引を更新・コミットする。
+# セッション側は「トリガーを押す」だけ＝使用量をほぼ消費しない。
+
+on:
+  push:
+    branches: ["claude/strategy-backtest-promote-h7bv1r"]
+    paths: ["results/paper/loop-trigger", ".github/workflows/paper-forward-loop.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-loop
+  cancel-in-progress: true   # 二重起動を防ぐ（常に最新の1本だけ回る）
+
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/strategy-backtest-promote-h7bv1r
+      - name: 5.5時間ループ（4分ごとに紙上取引→コミット）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          END=$(( $(date +%s) + 330*60 ))
+          while [ "$(date +%s)" -lt "$END" ]; do
+            python3 run_paper_forward.py || echo "tick error (continue)"
+            if ! git diff --quiet -- results/paper/; then
+              git add results/paper/
+              git commit -m "Paper loop tick ($(date -u +%H:%MZ))" || true
+              for i in 1 2 3 4; do
+                git pull --rebase origin claude/strategy-backtest-promote-h7bv1r \
+                  && git push origin HEAD:claude/strategy-backtest-promote-h7bv1r && break
+                sleep 5
+              done
+            fi
+            sleep 240
+          done
+          echo "loop window done"

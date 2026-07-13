@@ -34,8 +34,10 @@ FWD_PATH = os.path.join("overlay", "server", "forward_test.json")
 PAYOUT = 1.90
 STAKE = 1000.0
 HISTORY_KEEP = 600
-# 「今日の日付が変わるまで」= 2026-07-12 24:00 JST。以降は決済のみ・新規なし。
-TRADE_UNTIL = datetime(2026, 7, 12, 15, 0, tzinfo=timezone.utc)
+# 新規エントリーを止める時刻（UTC）。既定は当面の継続運用のため先の日付。
+# 環境変数 PAPER_TRADE_UNTIL（ISO8601）で上書き可。以降は決済のみ・新規なし。
+TRADE_UNTIL = datetime.fromisoformat(
+    os.environ.get("PAPER_TRADE_UNTIL", "2026-07-20T00:00:00+00:00"))
 
 
 def in_slot(iso: str, slot) -> bool:
