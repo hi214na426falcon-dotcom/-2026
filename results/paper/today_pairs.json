@@ -1,0 +1,30 @@
+{
+  "date": "2026-07-14",
+  "pairs": [
+    "ETHUSD",
+    "BTCUSD"
+  ],
+  "watch_only": false,
+  "rationale": "直近84日ウォークフォワード下限が損益分岐超のペアのみ採用",
+  "ranked": [
+    {
+      "pair": "ETHUSD",
+      "lcb": 0.5728,
+      "expiry_min": 3,
+      "params": {
+        "period": 20,
+        "num_std": 2.5
+      }
+    },
+    {
+      "pair": "BTCUSD",
+      "lcb": 0.5612,
+      "expiry_min": 3,
+      "params": {
+        "period": 30,
+        "num_std": 2.5
+      }
+    }
+  ],
+  "generated_at": "2026-07-14T13:42:46.401781+00:00"
+}

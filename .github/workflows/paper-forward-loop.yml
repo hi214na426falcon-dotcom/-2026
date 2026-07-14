@@ -1,20 +1,26 @@
 name: Paper forward loop (self-contained)
 
-# 省エネ運用: セッションを何度も起こす代わりに、GitHub の無料ランナーで
-# 1回の起動が最大 ~5.5 時間ループし続け、数分ごとに紙上取引を更新・コミットする。
-# セッション側は「トリガーを押す」だけ＝使用量をほぼ消費しない。
+# 省エネ運用: セッションを起こさず、GitHub の無料ランナーが1回の起動で ~5.5時間
+# ループし続け、数分ごとに紙上取引を更新・コミットする。終了時に自分自身を
+# workflow_dispatch で再起動して1週間（END_UTC まで）自走する。
+# ※ GITHUB_TOKEN による workflow_dispatch は例外的に新規runを起動できる。
 
 on:
   push:
     branches: ["claude/strategy-backtest-promote-h7bv1r"]
     paths: ["results/paper/loop-trigger", ".github/workflows/paper-forward-loop.yml"]
+  workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: paper-loop
-  cancel-in-progress: true   # 二重起動を防ぐ（常に最新の1本だけ回る）
+  cancel-in-progress: false   # 自己ディスパッチ分は現行終了後にキューで実行
+
+env:
+  END_UTC: "2026-07-21T22:00:00Z"   # 1週間の自走終了時刻
 
 jobs:
   loop:
@@ -30,6 +36,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           END=$(( $(date +%s) + 330*60 ))
           while [ "$(date +%s)" -lt "$END" ]; do
+            git pull --rebase origin claude/strategy-backtest-promote-h7bv1r || true
             python3 run_paper_forward.py || echo "tick error (continue)"
             if ! git diff --quiet -- results/paper/; then
               git add results/paper/
@@ -42,4 +49,20 @@ jobs:
             fi
             sleep 240
           done
-          echo "loop window done"
+          echo "loop segment done"
+      - name: 次のセグメントを自己ディスパッチ（END_UTC まで）
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOW=$(date -u +%s); END=$(date -u -d "${END_UTC}" +%s)
+          if [ "$NOW" -lt "$END" ]; then
+            echo "re-dispatch (until ${END_UTC})"
+            curl -sS -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/paper-forward-loop.yml/dispatches" \
+              -d '{"ref":"claude/strategy-backtest-promote-h7bv1r"}'
+          else
+            echo "past END_UTC; stop self-perpetuation"
+          fi

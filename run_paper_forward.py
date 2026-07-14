@@ -37,7 +37,7 @@ HISTORY_KEEP = 600
 # 新規エントリーを止める時刻（UTC）。既定は当面の継続運用のため先の日付。
 # 環境変数 PAPER_TRADE_UNTIL（ISO8601）で上書き可。以降は決済のみ・新規なし。
 TRADE_UNTIL = datetime.fromisoformat(
-    os.environ.get("PAPER_TRADE_UNTIL", "2026-07-14T08:00:00+00:00"))
+    os.environ.get("PAPER_TRADE_UNTIL", "2026-07-21T22:00:00+00:00"))
 
 
 def in_slot(iso: str, slot) -> bool:
@@ -76,13 +76,30 @@ def signal_at_last(pick, closes, times):
     return last
 
 
+TODAY_PATH = os.path.join("results", "paper", "today_pairs.json")
+
+
+def _todays_pairs():
+    """当日の対象ペア（run_daily_cycle.py が選抜）。無ければ None＝全推奨。"""
+    if not os.path.exists(TODAY_PATH):
+        return None
+    try:
+        with open(TODAY_PATH, encoding="utf-8") as f:
+            d = json.load(f)
+        return set(d.get("pairs") or [])
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
 def main() -> int:
     now = datetime.now(timezone.utc)
+    todays = _todays_pairs()
     with open(FWD_PATH, encoding="utf-8") as f:
         picks = [p for p in json.load(f).get("picks", [])
-                 if p["pair"] in PRODUCTS and p.get("recommended")]
+                 if p["pair"] in PRODUCTS and p.get("recommended")
+                 and (todays is None or p["pair"] in todays)]
     if not picks:
-        print("暗号資産の推奨ピックなし")
+        print("本日の対象ペアなし（today_pairs.json の選抜で0件）")
         return 0
 
     os.makedirs(os.path.dirname(STATE_PATH), exist_ok=True)
@@ -131,7 +148,11 @@ def main() -> int:
                     st["w" if win else "l"] += 1
                     pnl = STAKE * (PAYOUT - 1) if win else -STAKE
                     st["pnl"] += pnl
-                    rec = {"pair": pair, "entry_time": p["entry_time"],
+                    # JST日付タグ（日次評価用）＝エントリー時刻+9h の日付
+                    jday = (datetime.fromisoformat(p["entry_time"])
+                            + timedelta(hours=9)).date().isoformat()
+                    rec = {"pair": pair, "day": jday,
+                           "entry_time": p["entry_time"],
                            "direction": p["direction"], "entry": p["entry"],
                            "exit_time": exp_t, "exit": exit_px,
                            "result": "win" if win else "loss", "pnl": pnl}
