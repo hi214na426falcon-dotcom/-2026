@@ -1,5 +1,5 @@
 {
-  "_comment": "パスは自分のPC環境に合わせて書き換えること。data_path はMT4の「ファイル→データフォルダを開く」で表示されるフォルダ",
+  "_comment": "パスは自分のPC環境に合わせて書き換えること。data_path はMT4の「ファイル→データフォルダを開く」で表示されるフォルダ。以下はラッパーEA用の例。デイピタアルファ本体をテストする場合は expert をそのファイル名に変え、fixed_params/optimized_params をデイピタの入力パラメータ名に全て書き換えること(README参照)",
   "terminal_path": "C:/Program Files (x86)/HF Markets (SV) Ltd MT4 Terminal/terminal.exe",
   "data_path": "C:/Users/YOURNAME/AppData/Roaming/MetaQuotes/Terminal/0123456789ABCDEF0123456789ABCDEF",
 
