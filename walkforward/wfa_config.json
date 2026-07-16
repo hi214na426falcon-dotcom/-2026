@@ -3,9 +3,9 @@
   "terminal_path": "C:/Program Files (x86)/HF Markets (SV) Ltd MT4 Terminal/terminal.exe",
   "data_path": "C:/Users/YOURNAME/AppData/Roaming/MetaQuotes/Terminal/0123456789ABCDEF0123456789ABCDEF",
 
-  "expert": "DaypitaAlphaScalper",
-  "symbol": "USDJPY",
-  "period": "M5",
+  "expert": "Daypita_",
+  "symbol": "EURUSD",
+  "period": "M15",
   "model": 0,
   "spread": 5,
   "timeout_sec": 7200,
@@ -22,32 +22,11 @@
     "min_trades": 30
   },
 
+  "_params_note": "Daypita_のパラメータ名はEX4が暗号化形式のためここでは不明。MT4のテスターで「エキスパート設定→パラメーターの入力→保存」した .set の名前をそのまま転記すること。fixed_params にはロット・マーチン倍率など動かさない値、optimized_params には[開始,刻み,終了]の範囲で最適化したい値を入れる。ラッパーEA(DaypitaAlphaScalper)用の設定例はgit履歴のこのファイル初版を参照",
+
   "fixed_params": {
-    "InpIndicatorName": "DaypitaAlpha",
-    "InpBuyBuffer": 0,
-    "InpSellBuffer": 1,
-    "InpSignalShift": 1,
-    "InpLots": 0.10,
-    "InpRiskPercent": 1.0,
-    "InpUseBreakEven": true,
-    "InpUseTrailing": true,
-    "InpCloseOnOpposite": true,
-    "InpMaxSpreadPips": 1.5,
-    "InpStartHour": 9,
-    "InpEndHour": 23,
-    "InpFridayEndHour": 21,
-    "InpMaxPositions": 1,
-    "InpEcnMode": true,
-    "InpSlippagePoints": 10,
-    "InpMagic": 260716
   },
 
   "optimized_params": {
-    "InpStopLossPips":    [4, 2, 14],
-    "InpTakeProfitPips":  [4, 2, 14],
-    "InpBreakEvenPips":   [2, 1, 5],
-    "InpTrailStartPips":  [2, 2, 8],
-    "InpTrailStepPips":   [1, 1, 4],
-    "InpMaxHoldMinutes":  [30, 30, 120]
   }
 }
