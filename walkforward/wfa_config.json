@@ -1,0 +1,53 @@
+{
+  "_comment": "パスは自分のPC環境に合わせて書き換えること。data_path はMT4の「ファイル→データフォルダを開く」で表示されるフォルダ",
+  "terminal_path": "C:/Program Files (x86)/HF Markets (SV) Ltd MT4 Terminal/terminal.exe",
+  "data_path": "C:/Users/YOURNAME/AppData/Roaming/MetaQuotes/Terminal/0123456789ABCDEF0123456789ABCDEF",
+
+  "expert": "DaypitaAlphaScalper",
+  "symbol": "USDJPY",
+  "period": "M5",
+  "model": 0,
+  "spread": 5,
+  "timeout_sec": 7200,
+
+  "windows": {
+    "start": "2024-01-01",
+    "is_months": 6,
+    "oos_months": 2,
+    "count": 8
+  },
+
+  "selection": {
+    "criterion": "profit_factor",
+    "min_trades": 30
+  },
+
+  "fixed_params": {
+    "InpIndicatorName": "DaypitaAlpha",
+    "InpBuyBuffer": 0,
+    "InpSellBuffer": 1,
+    "InpSignalShift": 1,
+    "InpLots": 0.10,
+    "InpRiskPercent": 1.0,
+    "InpUseBreakEven": true,
+    "InpUseTrailing": true,
+    "InpCloseOnOpposite": true,
+    "InpMaxSpreadPips": 1.5,
+    "InpStartHour": 9,
+    "InpEndHour": 23,
+    "InpFridayEndHour": 21,
+    "InpMaxPositions": 1,
+    "InpEcnMode": true,
+    "InpSlippagePoints": 10,
+    "InpMagic": 260716
+  },
+
+  "optimized_params": {
+    "InpStopLossPips":    [4, 2, 14],
+    "InpTakeProfitPips":  [4, 2, 14],
+    "InpBreakEvenPips":   [2, 1, 5],
+    "InpTrailStartPips":  [2, 2, 8],
+    "InpTrailStepPips":   [1, 1, 4],
+    "InpMaxHoldMinutes":  [30, 30, 120]
+  }
+}

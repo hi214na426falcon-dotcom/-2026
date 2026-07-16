@@ -1,0 +1,5 @@
+walkforward/generated/
+walkforward/reports/
+walkforward/wfa_summary.csv
+__pycache__/
+*.ex4
