@@ -192,3 +192,4 @@
 {"pair": "BTCUSD", "day": "2026-07-21", "entry_time": "2026-07-20T20:20:00+00:00", "direction": "DOWN", "entry": 65270.77, "exit_time": "2026-07-20T20:23:00+00:00", "exit": 65248.01, "result": "win", "pnl": 899.9999999999999}
 {"pair": "BTCUSD", "day": "2026-07-21", "entry_time": "2026-07-21T08:21:00+00:00", "direction": "DOWN", "entry": 66295.12, "exit_time": "2026-07-21T08:24:00+00:00", "exit": 66256.97, "result": "win", "pnl": 899.9999999999999}
 {"pair": "BTCUSD", "day": "2026-07-21", "entry_time": "2026-07-21T09:31:00+00:00", "direction": "DOWN", "entry": 66255.77, "exit_time": "2026-07-21T09:34:00+00:00", "exit": 66237.98, "result": "win", "pnl": 899.9999999999999}
+{"pair": "BTCUSD", "day": "2026-07-21", "entry_time": "2026-07-21T10:10:00+00:00", "direction": "DOWN", "entry": 66332.0, "exit_time": "2026-07-21T10:13:00+00:00", "exit": 66338.5, "result": "loss", "pnl": -1000.0}
