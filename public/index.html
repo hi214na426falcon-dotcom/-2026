@@ -119,23 +119,21 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import firebaseConfig from './js/firebase-config.js';
-
-    // Firebase 設定確認
-    if (!firebaseConfig.projectId || firebaseConfig.projectId === 'YOUR_PROJECT_ID') {
-      document.body.innerHTML = `
-        <div style="text-align: center; padding: 40px; font-family: sans-serif;">
-          <h2 style="color: #d32f2f;">Firebase 設定が必要です</h2>
-          <p>public/js/firebase-config.js にプロジェクト設定を入力してください。</p>
-          <p><a href="/QUICK_START.md" style="color: #2196F3;">セットアップガイド →</a></p>
-        </div>
-      `;
-      throw new Error('Firebase config not set');
-    }
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import firebaseConfig, { useEmulator } from './js/firebase-config.js';
 
     initializeApp(firebaseConfig);
     const auth = getAuth();
+
+    // エミュレータに接続
+    if (useEmulator && useEmulator.enabled && location.hostname === 'localhost') {
+      try {
+        connectAuthEmulator(auth, `http://${useEmulator.auth.host}:${useEmulator.auth.port}`, { disableWarnings: true });
+        console.log('✓ Auth Emulator に接続しました');
+      } catch (error) {
+        console.warn('Auth Emulator 接続エラー:', error.message);
+      }
+    }
 
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
