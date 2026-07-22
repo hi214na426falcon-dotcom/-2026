@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="YUIME 現場特化 管理システム - ログイン">
+  <meta name="theme-color" content="#2196F3">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232196F3' width='192' height='192'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>Y</text></svg>">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>YUIME - ログイン</title>
+  <style>
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+      padding: 20px;
+    }
+    .login-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-card h1 {
+      text-align: center;
+      color: #2196F3;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #2196F3;
+      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    }
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-login:hover {
+      background: #1976D2;
+    }
+    .btn-login:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+    }
+    .loading-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <h1>YUIME</h1>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">メールアドレス</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">パスワード</label>
+          <input type="password" id="password" required>
+        </div>
+        <div class="error-message" id="errorMessage"></div>
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span class="loading-spinner" id="spinner"></span>
+          ログイン
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import firebaseConfig from './js/firebase-config.js';
+
+    initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const spinner = document.getElementById('spinner');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMessage.style.display = 'none';
+      loginBtn.disabled = true;
+      spinner.style.display = 'inline-block';
+
+      try {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = '/dashboard.html';
+      } catch (error) {
+        let message = 'ログインに失敗しました';
+        if (error.code === 'auth/user-not-found') {
+          message = 'メールアドレスが見つかりません';
+        } else if (error.code === 'auth/wrong-password') {
+          message = 'パスワードが正しくありません';
+        } else if (error.code === 'auth/invalid-email') {
+          message = 'メールアドレスの形式が正しくありません';
+        }
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+      } finally {
+        loginBtn.disabled = false;
+        spinner.style.display = 'none';
+      }
+    });
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.location.href = '/dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

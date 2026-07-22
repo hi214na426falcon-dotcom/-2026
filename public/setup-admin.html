@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="YUIME - 初期管理者作成">
+  <meta name="theme-color" content="#2196F3">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>YUIME - 初期管理者作成</title>
+  <style>
+    .setup-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      padding: 20px;
+    }
+    .setup-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .setup-card h1 {
+      text-align: center;
+      color: #4CAF50;
+      margin-bottom: 30px;
+      font-size: 24px;
+    }
+    .setup-card p {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 20px;
+      color: #856404;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="setup-container">
+    <div class="setup-card">
+      <h1>YUIME 初期設定</h1>
+      <p>システム管理者アカウントを作成します</p>
+
+      <div class="warning">
+        ⚠️ このページは初回のみ使用してください。<br>
+        作成後は本ファイルを削除またはアクセス制限してください。
+      </div>
+
+      <form id="setupForm">
+        <div class="form-group">
+          <label for="adminName">氏名</label>
+          <input type="text" id="adminName" required>
+        </div>
+        <div class="form-group">
+          <label for="adminEmail">メールアドレス</label>
+          <input type="email" id="adminEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">パスワード</label>
+          <input type="password" id="adminPassword" required minlength="6">
+        </div>
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
+        <button type="submit" class="btn btn-success" style="width: 100%;">管理者を作成</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+    import firebaseConfig from './js/firebase-config.js';
+
+    initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore();
+
+    // 既に管理者が存在する場合はリダイレクト
+    checkAdminExists();
+
+    async function checkAdminExists() {
+      try {
+        const usersSnap = await getDocs(collection(db, 'users'));
+        if (usersSnap.size > 0) {
+          document.body.innerHTML = '<div style="text-align: center; padding: 40px;"><h2>既に管理者が存在します</h2><p><a href="/index.html">ログインページへ</a></p></div>';
+        }
+      } catch (error) {
+        console.error('管理者確認エラー:', error);
+      }
+    }
+
+    document.getElementById('setupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('adminName').value.trim();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+      const errorMessage = document.getElementById('errorMessage');
+
+      errorMessage.style.display = 'none';
+
+      try {
+        // ユーザー作成
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Firestore に管理者情報を保存
+        await addDoc(collection(db, 'users'), {
+          uid: userCredential.user.uid,
+          email: email,
+          name: name,
+          role: 'admin',
+          createdAt: new Date(),
+        });
+
+        alert('管理者を作成しました。\n\nセキュリティのため、このページを削除またはアクセス制限してください。');
+        window.location.href = '/index.html';
+      } catch (error) {
+        let message = 'エラーが発生しました';
+        if (error.code === 'auth/email-already-in-use') {
+          message = 'このメールアドレスは既に使用されています';
+        } else if (error.code === 'auth/weak-password') {
+          message = 'パスワードが弱すぎます（6文字以上）';
+        } else if (error.code === 'auth/invalid-email') {
+          message = 'メールアドレスの形式が正しくありません';
+        }
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

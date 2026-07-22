@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="YUIME - 設定">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>YUIME - 設定</title>
+</head>
+<body>
+  <div class="navbar">
+    <h1>YUIME</h1>
+    <div class="navbar-menu">
+      <button onclick="navigateTo('/dashboard.html')">ダッシュボード</button>
+      <button onclick="navigateTo('/companies.html')">会社</button>
+      <button onclick="navigateTo('/workers.html')">作業員</button>
+      <button onclick="navigateTo('/qr.html')">QR</button>
+      <button onclick="logout()">ログアウト</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>設定</h2>
+
+    <div class="card">
+      <h3>ユーザー管理</h3>
+      <p>システムユーザーを管理します（管理者のみ）</p>
+      <button class="btn btn-primary" onclick="openUserModal()">ユーザーを管理</button>
+
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          <tr>
+            <th>メール</th>
+            <th>名前</th>
+            <th>ロール</th>
+          </tr>
+        </thead>
+        <tbody id="usersList">
+          <tr><td colspan="3" class="text-center">読込中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>CSV出力</h3>
+      <p>入退場記録をCSV形式でダウンロード</p>
+      <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+        <input type="date" id="fromDate">
+        <span>～</span>
+        <input type="date" id="toDate">
+      </div>
+      <button class="btn btn-primary" onclick="exportCSV()">CSV出力</button>
+    </div>
+
+    <div class="card">
+      <h3>その他</h3>
+      <button class="btn btn-secondary" onclick="logout()">ログアウト</button>
+    </div>
+  </div>
+
+  <!-- ユーザー管理モーダル -->
+  <div id="userModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>ユーザー管理</h2>
+        <button class="modal-close" onclick="closeUserModal()">&times;</button>
+      </div>
+      <form id="userForm">
+        <div class="form-group">
+          <label>メール</label>
+          <input type="email" id="userEmail" required>
+        </div>
+        <div class="form-group">
+          <label>名前</label>
+          <input type="text" id="userName" required>
+        </div>
+        <div class="form-group">
+          <label>ロール</label>
+          <select id="userRole" required>
+            <option value="admin">管理者</option>
+            <option value="prime">元請</option>
+            <option value="manager">現場管理者</option>
+            <option value="partner">協力会社</option>
+            <option value="worker">作業員</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button type="submit" class="btn btn-primary">作成</button>
+          <button type="button" class="btn btn-secondary" onclick="closeUserModal()">キャンセル</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { getFirestore, collection, getDocs, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+    import firebaseConfig from './js/firebase-config.js';
+
+    initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = '/index.html';
+        return;
+      }
+
+      await loadUsers();
+      setDefaultDates();
+    });
+
+    async function loadUsers() {
+      try {
+        const snap = await getDocs(collection(db, 'users'));
+        const tbody = document.getElementById('usersList');
+        tbody.innerHTML = '';
+
+        if (snap.empty) {
+          tbody.innerHTML = '<tr><td colspan="3" class="text-center">ユーザーがありません</td></tr>';
+          return;
+        }
+
+        snap.forEach((doc) => {
+          const data = doc.data();
+          const row = document.createElement('tr');
+          const roleLabel = {
+            'admin': '管理者',
+            'prime': '元請',
+            'manager': '現場管理者',
+            'partner': '協力会社',
+            'worker': '作業員'
+          }[data.role] || data.role;
+
+          row.innerHTML = `
+            <td>${data.email}</td>
+            <td>${data.name}</td>
+            <td>${roleLabel}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('ユーザー読込エラー:', error);
+      }
+    }
+
+    function setDefaultDates() {
+      const today = new Date();
+      const fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+
+      document.getElementById('fromDate').valueAsDate = fromDate;
+      document.getElementById('toDate').valueAsDate = today;
+    }
+
+    window.navigateTo = function(url) {
+      window.location.href = url;
+    };
+
+    window.logout = async function() {
+      await signOut(auth);
+      window.location.href = '/index.html';
+    };
+
+    window.openUserModal = function() {
+      document.getElementById('userForm').reset();
+      document.getElementById('userModal').classList.add('active');
+    };
+
+    window.closeUserModal = function() {
+      document.getElementById('userModal').classList.remove('active');
+    };
+
+    window.exportCSV = async function() {
+      try {
+        const fromDate = document.getElementById('fromDate').value;
+        const toDate = document.getElementById('toDate').value;
+
+        if (!fromDate || !toDate) {
+          alert('日付を指定してください');
+          return;
+        }
+
+        const from = new Date(fromDate);
+        const to = new Date(toDate);
+        to.setDate(to.getDate() + 1);
+
+        const q = query(
+          collection(db, 'attendance'),
+          where('timestamp', '>=', from),
+          where('timestamp', '<', to)
+        );
+
+        const snap = await getDocs(q);
+        const rows = [['作業員ID', '現場', '時刻', '種別']];
+
+        snap.forEach((doc) => {
+          const data = doc.data();
+          const ts = data.timestamp?.toDate?.() || new Date(data.timestamp);
+          rows.push([
+            data.workerId,
+            data.siteName || '-',
+            ts.toLocaleString('ja-JP'),
+            data.type === 'in' ? '入場' : '退場'
+          ]);
+        });
+
+        // CSV生成（BOM付きUTF-8）
+        const BOM = '﻿';
+        const csv = BOM + rows.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `attendance_${fromDate}_${toDate}.csv`);
+        link.click();
+      } catch (error) {
+        console.error('CSV出力エラー:', error);
+        alert('CSVの生成に失敗しました');
+      }
+    };
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alert('ユーザー作成はFirebase Consoleから行ってください');
+      closeUserModal();
+    });
+  </script>
+</body>
+</html>

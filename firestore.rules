@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ユーザー認証チェック
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return getUserRole() == 'admin';
+    }
+
+    function isPrime() {
+      return getUserRole() == 'prime';
+    }
+
+    function isManager() {
+      return getUserRole() == 'manager';
+    }
+
+    function isPartner() {
+      return getUserRole() == 'partner';
+    }
+
+    function isWorker() {
+      return getUserRole() == 'worker';
+    }
+
+    // users コレクション
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && isAdmin();
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isSignedIn() && isAdmin();
+    }
+
+    // companies コレクション
+    match /companies/{companyId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isAdmin();
+      allow update: if isSignedIn() && isAdmin();
+      allow delete: if isSignedIn() && isAdmin();
+    }
+
+    // sites コレクション
+    match /sites/{siteId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPrime());
+      allow update: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+      allow delete: if isSignedIn() && isAdmin();
+    }
+
+    // workers コレクション
+    match /workers/{workerId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPrime() || isPartner());
+      allow update: if isSignedIn() && (isAdmin() || isPrime() || isPartner());
+      allow delete: if isSignedIn() && (isAdmin() || isPrime());
+    }
+
+    // attendance コレクション
+    match /attendance/{attendanceId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPrime() || isManager() || isWorker());
+      allow update: if isSignedIn() && isAdmin();
+      allow delete: if isSignedIn() && isAdmin();
+    }
+
+    // documents コレクション
+    match /documents/{documentId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+      allow update: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+      allow delete: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+    }
+
+    // photos コレクション
+    match /photos/{photoId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+      allow update: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+      allow delete: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+    }
+
+    // notices コレクション
+    match /notices/{noticeId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPrime() || isManager());
+      allow update: if isSignedIn() && isAdmin();
+      allow delete: if isSignedIn() && isAdmin();
+    }
+
+    // 管理コレクション
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

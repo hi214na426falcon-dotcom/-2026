@@ -1,0 +1,41 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getUserRole() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return getUserRole() == 'admin';
+    }
+
+    function isPrimeOrManager() {
+      return getUserRole() in ['admin', 'prime', 'manager'];
+    }
+
+    // 写真フォルダ
+    match /photos/{allPaths=**} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isPrimeOrManager();
+      allow update: if isSignedIn() && isPrimeOrManager();
+      allow delete: if isSignedIn() && isPrimeOrManager();
+    }
+
+    // 書類フォルダ
+    match /documents/{allPaths=**} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isPrimeOrManager();
+      allow update: if isSignedIn() && isPrimeOrManager();
+      allow delete: if isSignedIn() && isPrimeOrManager();
+    }
+
+    // その他
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

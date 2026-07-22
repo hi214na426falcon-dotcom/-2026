@@ -1,0 +1,26 @@
+{
+  "name": "yuime-genba",
+  "version": "1.0.0",
+  "description": "建設・農業等の現場管理を効率化するWebアプリ",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "firebase serve --only hosting",
+    "emulate": "firebase emulators:start",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:firestore": "firebase deploy --only firestore:rules",
+    "deploy:storage": "firebase deploy --only storage"
+  },
+  "keywords": [
+    "construction",
+    "agriculture",
+    "site management",
+    "firebase",
+    "pwa"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "firebase-tools": "^13.0.0"
+  }
+}
