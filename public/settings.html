@@ -14,8 +14,8 @@
     <div class="navbar-menu">
       <button onclick="navigateTo('/dashboard.html')">ダッシュボード</button>
       <button onclick="navigateTo('/companies.html')">会社</button>
+      <button onclick="navigateTo('/sites.html')">現場</button>
       <button onclick="navigateTo('/workers.html')">作業員</button>
-      <button onclick="navigateTo('/qr.html')">QR</button>
       <button onclick="logout()">ログアウト</button>
     </div>
   </div>
@@ -43,12 +43,13 @@
     </div>
 
     <div class="card">
-      <h3>CSV出力</h3>
-      <p>入退場記録をCSV形式でダウンロード</p>
-      <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-        <input type="date" id="fromDate">
-        <span>～</span>
-        <input type="date" id="toDate">
+      <h3>作業員名簿 CSV出力</h3>
+      <p>現場ごとの作業員名簿をCSV形式でダウンロードします（Excel対応・BOM付きUTF-8）</p>
+      <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
+        <label>現場：</label>
+        <select id="siteFilter" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+          <option value="">すべての現場</option>
+        </select>
       </div>
       <button class="btn btn-primary" onclick="exportCSV()">CSV出力</button>
     </div>
@@ -94,21 +95,12 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import { getFirestore, collection, getDocs, query, where, serverTimestamp, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-    import firebaseConfig, { useEmulator } from './js/firebase-config.js';
+    import { onAuthStateChanged, signOut } from '/vendor/firebase/firebase-auth.js';
+    import { collection, getDocs } from '/vendor/firebase/firebase-firestore.js';
+    import { auth, db } from './js/app-firebase.js';
 
-    initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
-
-    if (useEmulator && useEmulator.enabled && location.hostname === 'localhost') {
-      try {
-        connectAuthEmulator(auth, `http://${useEmulator.auth.host}:${useEmulator.auth.port}`, { disableWarnings: true });
-        connectFirestoreEmulator(db, useEmulator.firestore.host, useEmulator.firestore.port);
-      } catch (error) {}
-    }
+    let companiesMap = {};
+    let sitesMap = {};
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -117,7 +109,7 @@
       }
 
       await loadUsers();
-      setDefaultDates();
+      await loadLookups();
     });
 
     async function loadUsers() {
@@ -131,21 +123,18 @@
           return;
         }
 
-        snap.forEach((doc) => {
-          const data = doc.data();
-          const row = document.createElement('tr');
+        snap.forEach((d) => {
+          const data = d.data();
           const roleLabel = {
-            'admin': '管理者',
-            'prime': '元請',
-            'manager': '現場管理者',
-            'partner': '協力会社',
-            'worker': '作業員'
+            'admin': '管理者', 'prime': '元請', 'manager': '現場管理者',
+            'partner': '協力会社', 'worker': '作業員'
           }[data.role] || data.role;
 
+          const row = document.createElement('tr');
           row.innerHTML = `
-            <td>${data.email}</td>
-            <td>${data.name}</td>
-            <td>${roleLabel}</td>
+            <td>${escapeHtml(data.email)}</td>
+            <td>${escapeHtml(data.name)}</td>
+            <td>${escapeHtml(roleLabel)}</td>
           `;
           tbody.appendChild(row);
         });
@@ -154,82 +143,94 @@
       }
     }
 
-    function setDefaultDates() {
-      const today = new Date();
-      const fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
-
-      document.getElementById('fromDate').valueAsDate = fromDate;
-      document.getElementById('toDate').valueAsDate = today;
+    async function loadLookups() {
+      companiesMap = {};
+      sitesMap = {};
+      const siteFilter = document.getElementById('siteFilter');
+      try {
+        const [companiesSnap, sitesSnap] = await Promise.all([
+          getDocs(collection(db, 'companies')),
+          getDocs(collection(db, 'sites')),
+        ]);
+        companiesSnap.forEach((d) => { companiesMap[d.id] = d.data().name; });
+        sitesSnap.forEach((d) => {
+          sitesMap[d.id] = d.data().name;
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = d.data().name;
+          siteFilter.appendChild(opt);
+        });
+      } catch (error) {
+        console.error('マスタ読込エラー:', error);
+      }
     }
 
-    window.navigateTo = function(url) {
-      window.location.href = url;
-    };
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
 
-    window.logout = async function() {
-      await signOut(auth);
-      window.location.href = '/index.html';
-    };
-
-    window.openUserModal = function() {
+    window.navigateTo = (url) => { window.location.href = url; };
+    window.logout = async () => { await signOut(auth); window.location.href = '/index.html'; };
+    window.openUserModal = () => {
       document.getElementById('userForm').reset();
       document.getElementById('userModal').classList.add('active');
     };
-
-    window.closeUserModal = function() {
+    window.closeUserModal = () => {
       document.getElementById('userModal').classList.remove('active');
     };
 
     window.exportCSV = async function() {
       try {
-        const fromDate = document.getElementById('fromDate').value;
-        const toDate = document.getElementById('toDate').value;
+        const siteFilter = document.getElementById('siteFilter').value;
+        const snap = await getDocs(collection(db, 'workers'));
 
-        if (!fromDate || !toDate) {
-          alert('日付を指定してください');
-          return;
-        }
+        const header = ['配属現場', '所属会社', '氏名', 'カナ', '国籍', '在留資格', '在留期限', '電話', '職能'];
+        const rows = [header];
 
-        const from = new Date(fromDate);
-        const to = new Date(toDate);
-        to.setDate(to.getDate() + 1);
-
-        const q = query(
-          collection(db, 'attendance'),
-          where('timestamp', '>=', from),
-          where('timestamp', '<', to)
-        );
-
-        const snap = await getDocs(q);
-        const rows = [['作業員ID', '現場', '時刻', '種別']];
-
-        snap.forEach((doc) => {
-          const data = doc.data();
-          const ts = data.timestamp?.toDate?.() || new Date(data.timestamp);
+        snap.forEach((d) => {
+          const w = d.data();
+          if (siteFilter && w.siteId !== siteFilter) return;
           rows.push([
-            data.workerId,
-            data.siteName || '-',
-            ts.toLocaleString('ja-JP'),
-            data.type === 'in' ? '入場' : '退場'
+            w.siteId ? (sitesMap[w.siteId] || '(削除済み現場)') : '未配属',
+            companiesMap[w.companyId] || '-',
+            w.name || '',
+            w.nameKana || '',
+            w.nationality || '',
+            w.visaType || '',
+            w.visaExpiry || '',
+            w.tel || '',
+            w.skill || '',
           ]);
         });
 
-        // CSV生成（BOM付きUTF-8）
+        if (rows.length === 1) {
+          alert('出力対象の作業員がいません');
+          return;
+        }
+
         const BOM = '﻿';
-        const csv = BOM + rows.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
+        const csv = BOM + rows.map((row) =>
+          row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+        ).join('\r\n');
+
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
+        const label = siteFilter ? (sitesMap[siteFilter] || 'site') : 'all';
+        const today = new Date().toISOString().slice(0, 10);
         link.setAttribute('href', url);
-        link.setAttribute('download', `attendance_${fromDate}_${toDate}.csv`);
+        link.setAttribute('download', `worker_roster_${label}_${today}.csv`);
         link.click();
+        URL.revokeObjectURL(url);
       } catch (error) {
         console.error('CSV出力エラー:', error);
         alert('CSVの生成に失敗しました');
       }
     };
 
-    document.getElementById('userForm').addEventListener('submit', async (e) => {
+    document.getElementById('userForm').addEventListener('submit', (e) => {
       e.preventDefault();
       alert('ユーザー作成はFirebase Consoleから行ってください');
       closeUserModal();

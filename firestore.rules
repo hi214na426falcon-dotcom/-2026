@@ -30,10 +30,22 @@ service cloud.firestore {
       return getUserRole() == 'worker';
     }
 
+    // meta（セットアップ状態などのアプリ設定）
+    //   read はセットアップ画面が未認証でも参照するため公開
+    //   write は管理者のみ
+    match /meta/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isAdmin();
+    }
+
     // users コレクション
+    //   create: 初回セットアップ時（meta/app 未作成）に限り、本人が自分の
+    //           ドキュメント（docID = uid）を作成できる。以降は管理者のみ。
     match /users/{userId} {
       allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
-      allow create: if isSignedIn() && isAdmin();
+      allow create: if isSignedIn()
+                    && request.auth.uid == userId
+                    && (!exists(/databases/$(database)/documents/meta/app) || isAdmin());
       allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
       allow delete: if isSignedIn() && isAdmin();
     }
@@ -60,14 +72,6 @@ service cloud.firestore {
       allow create: if isSignedIn() && (isAdmin() || isPrime() || isPartner());
       allow update: if isSignedIn() && (isAdmin() || isPrime() || isPartner());
       allow delete: if isSignedIn() && (isAdmin() || isPrime());
-    }
-
-    // attendance コレクション
-    match /attendance/{attendanceId} {
-      allow read: if isSignedIn();
-      allow create: if isSignedIn() && (isAdmin() || isPrime() || isManager() || isWorker());
-      allow update: if isSignedIn() && isAdmin();
-      allow delete: if isSignedIn() && isAdmin();
     }
 
     // documents コレクション

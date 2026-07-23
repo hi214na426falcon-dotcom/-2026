@@ -26,8 +26,11 @@
       <button class="btn btn-primary" onclick="openCreateModal()">+ 新規作成</button>
     </div>
 
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="作業員名で検索...">
+    <div class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <input type="text" id="searchInput" placeholder="氏名・会社・現場で検索..." style="flex: 1; min-width: 200px;">
+      <select id="siteFilter" style="padding: 12px; border: 1px solid #ddd; border-radius: 4px;">
+        <option value="">すべての現場</option>
+      </select>
     </div>
 
     <table class="table">
@@ -35,6 +38,7 @@
         <tr>
           <th>氏名</th>
           <th>所属会社</th>
+          <th>配属現場</th>
           <th>国籍</th>
           <th>在留資格</th>
           <th>在留期限</th>
@@ -42,7 +46,7 @@
         </tr>
       </thead>
       <tbody id="workersList">
-        <tr><td colspan="6" class="text-center">読込中...</td></tr>
+        <tr><td colspan="7" class="text-center">読込中...</td></tr>
       </tbody>
     </table>
   </div>
@@ -51,12 +55,12 @@
   <div id="workerModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>作業員情報</h2>
+        <h2 id="workerModalTitle">作業員情報</h2>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
       <form id="workerForm">
         <div class="form-group">
-          <label>氏名</label>
+          <label>氏名 <span style="color:#d32f2f;">*</span></label>
           <input type="text" id="workerName" required>
         </div>
         <div class="form-group">
@@ -64,8 +68,14 @@
           <input type="text" id="workerNameKana">
         </div>
         <div class="form-group">
-          <label>所属会社</label>
+          <label>所属会社 <span style="color:#d32f2f;">*</span></label>
           <select id="workerCompany" required></select>
+        </div>
+        <div class="form-group">
+          <label>配属現場</label>
+          <select id="workerSite">
+            <option value="">未配属</option>
+          </select>
         </div>
         <div class="form-group">
           <label>国籍</label>
@@ -96,21 +106,14 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-    import firebaseConfig, { useEmulator } from './js/firebase-config.js';
+    import { onAuthStateChanged, signOut } from '/vendor/firebase/firebase-auth.js';
+    import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from '/vendor/firebase/firebase-firestore.js';
+    import { auth, db } from './js/app-firebase.js';
 
-    initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
-
-    if (useEmulator && useEmulator.enabled && location.hostname === 'localhost') {
-      try {
-        connectAuthEmulator(auth, `http://${useEmulator.auth.host}:${useEmulator.auth.port}`, { disableWarnings: true });
-        connectFirestoreEmulator(db, useEmulator.firestore.host, useEmulator.firestore.port);
-      } catch (error) {}
-    }
+    let companiesMap = {};
+    let sitesMap = {};
+    let allWorkers = [];
+    let currentWorkerId = null;
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -119,17 +122,24 @@
       }
 
       await loadCompanies();
+      await loadSites();
       await loadWorkers();
+
+      document.getElementById('searchInput').addEventListener('input', renderWorkers);
+      document.getElementById('siteFilter').addEventListener('change', renderWorkers);
     });
 
     async function loadCompanies() {
+      companiesMap = {};
+      const select = document.getElementById('workerCompany');
+      select.innerHTML = '';
       try {
         const snap = await getDocs(collection(db, 'companies'));
-        const select = document.getElementById('workerCompany');
-        snap.forEach((doc) => {
+        snap.forEach((d) => {
+          companiesMap[d.id] = d.data().name;
           const option = document.createElement('option');
-          option.value = doc.id;
-          option.textContent = doc.data().name;
+          option.value = d.id;
+          option.textContent = d.data().name;
           select.appendChild(option);
         });
       } catch (error) {
@@ -137,48 +147,94 @@
       }
     }
 
+    async function loadSites() {
+      sitesMap = {};
+      const modalSelect = document.getElementById('workerSite');
+      const filterSelect = document.getElementById('siteFilter');
+      modalSelect.innerHTML = '<option value="">未配属</option>';
+      filterSelect.innerHTML = '<option value="">すべての現場</option>';
+      try {
+        const snap = await getDocs(collection(db, 'sites'));
+        snap.forEach((d) => {
+          sitesMap[d.id] = d.data().name;
+          const opt1 = document.createElement('option');
+          opt1.value = d.id;
+          opt1.textContent = d.data().name;
+          modalSelect.appendChild(opt1);
+          const opt2 = document.createElement('option');
+          opt2.value = d.id;
+          opt2.textContent = d.data().name;
+          filterSelect.appendChild(opt2);
+        });
+      } catch (error) {
+        console.error('現場読込エラー:', error);
+      }
+    }
+
     async function loadWorkers() {
       try {
         const snap = await getDocs(collection(db, 'workers'));
-        const tbody = document.getElementById('workersList');
-        tbody.innerHTML = '';
-
-        if (snap.empty) {
-          tbody.innerHTML = '<tr><td colspan="6" class="text-center">作業員がありません</td></tr>';
-          return;
-        }
-
-        snap.forEach((doc) => {
-          const data = doc.data();
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${data.name}</td>
-            <td>${data.companyName || '-'}</td>
-            <td>${data.nationality || '-'}</td>
-            <td>${data.visaType || '-'}</td>
-            <td>${data.visaExpiry || '-'}</td>
-            <td>
-              <button class="btn btn-secondary" onclick="editWorker('${doc.id}')">編集</button>
-              <button class="btn btn-danger" onclick="deleteWorker('${doc.id}')">削除</button>
-            </td>
-          `;
-          tbody.appendChild(row);
-        });
+        allWorkers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderWorkers();
       } catch (error) {
         console.error('作業員読込エラー:', error);
       }
     }
 
-    window.navigateTo = function(url) {
-      window.location.href = url;
-    };
+    function renderWorkers() {
+      const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+      const siteFilter = document.getElementById('siteFilter').value;
+      const tbody = document.getElementById('workersList');
+      tbody.innerHTML = '';
 
-    window.logout = async function() {
-      await signOut(auth);
-      window.location.href = '/index.html';
-    };
+      const filtered = allWorkers.filter((w) => {
+        if (siteFilter && w.siteId !== siteFilter) return false;
+        if (!keyword) return true;
+        const haystack = [
+          w.name,
+          companiesMap[w.companyId] || '',
+          sitesMap[w.siteId] || '',
+          w.nationality,
+          w.skill
+        ].join(' ').toLowerCase();
+        return haystack.includes(keyword);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">該当する作業員がいません</td></tr>';
+        return;
+      }
+
+      filtered.forEach((w) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${escapeHtml(w.name)}</td>
+          <td>${escapeHtml(companiesMap[w.companyId] || '-')}</td>
+          <td>${w.siteId ? escapeHtml(sitesMap[w.siteId] || '(削除済み現場)') : '<span style="color:#999;">未配属</span>'}</td>
+          <td>${escapeHtml(w.nationality || '-')}</td>
+          <td>${escapeHtml(w.visaType || '-')}</td>
+          <td>${escapeHtml(w.visaExpiry || '-')}</td>
+          <td>
+            <button class="btn btn-secondary" onclick="editWorker('${w.id}')">編集</button>
+            <button class="btn btn-danger" onclick="deleteWorker('${w.id}')">削除</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    window.navigateTo = (url) => { window.location.href = url; };
+    window.logout = async () => { await signOut(auth); window.location.href = '/index.html'; };
 
     window.openCreateModal = function() {
+      currentWorkerId = null;
+      document.getElementById('workerModalTitle').textContent = '作業員 新規作成';
       document.getElementById('workerForm').reset();
       document.getElementById('workerModal').classList.add('active');
     };
@@ -188,17 +244,30 @@
     };
 
     window.editWorker = function(id) {
-      console.log('編集:', id);
+      const w = allWorkers.find((x) => x.id === id);
+      if (!w) return;
+      currentWorkerId = id;
+      document.getElementById('workerModalTitle').textContent = '作業員 編集';
+      document.getElementById('workerName').value = w.name || '';
+      document.getElementById('workerNameKana').value = w.nameKana || '';
+      document.getElementById('workerCompany').value = w.companyId || '';
+      document.getElementById('workerSite').value = w.siteId || '';
+      document.getElementById('workerNationality').value = w.nationality || '';
+      document.getElementById('workerVisaType').value = w.visaType || '';
+      document.getElementById('workerVisaExpiry').value = w.visaExpiry || '';
+      document.getElementById('workerTel').value = w.tel || '';
+      document.getElementById('workerSkill').value = w.skill || '';
+      document.getElementById('workerModal').classList.add('active');
     };
 
     window.deleteWorker = async function(id) {
-      if (confirm('削除しますか？')) {
-        try {
-          await deleteDoc(doc(db, 'workers', id));
-          await loadWorkers();
-        } catch (error) {
-          console.error('削除エラー:', error);
-        }
+      if (!confirm('削除しますか？')) return;
+      try {
+        await deleteDoc(doc(db, 'workers', id));
+        await loadWorkers();
+      } catch (error) {
+        console.error('削除エラー:', error);
+        alert('削除に失敗しました');
       }
     };
 
@@ -206,21 +275,28 @@
       e.preventDefault();
       try {
         const data = {
-          name: document.getElementById('workerName').value,
-          nameKana: document.getElementById('workerNameKana').value,
+          name: document.getElementById('workerName').value.trim(),
+          nameKana: document.getElementById('workerNameKana').value.trim(),
           companyId: document.getElementById('workerCompany').value,
-          nationality: document.getElementById('workerNationality').value,
-          visaType: document.getElementById('workerVisaType').value,
+          siteId: document.getElementById('workerSite').value,
+          nationality: document.getElementById('workerNationality').value.trim(),
+          visaType: document.getElementById('workerVisaType').value.trim(),
           visaExpiry: document.getElementById('workerVisaExpiry').value,
-          tel: document.getElementById('workerTel').value,
-          skill: document.getElementById('workerSkill').value,
+          tel: document.getElementById('workerTel').value.trim(),
+          skill: document.getElementById('workerSkill').value.trim(),
         };
 
-        await addDoc(collection(db, 'workers'), data);
+        if (currentWorkerId) {
+          await updateDoc(doc(db, 'workers', currentWorkerId), data);
+        } else {
+          await addDoc(collection(db, 'workers'), data);
+        }
+
         closeModal();
         await loadWorkers();
       } catch (error) {
         console.error('保存エラー:', error);
+        alert('保存に失敗しました');
       }
     });
   </script>

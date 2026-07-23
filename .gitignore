@@ -34,3 +34,15 @@ logs/
 # Temporary files
 .tmp/
 temp/
+
+# Firebase emulator debug logs
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*-debug.log
+firebase-export-*/
+.firebase/
+
+# Playwright
+test-results/
+playwright-report/

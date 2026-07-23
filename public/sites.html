@@ -36,30 +36,31 @@
           <th>現場名</th>
           <th>元請会社</th>
           <th>現場管理者</th>
+          <th>配属人数</th>
           <th>状態</th>
           <th>操作</th>
         </tr>
       </thead>
       <tbody id="sitesList">
-        <tr><td colspan="5" class="text-center">読込中...</td></tr>
+        <tr><td colspan="6" class="text-center">読込中...</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- モーダル -->
+  <!-- 現場情報モーダル -->
   <div id="siteModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>現場情報</h2>
+        <h2 id="siteModalTitle">現場情報</h2>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
       <form id="siteForm">
         <div class="form-group">
-          <label>現場名</label>
+          <label>現場名 <span style="color:#d32f2f;">*</span></label>
           <input type="text" id="siteName" required>
         </div>
         <div class="form-group">
-          <label>元請会社</label>
+          <label>元請会社 <span style="color:#d32f2f;">*</span></label>
           <select id="siteCompany" required></select>
         </div>
         <div class="form-group">
@@ -85,22 +86,41 @@
     </div>
   </div>
 
+  <!-- 名簿モーダル -->
+  <div id="rosterModal" class="modal">
+    <div class="modal-content" style="max-width: 640px;">
+      <div class="modal-header">
+        <h2 id="rosterTitle">配属名簿</h2>
+        <button class="modal-close" onclick="closeRoster()">&times;</button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>氏名</th>
+            <th>所属会社</th>
+            <th>国籍</th>
+            <th>職能</th>
+          </tr>
+        </thead>
+        <tbody id="rosterList">
+          <tr><td colspan="4" class="text-center">読込中...</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 20px;">
+        <button type="button" class="btn btn-secondary" onclick="closeRoster()">閉じる</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-    import firebaseConfig, { useEmulator } from './js/firebase-config.js';
+    import { onAuthStateChanged, signOut } from '/vendor/firebase/firebase-auth.js';
+    import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from '/vendor/firebase/firebase-firestore.js';
+    import { auth, db } from './js/app-firebase.js';
 
-    initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
-
-    if (useEmulator && useEmulator.enabled && location.hostname === 'localhost') {
-      try {
-        connectAuthEmulator(auth, `http://${useEmulator.auth.host}:${useEmulator.auth.port}`, { disableWarnings: true });
-        connectFirestoreEmulator(db, useEmulator.firestore.host, useEmulator.firestore.port);
-      } catch (error) {}
-    }
+    let companiesMap = {};
+    let allSites = [];
+    let allWorkers = [];
+    let currentSiteId = null;
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -109,17 +129,23 @@
       }
 
       await loadCompanies();
+      await loadWorkers();
       await loadSites();
+
+      document.getElementById('searchInput').addEventListener('input', renderSites);
     });
 
     async function loadCompanies() {
+      companiesMap = {};
+      const select = document.getElementById('siteCompany');
+      select.innerHTML = '';
       try {
         const snap = await getDocs(collection(db, 'companies'));
-        const select = document.getElementById('siteCompany');
-        snap.forEach((doc) => {
+        snap.forEach((d) => {
+          companiesMap[d.id] = d.data().name;
           const option = document.createElement('option');
-          option.value = doc.id;
-          option.textContent = doc.data().name;
+          option.value = d.id;
+          option.textContent = d.data().name;
           select.appendChild(option);
         });
       } catch (error) {
@@ -127,47 +153,103 @@
       }
     }
 
+    async function loadWorkers() {
+      try {
+        const snap = await getDocs(collection(db, 'workers'));
+        allWorkers = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      } catch (error) {
+        console.error('作業員読込エラー:', error);
+      }
+    }
+
     async function loadSites() {
       try {
         const snap = await getDocs(collection(db, 'sites'));
-        const tbody = document.getElementById('sitesList');
-        tbody.innerHTML = '';
-
-        if (snap.empty) {
-          tbody.innerHTML = '<tr><td colspan="5" class="text-center">現場がありません</td></tr>';
-          return;
-        }
-
-        snap.forEach((doc) => {
-          const data = doc.data();
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${data.name}</td>
-            <td>${data.companyName || '-'}</td>
-            <td>${data.manager || '-'}</td>
-            <td>${data.status === 'active' ? '進行中' : '完了'}</td>
-            <td>
-              <button class="btn btn-secondary" onclick="editSite('${doc.id}')">編集</button>
-              <button class="btn btn-danger" onclick="deleteSite('${doc.id}')">削除</button>
-            </td>
-          `;
-          tbody.appendChild(row);
-        });
+        allSites = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderSites();
       } catch (error) {
         console.error('現場読込エラー:', error);
       }
     }
 
-    window.navigateTo = function(url) {
-      window.location.href = url;
+    function countWorkers(siteId) {
+      return allWorkers.filter((w) => w.siteId === siteId).length;
+    }
+
+    function renderSites() {
+      const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+      const tbody = document.getElementById('sitesList');
+      tbody.innerHTML = '';
+
+      const filtered = allSites.filter((s) =>
+        !keyword || (s.name || '').toLowerCase().includes(keyword)
+      );
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">現場がありません</td></tr>';
+        return;
+      }
+
+      filtered.forEach((s) => {
+        const count = countWorkers(s.id);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${escapeHtml(s.name)}</td>
+          <td>${escapeHtml(companiesMap[s.companyId] || '-')}</td>
+          <td>${escapeHtml(s.manager || '-')}</td>
+          <td>
+            <button class="btn btn-success" onclick="showRoster('${s.id}')">${count}人 の名簿</button>
+          </td>
+          <td>${s.status === 'completed' ? '完了' : '進行中'}</td>
+          <td>
+            <button class="btn btn-secondary" onclick="editSite('${s.id}')">編集</button>
+            <button class="btn btn-danger" onclick="deleteSite('${s.id}')">削除</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    window.showRoster = function(siteId) {
+      const site = allSites.find((s) => s.id === siteId);
+      const workers = allWorkers.filter((w) => w.siteId === siteId);
+      document.getElementById('rosterTitle').textContent = `${site ? site.name : ''} の配属名簿（${workers.length}人）`;
+      const tbody = document.getElementById('rosterList');
+      tbody.innerHTML = '';
+
+      if (workers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">配属されている作業員はいません</td></tr>';
+      } else {
+        workers.forEach((w) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${escapeHtml(w.name)}</td>
+            <td>${escapeHtml(companiesMap[w.companyId] || '-')}</td>
+            <td>${escapeHtml(w.nationality || '-')}</td>
+            <td>${escapeHtml(w.skill || '-')}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      document.getElementById('rosterModal').classList.add('active');
     };
 
-    window.logout = async function() {
-      await signOut(auth);
-      window.location.href = '/index.html';
+    window.closeRoster = function() {
+      document.getElementById('rosterModal').classList.remove('active');
     };
+
+    window.navigateTo = (url) => { window.location.href = url; };
+    window.logout = async () => { await signOut(auth); window.location.href = '/index.html'; };
 
     window.openCreateModal = function() {
+      currentSiteId = null;
+      document.getElementById('siteModalTitle').textContent = '現場 新規作成';
       document.getElementById('siteForm').reset();
       document.getElementById('siteModal').classList.add('active');
     };
@@ -177,17 +259,31 @@
     };
 
     window.editSite = function(id) {
-      console.log('編集:', id);
+      const s = allSites.find((x) => x.id === id);
+      if (!s) return;
+      currentSiteId = id;
+      document.getElementById('siteModalTitle').textContent = '現場 編集';
+      document.getElementById('siteName').value = s.name || '';
+      document.getElementById('siteCompany').value = s.companyId || '';
+      document.getElementById('siteManager').value = s.manager || '';
+      document.getElementById('siteAddress').value = s.address || '';
+      document.getElementById('siteStatus').value = s.status || 'active';
+      document.getElementById('siteModal').classList.add('active');
     };
 
     window.deleteSite = async function(id) {
-      if (confirm('削除しますか？')) {
-        try {
-          await deleteDoc(doc(db, 'sites', id));
-          await loadSites();
-        } catch (error) {
-          console.error('削除エラー:', error);
-        }
+      const count = countWorkers(id);
+      if (count > 0) {
+        if (!confirm(`この現場には${count}人が配属されています。削除すると配属情報が残ります。削除しますか？`)) return;
+      } else {
+        if (!confirm('削除しますか？')) return;
+      }
+      try {
+        await deleteDoc(doc(db, 'sites', id));
+        await loadSites();
+      } catch (error) {
+        console.error('削除エラー:', error);
+        alert('削除に失敗しました');
       }
     };
 
@@ -195,18 +291,24 @@
       e.preventDefault();
       try {
         const data = {
-          name: document.getElementById('siteName').value,
+          name: document.getElementById('siteName').value.trim(),
           companyId: document.getElementById('siteCompany').value,
-          manager: document.getElementById('siteManager').value,
-          address: document.getElementById('siteAddress').value,
+          manager: document.getElementById('siteManager').value.trim(),
+          address: document.getElementById('siteAddress').value.trim(),
           status: document.getElementById('siteStatus').value,
         };
 
-        await addDoc(collection(db, 'sites'), data);
+        if (currentSiteId) {
+          await updateDoc(doc(db, 'sites', currentSiteId), data);
+        } else {
+          await addDoc(collection(db, 'sites'), data);
+        }
+
         closeModal();
         await loadSites();
       } catch (error) {
         console.error('保存エラー:', error);
+        alert('保存に失敗しました');
       }
     });
   </script>

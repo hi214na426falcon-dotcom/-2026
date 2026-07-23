@@ -16,7 +16,6 @@
       <button onclick="navigateTo('/companies.html')">会社</button>
       <button onclick="navigateTo('/sites.html')">現場</button>
       <button onclick="navigateTo('/workers.html')">作業員</button>
-      <button onclick="navigateTo('/qr.html')">QR</button>
       <button onclick="navigateTo('/settings.html')">設定</button>
       <button onclick="logout()">ログアウト</button>
     </div>
@@ -35,8 +34,8 @@
         <div class="stat-value" id="workersCount">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">本日入場数</div>
-        <div class="stat-value" id="todayCount">0</div>
+        <div class="stat-label">配属済み</div>
+        <div class="stat-value" id="assignedCount">0</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">会社数</div>
@@ -45,116 +44,101 @@
     </div>
 
     <div class="card">
-      <h3>最近の入退場</h3>
+      <h3>現場別の配属人数</h3>
       <table class="table">
         <thead>
           <tr>
-            <th>作業員名</th>
-            <th>現場</th>
-            <th>時刻</th>
-            <th>種別</th>
+            <th>現場名</th>
+            <th>元請会社</th>
+            <th>状態</th>
+            <th>配属人数</th>
           </tr>
         </thead>
-        <tbody id="attendanceList">
+        <tbody id="siteRosterList">
           <tr><td colspan="4" class="text-center">データなし</td></tr>
         </tbody>
       </table>
     </div>
+
+    <div class="card" id="unassignedCard" style="display:none;">
+      <h3>未配属の作業員</h3>
+      <p id="unassignedText" style="color:#666;"></p>
+    </div>
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import { getFirestore, collection, getDocs, query, orderBy, limit, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-    import firebaseConfig, { useEmulator } from './js/firebase-config.js';
-
-    initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
-
-    // エミュレータに接続
-    if (useEmulator && useEmulator.enabled && location.hostname === 'localhost') {
-      try {
-        connectAuthEmulator(auth, `http://${useEmulator.auth.host}:${useEmulator.auth.port}`, { disableWarnings: true });
-        connectFirestoreEmulator(db, useEmulator.firestore.host, useEmulator.firestore.port);
-        console.log('✓ Emulator に接続しました');
-      } catch (error) {
-        console.warn('Emulator 接続エラー:', error.message);
-      }
-    }
+    import { onAuthStateChanged, signOut } from '/vendor/firebase/firebase-auth.js';
+    import { collection, getDocs } from '/vendor/firebase/firebase-firestore.js';
+    import { auth, db } from './js/app-firebase.js';
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = '/index.html';
         return;
       }
-
       await loadDashboard();
     });
 
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
     async function loadDashboard() {
       try {
-        // 現場数
-        const sitesSnap = await getDocs(collection(db, 'sites'));
-        document.getElementById('sitesCount').textContent = sitesSnap.size;
+        const [companiesSnap, sitesSnap, workersSnap] = await Promise.all([
+          getDocs(collection(db, 'companies')),
+          getDocs(collection(db, 'sites')),
+          getDocs(collection(db, 'workers')),
+        ]);
 
-        // 作業員数
-        const workersSnap = await getDocs(collection(db, 'workers'));
-        document.getElementById('workersCount').textContent = workersSnap.size;
+        const companiesMap = {};
+        companiesSnap.forEach((d) => { companiesMap[d.id] = d.data().name; });
 
-        // 会社数
-        const companiesSnap = await getDocs(collection(db, 'companies'));
+        const sites = sitesSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        const workers = workersSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+        const assigned = workers.filter((w) => w.siteId).length;
+
+        document.getElementById('sitesCount').textContent = sites.length;
+        document.getElementById('workersCount').textContent = workers.length;
+        document.getElementById('assignedCount').textContent = assigned;
         document.getElementById('companiesCount').textContent = companiesSnap.size;
 
-        // 本日入場数
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const attendanceSnap = await getDocs(collection(db, 'attendance'));
-        const todayCount = attendanceSnap.docs.filter((doc) => {
-          const ts = doc.data().timestamp?.toDate?.() || new Date(doc.data().timestamp);
-          return ts >= today && doc.data().type === 'in';
-        }).length;
-        document.getElementById('todayCount').textContent = todayCount;
-
-        // 最近の入退場
-        const attendanceQuery = query(collection(db, 'attendance'), orderBy('timestamp', 'desc'), limit(10));
-        const attendanceList = await getDocs(attendanceQuery);
-
-        const tbody = document.getElementById('attendanceList');
+        // 現場別 配属人数
+        const tbody = document.getElementById('siteRosterList');
         tbody.innerHTML = '';
-
-        if (attendanceList.empty) {
-          tbody.innerHTML = '<tr><td colspan="4" class="text-center">データなし</td></tr>';
-          return;
+        if (sites.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="text-center">現場が登録されていません</td></tr>';
+        } else {
+          sites.forEach((s) => {
+            const count = workers.filter((w) => w.siteId === s.id).length;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${escapeHtml(s.name)}</td>
+              <td>${escapeHtml(companiesMap[s.companyId] || '-')}</td>
+              <td>${s.status === 'completed' ? '完了' : '進行中'}</td>
+              <td><strong>${count}</strong> 人</td>
+            `;
+            tbody.appendChild(row);
+          });
         }
 
-        for (const doc of attendanceList.docs) {
-          const data = doc.data();
-          const row = document.createElement('tr');
-          const ts = data.timestamp?.toDate?.() || new Date(data.timestamp);
-          const time = ts.toLocaleTimeString('ja-JP');
-
-          row.innerHTML = `
-            <td>${data.workerName || '不明'}</td>
-            <td>${data.siteName || '不明'}</td>
-            <td>${time}</td>
-            <td>${data.type === 'in' ? '入場' : '退場'}</td>
-          `;
-          tbody.appendChild(row);
+        // 未配属
+        const unassigned = workers.length - assigned;
+        if (unassigned > 0) {
+          document.getElementById('unassignedCard').style.display = 'block';
+          document.getElementById('unassignedText').textContent =
+            `${unassigned}人 の作業員がどの現場にも配属されていません。「作業員」画面で配属先を設定してください。`;
         }
       } catch (error) {
         console.error('ダッシュボード読込エラー:', error);
       }
     }
 
-    window.navigateTo = function(url) {
-      window.location.href = url;
-    };
-
-    window.logout = async function() {
-      await signOut(auth);
-      window.location.href = '/index.html';
-    };
+    window.navigateTo = (url) => { window.location.href = url; };
+    window.logout = async () => { await signOut(auth); window.location.href = '/index.html'; };
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(console.error);

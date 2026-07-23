@@ -118,22 +118,8 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import firebaseConfig, { useEmulator } from './js/firebase-config.js';
-
-    initializeApp(firebaseConfig);
-    const auth = getAuth();
-
-    // エミュレータに接続
-    if (useEmulator && useEmulator.enabled && location.hostname === 'localhost') {
-      try {
-        connectAuthEmulator(auth, `http://${useEmulator.auth.host}:${useEmulator.auth.port}`, { disableWarnings: true });
-        console.log('✓ Auth Emulator に接続しました');
-      } catch (error) {
-        console.warn('Auth Emulator 接続エラー:', error.message);
-      }
-    }
+    import { signInWithEmailAndPassword, onAuthStateChanged } from '/vendor/firebase/firebase-auth.js';
+    import { auth } from './js/app-firebase.js';
 
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -171,7 +157,7 @@
       }
     });
 
-    auth.onAuthStateChanged((user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         window.location.href = '/dashboard.html';
       }

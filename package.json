@@ -6,6 +6,7 @@
   "scripts": {
     "start": "firebase serve --only hosting",
     "emulate": "firebase emulators:start",
+    "test:e2e": "node tests/e2e.mjs",
     "deploy": "firebase deploy",
     "deploy:hosting": "firebase deploy --only hosting",
     "deploy:firestore": "firebase deploy --only firestore:rules",
@@ -21,7 +22,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@google-cloud/firestore": "^8.7.0",
-    "firebase-tools": "^13.35.1"
+    "firebase": "^10.7.0",
+    "firebase-tools": "^13.35.1",
+    "playwright": "^1.61.1"
   }
 }

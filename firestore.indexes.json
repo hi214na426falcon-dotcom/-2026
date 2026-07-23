@@ -35,30 +35,12 @@
       ]
     },
     {
-      "collectionGroup": "attendance",
-      "queryScope": "Collection",
-      "fields": [
-        {
-          "fieldPath": "workerId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "timestamp",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "attendance",
+      "collectionGroup": "workers",
       "queryScope": "Collection",
       "fields": [
         {
           "fieldPath": "siteId",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "timestamp",
-          "order": "DESCENDING"
         }
       ]
     }
