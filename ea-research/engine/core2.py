@@ -79,21 +79,35 @@ def _in_session(hour_i, sess):
 
 # ---- 検証本体。core.backtest と同じ鉄の掟。フィルタ(adx/session)と ----
 # ---- ATR動的ストップを追加。base はロジック名(core.LOGICS)。 ----
-def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0,
+_HTF_CACHE = {}
+def _htf_sma(pair, htf):
+    """MTF-lite: 上位足レジーム代理として close の長期SMA。
+    真の複数時間足(m15取得)ではなく、同一H1系列での上位足方向フィルタ。"""
+    key = (pair, htf)
+    if key in _HTF_CACHE: return _HTF_CACHE[key]
+    o, h, l, c, hour = load_full(pair)
+    sma = pd.Series(c).rolling(htf).mean().values
+    _HTF_CACHE[key] = sma
+    return sma
+
+def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
               lo_i=None, hi_i=None):
     """
     prm=(fast,slow,rsi_p,sl,tp,bb_p)。
     adx_thr>0 なら ADX がその値以上のときだけエントリー。
     sess で時間帯を制限。
     atr_mult>0 なら sl/tp を無視し ATR*mult / ATR*mult*(tp/sl) で建値確定。
+    htf>0 なら上位足レジーム(長期SMA)方向に一致するエントリーだけ許可(MTF-lite)。
     """
     fast, slow, rsi_p, sl, tp, bb_p = prm
     o, h, l, c, hour = load_full(pair)
     ix = indicators2(pair, fast, slow, rsi_p, bb_p)
     adx = ix['adx']; atr = ix['atr']
+    hsma = _htf_sma(pair, htf) if htf > 0 else None
     pip = core.PIP_MAP.get(pair, 0.0001); sp = core.SPR_MAP[pair]*pip
     n = len(c)
-    lo_i = max(slow+2, bb_p+2, 16) if lo_i is None else max(lo_i, slow+2, bb_p+2, 16)
+    _floor = max(slow+2, bb_p+2, 16, (htf+2 if htf else 0))
+    lo_i = _floor if lo_i is None else max(lo_i, _floor)
     hi_i = n if hi_i is None else hi_i
     tp_ratio = tp/sl if sl else 2.0
     trades = []; pos = None
@@ -112,6 +126,9 @@ def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0,
         if not _in_session(hour[i], sess): continue
         sig = core.signal(base, ix, i, c)
         if sig == 0: continue
+        if hsma is not None:  # 上位足レジーム方向に一致しないエントリーは捨てる
+            if sig == 1 and not (c[i] > hsma[i]): continue
+            if sig == -1 and not (c[i] < hsma[i]): continue
         e = c[i]
         if atr_mult > 0 and atr[i] > 0:
             risk = atr_mult*atr[i]; rew = risk*tp_ratio
@@ -127,10 +144,10 @@ def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0,
     return dict(n=len(tr), wr=len(w)/len(tr)*100, pf=pf,
                 exp=tr.mean()/pip, maxdd=maxdd/pip, total=eq[-1]/pip)
 
-def validate_survivor2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0):
+def validate_survivor2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0):
     """core.validate_survivor と同じ関門。フィルタ付きで判定。"""
     o, h, l, c, hour = load_full(pair); n=len(c); split=int(n*0.6)
-    kw = dict(adx_thr=adx_thr, sess=sess, atr_mult=atr_mult)
+    kw = dict(adx_thr=adx_thr, sess=sess, atr_mult=atr_mult, htf=htf)
     ins = backtest2(base, prm, pair, lo_i=0, hi_i=split, **kw)
     out = backtest2(base, prm, pair, lo_i=split, hi_i=n, **kw)
     if not ins or not out: return False, {}

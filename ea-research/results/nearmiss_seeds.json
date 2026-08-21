@@ -1,3 +1,36 @@
 {
- "seeds": []
+ "seeds": [
+  {
+   "pair": "EURGBP",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURGBP",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "all",
+   "atr_mult": 2.0,
+   "htf": 0
+  }
+ ]
 }
