@@ -1,0 +1,29 @@
+{
+  "run": "atr",
+  "scanned": 1440,
+  "n_survivors": 1,
+  "survivors": [
+    {
+      "id": "EURGBP|trend|50,100,14,20,80,20|adx0|all|atr2.0",
+      "pair": "EURGBP",
+      "base": "trend",
+      "params": [
+        50,
+        100,
+        14,
+        20,
+        80,
+        20
+      ],
+      "adx_thr": 0,
+      "sess": "all",
+      "atr_mult": 2.0,
+      "in_pf": 1.501,
+      "out_pf": 1.345,
+      "out_exp": 6.327,
+      "out_n": 196,
+      "out_wr": 25.0,
+      "out_maxdd": 605.0
+    }
+  ]
+}
