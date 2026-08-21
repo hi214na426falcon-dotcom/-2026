@@ -1,6 +1,29 @@
 {
   "run": "composite",
-  "scanned": 9350,
-  "n_survivors": 0,
-  "survivors": []
+  "scanned": 9550,
+  "n_survivors": 1,
+  "survivors": [
+    {
+      "id": "EURGBP|trend|50,100,14,20,80,20|adx25|all|atr0.0",
+      "pair": "EURGBP",
+      "base": "trend",
+      "params": [
+        50,
+        100,
+        14,
+        20,
+        80,
+        20
+      ],
+      "adx_thr": 25,
+      "sess": "all",
+      "atr_mult": 0.0,
+      "in_pf": 1.285,
+      "out_pf": 1.324,
+      "out_exp": 5.124,
+      "out_n": 116,
+      "out_wr": 26.72,
+      "out_maxdd": 367.2
+    }
+  ]
 }
