@@ -43504,6 +43504,12 @@
    "scanned": 300,
    "survivors": 0,
    "cumulative": 300
+  },
+  {
+   "date": "2026-08-22",
+   "scanned": 30000,
+   "survivors": 9,
+   "cumulative": 43260
   }
  ],
  "seeds": [
