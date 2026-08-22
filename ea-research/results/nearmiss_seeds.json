@@ -2767,6 +2767,182 @@
    "sess": "london",
    "atr_mult": 0.0,
    "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    5,
+    150,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    5,
+    200,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    5,
+    200,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    10,
+    150,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    10,
+    200,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    20,
+    150,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    20,
+    200,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    30,
+    150,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    30,
+    200,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    30,
+    200,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    50,
+    150,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
   }
  ]
 }
