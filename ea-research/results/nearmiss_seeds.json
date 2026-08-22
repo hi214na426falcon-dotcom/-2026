@@ -2943,6 +2943,22 @@
    "sess": "overlap",
    "atr_mult": 0.0,
    "htf": 0
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "breakout",
+   "prm": [
+    50,
+    200,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "overlap",
+   "atr_mult": 0.0,
+   "htf": 0
   }
  ]
 }
