@@ -19926,6 +19926,4756 @@
    "max_bars": 0,
    "be_trig": 0.0,
    "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    160,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    160,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    200,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    200,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    200,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    160,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    280,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    25,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    30,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    30,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    320,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    340,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    340,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    340,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    340,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    340,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    280,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    280,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    340,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    280,
+    14,
+    40,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    280,
+    14,
+    45,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    300,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    280,
+    14,
+    40,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    260,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    340,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    340,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    280,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    280,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    260,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    260,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    280,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    300,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    15,
+    60,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    15,
+    80,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    20,
+    60,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    100,
+    14,
+    15,
+    80,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    45,
+    60,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    55,
+    100,
+    14,
+    15,
+    40,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    100,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    120,
+    14,
+    35,
+    20,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    45,
+    100,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    80,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    80,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    55,
+    100,
+    14,
+    30,
+    20,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    55,
+    100,
+    14,
+    30,
+    40,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    55,
+    100,
+    14,
+    35,
+    20,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    55,
+    100,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    60,
+    80,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    60,
+    80,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    55,
+    140,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    60,
+    80,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    60,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    60,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    60,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    60,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    80,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    45,
+    80,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    45,
+    80,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    45,
+    100,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    45,
+    100,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
   }
  ]
 }
