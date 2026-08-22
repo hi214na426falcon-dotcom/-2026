@@ -1,0 +1,11 @@
+[daily 2026-08-22 02:48] 累計 13260 / 上限 30000 / 時間 1500s
+  !!! 生存 EURGBP|trend|50,100,14,15,80,20|adx25|all|atr0.0|htf0 out_pf=1.371 → 裏取り FLUKE
+  !!! 生存 EURGBP|trend|50,100,14,15,100,20|adx25|all|atr0.0|htf0 out_pf=1.373 → 裏取り FLUKE
+  !!! 生存 EURGBP|trend|50,100,14,15,60,20|adx0|all|atr2.0|htf0 out_pf=1.345 → 裏取り FLUKE
+  !!! 生存 EURGBP|trend|50,100,14,25,100,20|adx0|all|atr2.0|htf0 out_pf=1.345 → 裏取り FLUKE
+  進捗 今日500/30000 累計13760 18cfg/s 生存4 seed+16
+  進捗 今日1000/30000 累計14260 22cfg/s 生存4 seed+22
+  進捗 今日1500/30000 累計14760 25cfg/s 生存4 seed+47
+  進捗 今日2000/30000 累計15260 26cfg/s 生存4 seed+66
+  進捗 今日2500/30000 累計15760 27cfg/s 生存4 seed+74
+  進捗 今日3000/30000 累計16260 28cfg/s 生存4 seed+90
