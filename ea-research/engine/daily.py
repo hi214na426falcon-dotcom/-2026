@@ -25,6 +25,8 @@ SEEDS = space.NEARMISS_FILE
 
 MAX_NEW_PER_DAY = 30000     # 1日に新規で回す上限(compute ~15-18分目安)
 TIME_BUDGET_S   = 1500      # 時間上限(秒)。どちらか先に達したら止める
+SEEDS_PER_GROUP = 12        # (pair,base)ごとに残すseed数(近傍の暴走防止)
+SEEDS_TOTAL_CAP = 400       # seed総数の上限(強いものだけ残す)
 FLUSH_EVERY     = 500
 COMMIT_EVERY    = 3000
 # 近傍seed化のしきい値(惜しい/偶然勝った点)
@@ -47,6 +49,20 @@ def save_master(m):
     json.dump({k:v for k,v in m.items() if k!='done'}, open(tmp,'w'),
               ensure_ascii=False, indent=1)
     os.replace(tmp, MASTER)
+
+def prune_seeds(m):
+    """seedを(pair,base)ごと上位N・総数上限に剪定。近傍の暴走を防ぎ、
+    強い惜しい点にだけ計算を集中させる。"""
+    from collections import defaultdict
+    groups=defaultdict(list)
+    for s in m['seeds']:
+        groups[(s['pair'],s['base'])].append(s)
+    kept=[]
+    for g in groups.values():
+        g.sort(key=lambda s: s.get('out_pf',0), reverse=True)
+        kept.extend(g[:SEEDS_PER_GROUP])
+    kept.sort(key=lambda s: s.get('out_pf',0), reverse=True)
+    m['seeds']=kept[:SEEDS_TOTAL_CAP]
 
 def save_seeds(m):
     json.dump(dict(seeds=m['seeds']), open(SEEDS,'w'), ensure_ascii=False, indent=1)
@@ -199,6 +215,23 @@ def ensure_m15():
     import subprocess
     subprocess.run([sys.executable, os.path.join(HERE,'fetch_m15.py')], timeout=1200)
 
+def write_candidates(m):
+    """裏取り(ROBUST)を通った候補だけ集めた一覧。デモ検証の入口。"""
+    rob=[s for s in m['survivors'] if s.get('verdict')=='ROBUST']
+    rob.sort(key=lambda s: s.get('out_pf',0), reverse=True)
+    lines=["# ROBUST候補一覧(自動裏取り通過分)","",
+           "近傍ロバスト性(半数以上)＋実スプレッド(×1.3,×1.6)を通過したもの。",
+           "**ここを通っても『本物』確定ではない。** 別期間(2023-2025)データとデモ3ヶ月",
+           "フォワードを通って初めて候補。多重検定のまぐれが紛れる前提で疑うこと。",""]
+    if not rob:
+        lines.append("(まだ無し)")
+    for s in rob:
+        lines.append(f"- **{s['pair']} / {s['base']}** params={s['params']} "
+                     f"[adx{s.get('adx_thr',0)} {s.get('sess','')} atr{s.get('atr_mult',0)} htf{s.get('htf',0)}]"
+                     f" — out_pf={s['out_pf']} 勝率{s.get('out_wr')}% n={s.get('out_n')} "
+                     f"exp={s.get('out_exp')}pips maxDD={s.get('out_maxdd')}pips")
+    open(os.path.join(RESULTS,'CANDIDATES.md'),'w').write("\n".join(lines))
+
 def main():
     args=sys.argv[1:]
     if '--report-only' in args:
@@ -234,8 +267,10 @@ def main():
                           adx_thr=cfg['adx_thr'],sess=cfg['sess'],
                           atr_mult=cfg['atr_mult'],htf=cfg['htf'],
                           max_bars=cfg.get('max_bars',0),be_trig=cfg.get('be_trig',0.0),
-                          trail=cfg.get('trail',False))
-                if seed not in m['seeds']:
+                          trail=cfg.get('trail',False),out_pf=round(out['pf'],3))
+                if not any(s.get('prm')==seed['prm'] and s['pair']==seed['pair']
+                           and s['base']==seed['base'] and s['sess']==seed['sess']
+                           and s['adx_thr']==seed['adx_thr'] for s in m['seeds']):
                     m['seeds'].append(seed); new_seeds+=1
         if since_flush>=FLUSH_EVERY:
             since_flush=0; save_master(m); save_seeds(m)
@@ -249,6 +284,8 @@ def main():
     # 当日締め
     m['days'].append(dict(date=today.strftime('%Y-%m-%d'), scanned=scanned_today,
                           survivors=len(new_survivors), cumulative=m['scanned_total']))
+    prune_seeds(m)                    # 近傍seedを剪定(暴走防止)
+    write_candidates(m)               # ROBUST候補を一覧化
     save_master(m); save_seeds(m)
     report=write_report(m, today, scanned_today, new_survivors, verdicts)
     git_save(f"report(ea): {today:%Y-%m-%d} scanned={scanned_today} total={m['scanned_total']} survivors={len(new_survivors)}")
