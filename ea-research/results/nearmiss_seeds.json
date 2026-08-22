@@ -30718,6 +30718,5573 @@
    "max_bars": 0,
    "be_trig": 0.0,
    "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    25,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    25,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    150,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    15,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    15,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    15,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    170,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    15,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    30,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    170,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    170,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    170,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    150,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    130,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    110,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    35,
+    40,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    45,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    40,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    45,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    130,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    150,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    130,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    10,
+    130,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    150,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    170,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    190,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    190,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    190,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    190,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    190,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    190,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    170,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    190,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    190,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    190,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    190,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    150,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    150,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    150,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    150,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    150,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    150,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    170,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    220,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    220,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    220,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    200,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    200,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    220,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    220,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    220,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    220,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    220,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    240,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    160,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    180,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    180,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    200,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    200,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    200,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    200,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    200,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    25,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    25,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    35,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    35,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    180,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    180,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    200,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    200,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    220,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    180,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    180,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    200,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    40,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    45,
+    40,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    45,
+    60,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    160,
+    14,
+    45,
+    80,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    320,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    320,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    320,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    320,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    320,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    320,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    15,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    20,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    280,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    320,
+    14,
+    15,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    15,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    15,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    20,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    20,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    340,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    260,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    340,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    340,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    340,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    15,
+    340,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    300,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    320,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    320,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    320,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    340,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    320,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    40,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    45,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    340,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    100,
+    14,
+    25,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    100,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    80,
+    14,
+    30,
+    80,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    80,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    80,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    30,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    80,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    100,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    100,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    80,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    25,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    30,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    35,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    35,
+    100,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    40,
+    60,
+    14,
+    25,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    100,
+    14,
+    45,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    20,
+    120,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    35,
+    100,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    100,
+    14,
+    35,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    140,
+    14,
+    40,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
+  },
+  {
+   "pair": "GBPUSD",
+   "base": "trend",
+   "prm": [
+    25,
+    140,
+    14,
+    45,
+    140,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0,
+   "max_bars": 0,
+   "be_trig": 0.0,
+   "trail": false
   }
  ]
 }
