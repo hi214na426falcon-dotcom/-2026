@@ -1471,6 +1471,166 @@
    "sess": "london",
    "atr_mult": 0.0,
    "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    30,
+    300,
+    14,
+    40,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    20,
+    60,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    20,
+    80,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    30,
+    40,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    30,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    100,
+    14,
+    40,
+    60,
+    20
+   ],
+   "adx_thr": 25,
+   "sess": "london",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    150,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 0,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    150,
+    14,
+    30,
+    120,
+    20
+   ],
+   "adx_thr": 20,
+   "sess": "ny",
+   "atr_mult": 0.0,
+   "htf": 0
+  },
+  {
+   "pair": "EURUSD",
+   "base": "trend",
+   "prm": [
+    50,
+    200,
+    14,
+    40,
+    40,
+    20
+   ],
+   "adx_thr": 30,
+   "sess": "all",
+   "atr_mult": 0.0,
+   "htf": 0
   }
  ]
 }
