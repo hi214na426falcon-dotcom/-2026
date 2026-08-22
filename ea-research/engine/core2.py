@@ -91,6 +91,7 @@ def _htf_sma(pair, htf):
     return sma
 
 def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
+              max_bars=0, be_trig=0.0, trail=False,
               lo_i=None, hi_i=None):
     """
     prm=(fast,slow,rsi_p,sl,tp,bb_p)。
@@ -98,6 +99,10 @@ def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
     sess で時間帯を制限。
     atr_mult>0 なら sl/tp を無視し ATR*mult / ATR*mult*(tp/sl) で建値確定。
     htf>0 なら上位足レジーム(長期SMA)方向に一致するエントリーだけ許可(MTF-lite)。
+    --- 出口ロジック(鉄の掟: 初期損切りは必ず入る。以下は"有利方向にだけ"動かす)---
+    max_bars>0 : そのバー数を超えたら成行手仕舞い(時間切れ)。
+    be_trig>0  : 含み益が初期リスク*be_trig に達したら損切りを建値へ(建値移動)。
+    trail=True : 含み益が乗ったら、初期リスク幅を保って損切りを追従(トレーリング)。
     """
     fast, slow, rsi_p, sl, tp, bb_p = prm
     o, h, l, c, hour = load_full(pair)
@@ -110,16 +115,36 @@ def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
     lo_i = _floor if lo_i is None else max(lo_i, _floor)
     hi_i = n if hi_i is None else hi_i
     tp_ratio = tp/sl if sl else 2.0
+    dyn = (max_bars > 0 or be_trig > 0 or trail)
     trades = []; pos = None
     for i in range(lo_i, hi_i):
         if pos:
-            d, e, s, t = pos
+            d, e, s, t, ei, risk, fav = pos
             if d == 1:
                 if l[i] <= s: trades.append((s-e)-sp); pos=None
                 elif h[i] >= t: trades.append((t-e)-sp); pos=None
             else:
                 if h[i] >= s: trades.append((e-s)-sp); pos=None
                 elif l[i] <= t: trades.append((e-t)-sp); pos=None
+            if pos and dyn:
+                d, e, s, t, ei, risk, fav = pos
+                # 有利方向の到達点を更新
+                fav = max(fav, h[i]) if d == 1 else min(fav, l[i])
+                # 時間切れ(成行手仕舞い)
+                if max_bars > 0 and (i - ei) >= max_bars:
+                    px = c[i]
+                    trades.append(((px-e) if d == 1 else (e-px)) - sp); pos = None
+                else:
+                    ns = s
+                    if d == 1:
+                        prof = fav - e
+                        if be_trig > 0 and prof >= be_trig*risk: ns = max(ns, e)
+                        if trail and prof > risk: ns = max(ns, fav - risk)
+                    else:
+                        prof = e - fav
+                        if be_trig > 0 and prof >= be_trig*risk: ns = min(ns, e)
+                        if trail and prof > risk: ns = min(ns, fav + risk)
+                    pos = (d, e, ns, t, ei, risk, fav)
         if pos: continue
         # --- フィルタ ---
         if adx_thr > 0 and not (adx[i] >= adx_thr): continue
@@ -134,8 +159,8 @@ def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
             risk = atr_mult*atr[i]; rew = risk*tp_ratio
         else:
             risk = sl*pip; rew = tp*pip
-        if sig == 1: pos = (1, e, e-risk, e+rew)
-        else:        pos = (-1, e, e+risk, e-rew)
+        if sig == 1: pos = (1, e, e-risk, e+rew, i, risk, e)
+        else:        pos = (-1, e, e+risk, e-rew, i, risk, e)
     tr = np.array(trades)
     if len(tr) < 40: return None
     w = tr[tr>0]; lsr = tr[tr<=0]
@@ -144,10 +169,12 @@ def backtest2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
     return dict(n=len(tr), wr=len(w)/len(tr)*100, pf=pf,
                 exp=tr.mean()/pip, maxdd=maxdd/pip, total=eq[-1]/pip)
 
-def validate_survivor2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0):
+def validate_survivor2(base, prm, pair, adx_thr=0, sess='all', atr_mult=0.0, htf=0,
+                       max_bars=0, be_trig=0.0, trail=False):
     """core.validate_survivor と同じ関門。フィルタ付きで判定。"""
     o, h, l, c, hour = load_full(pair); n=len(c); split=int(n*0.6)
-    kw = dict(adx_thr=adx_thr, sess=sess, atr_mult=atr_mult, htf=htf)
+    kw = dict(adx_thr=adx_thr, sess=sess, atr_mult=atr_mult, htf=htf,
+              max_bars=max_bars, be_trig=be_trig, trail=trail)
     ins = backtest2(base, prm, pair, lo_i=0, hi_i=split, **kw)
     out = backtest2(base, prm, pair, lo_i=split, hi_i=n, **kw)
     if not ins or not out: return False, {}

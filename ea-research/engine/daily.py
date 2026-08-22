@@ -16,7 +16,7 @@
   python3 daily.py --report-only   # 回さず直近の報告だけ表示
 """
 import sys, os, json, time, datetime
-import core, core2, space
+import core, core2, core3_mtf, space
 
 HERE = os.path.dirname(__file__)
 RESULTS = os.path.join(HERE, '..', 'results')
@@ -68,27 +68,65 @@ def git_save(msg):
         print('  [git skip]', repr(e)[:70], flush=True)
 
 # ---------- 1 config 評価 ----------
+def _kw(cfg):
+    return dict(adx_thr=cfg['adx_thr'], sess=cfg['sess'], atr_mult=cfg['atr_mult'],
+               htf=cfg['htf'], max_bars=cfg.get('max_bars',0),
+               be_trig=cfg.get('be_trig',0.0), trail=cfg.get('trail',False))
+
 def evaluate(cfg):
-    p, det = core2.validate_survivor2(cfg['base'], tuple(cfg['prm']), cfg['pair'],
-                adx_thr=cfg['adx_thr'], sess=cfg['sess'],
-                atr_mult=cfg['atr_mult'], htf=cfg['htf'])
+    if cfg.get('kind') == 'mtf':
+        p, det = core3_mtf.validate_mtf(cfg['pair'], cfg['h1_fast'], cfg['h1_slow'],
+                    cfg['m_fast'], cfg['m_slow'], cfg['trig'], cfg['sl'], cfg['tp'], cfg['rsi_p'])
+    else:
+        p, det = core2.validate_survivor2(cfg['base'], tuple(cfg['prm']), cfg['pair'], **_kw(cfg))
     ins = det.get('in_sample'); out = det.get('out_sample')
     return p, ins, out
 
 def rec(cfg, ins, out, passed):
     r = dict(id=space.config_id(cfg), family=cfg['family'], pair=cfg['pair'],
-             base=cfg['base'], params=cfg['prm'], adx_thr=cfg['adx_thr'],
-             sess=cfg['sess'], atr_mult=cfg['atr_mult'], htf=cfg['htf'],
              in_pf=round(ins['pf'],3), out_pf=round(out['pf'],3),
              out_exp=round(out['exp'],3), out_n=out['n'],
              out_wr=round(out['wr'],2), out_maxdd=round(out['maxdd'],1),
              passed=bool(passed))
+    if cfg.get('kind') == 'mtf':
+        r.update(kind='mtf', base=f"MTF/{cfg['trig']}",
+                 params=[cfg['h1_fast'],cfg['h1_slow'],cfg['m_fast'],cfg['m_slow'],
+                         cfg['sl'],cfg['tp']],
+                 adx_thr=0, sess='m15', atr_mult=0.0, htf=0,
+                 max_bars=0, be_trig=0.0, trail=False)
+    else:
+        r.update(base=cfg['base'], params=cfg['prm'], adx_thr=cfg['adx_thr'],
+                 sess=cfg['sess'], atr_mult=cfg['atr_mult'], htf=cfg['htf'],
+                 max_bars=cfg.get('max_bars',0), be_trig=cfg.get('be_trig',0.0),
+                 trail=cfg.get('trail',False))
     return r
 
 # ---------- 生存者の自動裏取り(近傍ロバスト性 + 実スプレッド) ----------
+def _stress_mtf(cfg):
+    pair=cfg['pair']
+    def ok(mf,ms,sl,tp,sp_mult=1.0):
+        base_sp=core.SPR_MAP[pair]
+        try:
+            core.SPR_MAP[pair]=base_sp*sp_mult
+            p,det=core3_mtf.validate_mtf(pair,cfg['h1_fast'],cfg['h1_slow'],
+                    mf,ms,cfg['trig'],sl,tp,cfg['rsi_p'])
+            return bool(p)
+        finally:
+            core.SPR_MAP[pair]=base_sp
+    mf,ms,sl,tp=cfg['m_fast'],cfg['m_slow'],cfg['sl'],cfg['tp']
+    neigh=[(mf,ms,sl+5,tp),(mf,ms,max(5,sl-5),tp),(mf,ms,sl,tp+20),
+           (mf,ms,sl,max(10,tp-20)),(mf,ms+10,sl,tp),(max(3,mf-5),ms,sl,tp)]
+    npass=sum(ok(*x) for x in neigh); nfrac=npass/max(1,len(neigh))
+    spread_ok = ok(mf,ms,sl,tp,1.3) and ok(mf,ms,sl,tp,1.6)
+    verdict='ROBUST' if (nfrac>=0.5 and spread_ok) else 'FLUKE'
+    return dict(neighbor_pass=npass, neighbor_total=len(neigh),
+                neighbor_frac=round(nfrac,2), spread_robust=spread_ok, verdict=verdict)
+
 def stress_test(cfg):
+    if cfg.get('kind') == 'mtf':
+        return _stress_mtf(cfg)
     base=cfg['base']; pair=cfg['pair']; f,s,r,sl,tp,bb=cfg['prm']
-    kw=dict(adx_thr=cfg['adx_thr'], sess=cfg['sess'], atr_mult=cfg['atr_mult'], htf=cfg['htf'])
+    kw=_kw(cfg)
     def ok(prm):
         p,det=core2.validate_survivor2(base,tuple(prm),pair,**kw)
         return bool(p)
@@ -180,11 +218,13 @@ def main():
                 v=stress_test(cfg); r['verdict']=v['verdict']
                 m['survivors'].append(r); new_survivors.append(r); verdicts[r['id']]=v
                 print(f"  !!! 生存 {cid} out_pf={r['out_pf']} → 裏取り {v['verdict']}", flush=True)
-            # 近傍seed(惜しい/偶然勝った点)
-            if ins['pf']>=NEAR_INS_PF and out['pf']>=NEAR_OUT_PF:
+            # 近傍seed(惜しい/偶然勝った点)。MTFは形が違うので現状seed化しない(stressで裏取り済)。
+            if ins['pf']>=NEAR_INS_PF and out['pf']>=NEAR_OUT_PF and cfg.get('kind')!='mtf':
                 seed=dict(pair=cfg['pair'],base=cfg['base'],prm=cfg['prm'],
                           adx_thr=cfg['adx_thr'],sess=cfg['sess'],
-                          atr_mult=cfg['atr_mult'],htf=cfg['htf'])
+                          atr_mult=cfg['atr_mult'],htf=cfg['htf'],
+                          max_bars=cfg.get('max_bars',0),be_trig=cfg.get('be_trig',0.0),
+                          trail=cfg.get('trail',False))
                 if seed not in m['seeds']:
                     m['seeds'].append(seed); new_seeds+=1
         if since_flush>=FLUSH_EVERY:
