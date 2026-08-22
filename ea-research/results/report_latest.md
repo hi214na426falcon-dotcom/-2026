@@ -1,19 +1,91 @@
 # EA探索 朝の報告 2026-08-22
 
+## ★ 裏取りを通った候補 1件(要チェック)
+- **GBPUSD / trend / neighborhood** params=[45, 240, 14, 45, 120, 20] adx0 all atr0.0 htf0
+  - out_pf=1.37 勝率34.96% n=123 exp=11.183pips maxDD=379.5pips
+  - 近傍ロバスト 5/10通過 / 実スプレッド耐えた → **ROBUST**
+  - 次: 別期間データ・デモ3ヶ月フォワード(README「生存者が出たら」)
 
-## 素通り生存 9件(ただし裏取りで FLUKE=まぐれ判定)
-- EURGBP/trend params=[50, 100, 14, 15, 80, 20] out_pf=1.371 → 近傍1/10 スプレッド脱 = FLUKE
-- EURGBP/trend params=[50, 100, 14, 15, 100, 20] out_pf=1.373 → 近傍2/10 スプレッド脱 = FLUKE
-- EURGBP/trend params=[50, 100, 14, 15, 60, 20] out_pf=1.345 → 近傍0/10 スプレッド脱 = FLUKE
-- EURGBP/trend params=[50, 100, 14, 25, 100, 20] out_pf=1.345 → 近傍0/10 スプレッド脱 = FLUKE
-- GBPUSD/trend params=[20, 150, 14, 20, 40, 20] out_pf=1.486 → 近傍0/10 スプレッド脱 = FLUKE
-- GBPUSD/trend params=[20, 150, 14, 20, 80, 20] out_pf=1.413 → 近傍0/10 スプレッド脱 = FLUKE
-- GBPUSD/trend params=[20, 150, 14, 20, 120, 20] out_pf=1.459 → 近傍3/10 スプレッド耐 = FLUKE
-- GBPUSD/trend params=[20, 150, 14, 40, 80, 20] out_pf=1.497 → 近傍0/10 スプレッド耐 = FLUKE
-- GBPUSD/trend params=[20, 150, 14, 40, 120, 20] out_pf=1.586 → 近傍0/10 スプレッド脱 = FLUKE
+## 素通り生存 76件(ただし裏取りで FLUKE=まぐれ判定)
+- EURGBP/trend params=[50, 100, 14, 15, 120, 20] out_pf=1.351 → 近傍2/10 スプレッド脱 = FLUKE
+- EURGBP/trend params=[50, 100, 14, 10, 40, 20] out_pf=1.345 → 近傍0/10 スプレッド脱 = FLUKE
+- EURGBP/trend params=[50, 100, 14, 30, 120, 20] out_pf=1.345 → 近傍0/10 スプレッド脱 = FLUKE
+- EURUSD/trend params=[10, 110, 14, 40, 60, 20] out_pf=1.427 → 近傍0/9 スプレッド耐 = FLUKE
+- EURUSD/trend params=[5, 180, 14, 35, 140, 20] out_pf=1.634 → 近傍0/8 スプレッド耐 = FLUKE
+- EURUSD/trend params=[5, 180, 14, 25, 140, 20] out_pf=1.355 → 近傍0/8 スプレッド耐 = FLUKE
+- EURUSD/trend params=[10, 160, 14, 20, 100, 20] out_pf=1.428 → 近傍0/9 スプレッド脱 = FLUKE
+- EURUSD/trend params=[10, 160, 14, 25, 100, 20] out_pf=1.43 → 近傍0/9 スプレッド耐 = FLUKE
+- EURUSD/trend params=[10, 180, 14, 15, 100, 20] out_pf=1.646 → 近傍1/9 スプレッド耐 = FLUKE
+- EURUSD/trend params=[10, 160, 14, 30, 100, 20] out_pf=1.613 → 近傍0/9 スプレッド脱 = FLUKE
+- EURUSD/trend params=[5, 180, 14, 30, 140, 20] out_pf=1.346 → 近傍0/8 スプレッド脱 = FLUKE
+- EURUSD/trend params=[10, 130, 14, 15, 80, 20] out_pf=1.305 → 近傍0/9 スプレッド脱 = FLUKE
+- EURUSD/trend params=[15, 150, 14, 25, 100, 20] out_pf=1.36 → 近傍0/10 スプレッド脱 = FLUKE
+- EURUSD/trend params=[40, 80, 14, 15, 100, 20] out_pf=1.571 → 近傍1/9 スプレッド耐 = FLUKE
+- EURUSD/trend params=[40, 80, 14, 25, 100, 20] out_pf=1.383 → 近傍0/9 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[5, 130, 14, 35, 140, 20] out_pf=1.304 → 近傍1/8 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[5, 130, 14, 45, 140, 20] out_pf=1.436 → 近傍0/8 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[5, 150, 14, 45, 100, 20] out_pf=1.354 → 近傍1/8 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[5, 150, 14, 45, 120, 20] out_pf=1.48 → 近傍1/8 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[5, 110, 14, 30, 140, 20] out_pf=1.338 → 近傍1/8 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[5, 110, 14, 35, 140, 20] out_pf=1.352 → 近傍0/8 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 15, 40, 20] out_pf=1.315 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[10, 150, 14, 15, 100, 20] out_pf=1.334 → 近傍1/9 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 15, 80, 20] out_pf=1.349 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 15, 100, 20] out_pf=1.365 → 近傍3/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[10, 130, 14, 20, 120, 20] out_pf=1.315 → 近傍2/9 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[10, 130, 14, 20, 140, 20] out_pf=1.448 → 近傍2/9 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[15, 150, 14, 15, 140, 20] out_pf=1.3 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[15, 150, 14, 20, 120, 20] out_pf=1.442 → 近傍2/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[15, 150, 14, 20, 140, 20] out_pf=1.326 → 近傍4/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[15, 170, 14, 20, 140, 20] out_pf=1.342 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 15, 140, 20] out_pf=1.312 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 20, 120, 20] out_pf=1.427 → 近傍3/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 20, 140, 20] out_pf=1.573 → 近傍4/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 25, 120, 20] out_pf=1.38 → 近傍2/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 25, 140, 20] out_pf=1.53 → 近傍2/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 15, 120, 20] out_pf=1.517 → 近傍2/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 15, 140, 20] out_pf=1.495 → 近傍4/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 20, 140, 20] out_pf=1.472 → 近傍4/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 25, 120, 20] out_pf=1.355 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[25, 150, 14, 25, 140, 20] out_pf=1.326 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[30, 110, 14, 25, 140, 20] out_pf=1.483 → 近傍1/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 30, 140, 20] out_pf=1.409 → 近傍0/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 130, 14, 35, 140, 20] out_pf=1.384 → 近傍0/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 35, 100, 20] out_pf=1.326 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 35, 120, 20] out_pf=1.511 → 近傍1/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[25, 150, 14, 30, 140, 20] out_pf=1.326 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[30, 110, 14, 30, 140, 20] out_pf=1.57 → 近傍1/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 35, 40, 20] out_pf=1.465 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 35, 80, 20] out_pf=1.339 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[20, 150, 14, 45, 80, 20] out_pf=1.365 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[25, 150, 14, 40, 140, 20] out_pf=1.347 → 近傍1/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[25, 150, 14, 25, 100, 20] out_pf=1.331 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[25, 170, 14, 25, 60, 20] out_pf=1.457 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[25, 170, 14, 25, 80, 20] out_pf=1.591 → 近傍2/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[25, 170, 14, 25, 100, 20] out_pf=1.726 → 近傍3/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[35, 150, 14, 15, 100, 20] out_pf=1.472 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[35, 150, 14, 20, 80, 20] out_pf=1.383 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[40, 110, 14, 30, 140, 20] out_pf=1.332 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[40, 130, 14, 35, 120, 20] out_pf=1.367 → 近傍0/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[40, 220, 14, 35, 140, 20] out_pf=1.341 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[40, 240, 14, 45, 120, 20] out_pf=1.367 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 200, 14, 40, 140, 20] out_pf=1.335 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 200, 14, 45, 120, 20] out_pf=1.379 → 近傍4/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 200, 14, 45, 140, 20] out_pf=1.406 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 220, 14, 35, 140, 20] out_pf=1.316 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 220, 14, 40, 140, 20] out_pf=1.349 → 近傍2/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[45, 220, 14, 45, 120, 20] out_pf=1.365 → 近傍3/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 240, 14, 35, 120, 20] out_pf=1.306 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 240, 14, 40, 120, 20] out_pf=1.313 → 近傍0/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[45, 240, 14, 45, 100, 20] out_pf=1.421 → 近傍1/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[50, 200, 14, 45, 120, 20] out_pf=1.361 → 近傍3/10 スプレッド耐 = FLUKE
+- GBPUSD/trend params=[50, 220, 14, 45, 100, 20] out_pf=1.304 → 近傍2/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[50, 220, 14, 45, 120, 20] out_pf=1.305 → 近傍5/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[50, 220, 14, 45, 140, 20] out_pf=1.316 → 近傍1/10 スプレッド脱 = FLUKE
+- GBPUSD/trend params=[50, 240, 14, 45, 120, 20] out_pf=1.321 → 近傍4/10 スプレッド脱 = FLUKE
 
 ## 数字
-- 昨日(今回)試した数: **30000 通り**
-- 累計: **43260 通り**
-- 累計 素通り生存: 9件 / うち裏取り通過(ROBUST): 0件
-- 近傍seed(翌日周辺を攻める惜しい点): 185件
+- 昨日(今回)試した数: **31044 通り**
+- 累計: **74304 通り**
+- 累計 素通り生存: 86件 / うち裏取り通過(ROBUST): 1件
+- 近傍seed(翌日周辺を攻める惜しい点): 2560件
