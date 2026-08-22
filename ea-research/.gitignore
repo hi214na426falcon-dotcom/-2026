@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 *.tmp
 results/run_*.log
+data/*_m15.csv

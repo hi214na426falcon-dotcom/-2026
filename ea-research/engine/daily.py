@@ -190,6 +190,15 @@ def write_report(m, today, scanned_today, new_survivors, verdicts):
     open(os.path.join(RESULTS,'report_latest.md'),'w').write("\n".join(lines))
     return "\n".join(lines)
 
+def ensure_m15():
+    """MTFに必要な m15 データが無ければ取得(fresh session対策)。"""
+    need=[p for p in space.PAIRS
+          if not os.path.exists(os.path.join(HERE,'..','data',f'{p}_m15.csv'))]
+    if not need: return
+    print(f"[m15] 取得: {need}", flush=True)
+    import subprocess
+    subprocess.run([sys.executable, os.path.join(HERE,'fetch_m15.py')], timeout=1200)
+
 def main():
     args=sys.argv[1:]
     if '--report-only' in args:
@@ -198,6 +207,7 @@ def main():
         return
     max_new = MAX_NEW_PER_DAY
     if '--max' in args: max_new=int(args[args.index('--max')+1])
+    ensure_m15()
 
     m=load_master()
     today=_now(); t0=time.time()
