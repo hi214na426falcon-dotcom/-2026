@@ -33,3 +33,14 @@
   進捗 今日14000/30000 累計27260 31cfg/s 生存4 seed+100
   進捗 今日14500/30000 累計27760 31cfg/s 生存4 seed+101
   進捗 今日15000/30000 累計28260 31cfg/s 生存4 seed+108
+  進捗 今日15500/30000 累計28760 31cfg/s 生存4 seed+115
+  !!! 生存 GBPUSD|trend|20,150,14,20,40,20|adx0|london|atr0.0|htf0 out_pf=1.486 → 裏取り FLUKE
+  !!! 生存 GBPUSD|trend|20,150,14,20,80,20|adx0|london|atr0.0|htf0 out_pf=1.413 → 裏取り FLUKE
+  !!! 生存 GBPUSD|trend|20,150,14,20,120,20|adx0|london|atr0.0|htf0 out_pf=1.459 → 裏取り FLUKE
+  進捗 今日16000/30000 累計29260 31cfg/s 生存7 seed+123
+  !!! 生存 GBPUSD|trend|20,150,14,40,80,20|adx0|london|atr0.0|htf0 out_pf=1.497 → 裏取り FLUKE
+  !!! 生存 GBPUSD|trend|20,150,14,40,120,20|adx0|london|atr0.0|htf0 out_pf=1.586 → 裏取り FLUKE
+  進捗 今日16500/30000 累計29760 31cfg/s 生存9 seed+138
+  進捗 今日17000/30000 累計30260 31cfg/s 生存9 seed+156
+  進捗 今日17500/30000 累計30760 31cfg/s 生存9 seed+158
+  進捗 今日18000/30000 累計31260 31cfg/s 生存9 seed+171
