@@ -25,7 +25,7 @@
     <header class="topbar">
       <button id="menuBtn" class="icon-btn" aria-label="メニュー">☰</button>
       <div class="brand">
-        <span class="brand-mark">📍</span>
+        <span class="brand-mark" id="brandMark">📍</span>
         <div class="brand-text">
           <strong id="collectionName">マイリスト</strong>
           <small id="collectionMeta">0 スポット</small>
@@ -69,14 +69,19 @@
   <div id="drawer" class="drawer hidden" aria-hidden="true">
     <div class="drawer-panel">
       <div class="drawer-head">
-        <strong>リスト一覧</strong>
+        <strong>Whimo Web</strong>
         <button id="drawerClose" class="icon-btn">✕</button>
       </div>
+
+      <div id="accountBox" class="account-box"></div>
+
+      <div class="drawer-section-label">リスト一覧</div>
       <div id="collectionList" class="collection-list"></div>
       <button id="newCollectionBtn" class="btn ghost full">＋ 新しいリストを作る</button>
       <div class="drawer-foot">
         <button id="importBtn" class="btn ghost full">🔗 共有リンクから取り込む</button>
-        <p class="muted small">Whimo Web（非公式クローン / MVP）。データはこの端末のブラウザに保存されます。</p>
+        <button id="settingsBtn" class="btn ghost full">⚙️ 設定</button>
+        <p class="muted small" id="modeNote"></p>
       </div>
     </div>
     <div class="drawer-scrim" data-close-drawer></div>
@@ -128,6 +133,16 @@
         <span>もう行った（訪問済み）</span>
       </label>
 
+      <div class="field" id="photoField">
+        <span>写真</span>
+        <div id="photoGrid" class="photo-grid"></div>
+        <label class="btn ghost small photo-add">
+          📷 写真を追加
+          <input id="photoInput" type="file" accept="image/*" multiple hidden />
+        </label>
+        <small id="photoHint" class="muted"></small>
+      </div>
+
       <div class="sheet-actions">
         <button id="deleteSpotBtn" class="btn danger ghost hidden">削除</button>
         <div class="spacer"></div>
@@ -156,12 +171,129 @@
     </div>
   </div>
 
+  <!-- ===== Auth modal ===== -->
+  <div id="authModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-scrim" data-close-auth></div>
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h2 id="authTitle">ログイン</h2>
+      <p class="muted">クラウドに保存すると、複数の端末で同期・共有・写真・家計簿が使えます。</p>
+      <label class="field"><span>メールアドレス</span>
+        <input id="authEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" />
+      </label>
+      <label class="field"><span>パスワード（6文字以上）</span>
+        <input id="authPass" type="password" autocomplete="current-password" placeholder="••••••" />
+      </label>
+      <div id="authError" class="auth-error hidden"></div>
+      <div class="sheet-actions">
+        <button id="authToggle" class="btn ghost small">新規登録はこちら</button>
+        <div class="spacer"></div>
+        <button data-close-auth class="btn ghost">閉じる</button>
+        <button id="authSubmit" class="btn primary">ログイン</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Members (share) modal ===== -->
+  <div id="membersModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-scrim" data-close-members></div>
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h2>リストを共有</h2>
+      <p class="muted">共有したい相手の<strong>メールアドレス</strong>を追加すると、その人だけがこのリストを見られます（一緒に編集できます）。相手も同じメールでログインが必要です。</p>
+      <div class="link-row">
+        <input id="memberEmail" type="email" inputmode="email" placeholder="partner@example.com" />
+        <button id="memberAddBtn" class="btn primary small">追加</button>
+      </div>
+      <div id="memberList" class="member-list"></div>
+      <div class="sheet-actions"><div class="spacer"></div>
+        <button data-close-members class="btn ghost">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Settings modal ===== -->
+  <div id="settingsModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-scrim" data-close-settings></div>
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h2>設定</h2>
+      <label class="field"><span>隠し家計簿の開き方（ロゴ 📍 の操作）</span>
+        <select id="gestureSelect" class="select">
+          <option value="tap7">ロゴを7回タップ</option>
+          <option value="long">ロゴを長押し</option>
+          <option value="both">7回タップ／長押しの両方</option>
+        </select>
+        <small class="muted">上部の 📍 ロゴにこの操作をすると、レシート・使った金額の画面が開きます。</small>
+      </label>
+      <div class="sheet-actions"><div class="spacer"></div>
+        <button data-close-settings class="btn primary">完了</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Hidden budget screen ===== -->
+  <div id="budgetScreen" class="budget hidden" aria-hidden="true">
+    <header class="budget-head">
+      <button id="budgetClose" class="icon-btn">✕</button>
+      <div class="budget-title">
+        <strong>家計簿</strong>
+        <small id="budgetMeta"></small>
+      </div>
+      <button id="budgetAddBtn" class="icon-btn">＋</button>
+    </header>
+    <div class="budget-total" id="budgetTotal"></div>
+    <div id="budgetList" class="budget-list"></div>
+
+    <!-- add expense sheet -->
+    <div id="expenseSheet" class="modal hidden">
+      <div class="modal-scrim" data-close-expense></div>
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <h2>記録を追加</h2>
+        <label class="field"><span>金額（円） <em class="req">必須</em></span>
+          <input id="ex_amount" type="number" inputmode="numeric" placeholder="例）1200" />
+        </label>
+        <label class="field"><span>メモ</span>
+          <input id="ex_memo" type="text" placeholder="店名・内容など" />
+        </label>
+        <label class="field"><span>日付</span>
+          <input id="ex_date" type="date" />
+        </label>
+        <label class="field"><span>関連スポット（任意）</span>
+          <select id="ex_spot" class="select"></select>
+        </label>
+        <label class="field"><span>公開範囲</span>
+          <div id="ex_visibility" class="chip-row">
+            <button type="button" data-vis="private" class="vis-chip active">🔒 自分だけ</button>
+            <button type="button" data-vis="shared" class="vis-chip">👫 相手と共有</button>
+          </div>
+        </label>
+        <div class="field">
+          <span>レシート写真（任意）</span>
+          <label class="btn ghost small photo-add">📷 レシートを撮影/選択
+            <input id="ex_receipt" type="file" accept="image/*" hidden />
+          </label>
+          <div id="ex_receiptPreview" class="receipt-preview"></div>
+        </div>
+        <div class="sheet-actions"><div class="spacer"></div>
+          <button data-close-expense class="btn ghost">キャンセル</button>
+          <button id="ex_save" class="btn primary">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div id="toast" class="toast hidden"></div>
 
   <!-- Leaflet script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
           crossorigin="" referrerpolicy="no-referrer"></script>
+  <!-- Config (fill in js/env.js after creating your Supabase project) -->
+  <script src="./js/env.js"></script>
+  <!-- Supabase client (loads only for cloud mode) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
   <!-- App -->
   <script type="module" src="./js/app.js"></script>
 </body>
