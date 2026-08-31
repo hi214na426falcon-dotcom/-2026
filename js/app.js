@@ -6,6 +6,7 @@ import * as geo from './geo.js';
 import * as share from './share.js';
 import * as mapView from './map.js';
 import * as trips from './trips.js';
+import * as route from './route.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -663,6 +664,21 @@ async function recSetPoint(which) {
   } catch (e) { toast(geoErr(e)); }
   finally { busy(false); }
 }
+async function recBuildRoute() {
+  const t = trips.get(recTripId);
+  if (!t || !t.start || !t.goal) { toast('先にスタートとゴールを指定してください'); return; }
+  await mutate(async () => {
+    try {
+      const r = await route.getRoute(t.start, t.goal);
+      trips.update(recTripId, { track: [t.start, ...r.coords, t.goal], distance: r.distance });
+      toast('道に沿ったルートを取得しました');
+    } catch {
+      trips.update(recTripId, { track: [t.start, t.goal], distance: trips.trackDistance([t.start, t.goal]) });
+      toast('ルート取得に失敗したため直線で記録します');
+    }
+    updateRecStats(trips.get(recTripId));
+  });
+}
 async function recAddPhotos(ev) {
   const files = Array.from(ev.target.files || []); ev.target.value = '';
   if (!files.length || !recTripId) return;
@@ -676,15 +692,23 @@ async function recAddPhotos(ev) {
     toast(`写真を${files.length}枚追加しました`);
   });
 }
-function finishRecording() {
+async function finishRecording() {
   if (!recTripId) return;
   if (recStop) { recStop(); recStop = null; }
-  const t = trips.finish(recTripId);
+  const id = recTripId;
+  // Points mode with start+goal but no road route yet → try routing.
+  const pre = trips.get(id);
+  if (pre && recMode === 'points' && pre.start && pre.goal && pre.track.length <= 2) {
+    try {
+      const r = await route.getRoute(pre.start, pre.goal);
+      trips.update(id, { track: [pre.start, ...r.coords, pre.goal], distance: r.distance });
+    } catch { /* keep straight line */ }
+  }
+  trips.finish(id);
   recClock(false);
-  const id = recTripId; recTripId = null;
+  recTripId = null;
   renderTrips();
   toast('記録を終了しました');
-  if (t && t.track.length < 1) return;
   openTrip(id);
 }
 function cancelRecording() {
@@ -710,8 +734,28 @@ async function openTrip(id) {
   $('#tripScreen').classList.remove('hidden');
   if (tripMapInst) { mapView.disposeMap(tripMapInst); tripMapInst = null; }
   tripMapInst = mapView.makeRouteMap('tripMap', t.track, t.photos);
+  renderTripSpend(t);
   await renderTripPhotos(t);
   $('#tripPlay').disabled = t.photos.length === 0;
+}
+function renderTripSpend(t) {
+  $('#tripSpendTotal').textContent = yen(trips.spendTotal(t));
+  const wrap = $('#tripSpendList'); wrap.innerHTML = '';
+  (t.spend || []).forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'spend-item';
+    el.innerHTML = `<span class="sp-amt">${yen(s.amount)}</span><span class="sp-memo">${esc(s.memo || '')}</span><button class="sp-del">削除</button>`;
+    el.querySelector('.sp-del').onclick = () => { trips.deleteSpend(t.id, s.id); renderTripSpend(trips.get(t.id)); };
+    wrap.appendChild(el);
+  });
+}
+function addSpend() {
+  if (!currentTripId) return;
+  const amount = parseInt($('#spendAmount').value, 10);
+  if (!amount && amount !== 0) { toast('金額を入力してください'); return; }
+  trips.addSpend(currentTripId, amount || 0, $('#spendMemo').value.trim());
+  $('#spendAmount').value = ''; $('#spendMemo').value = '';
+  renderTripSpend(trips.get(currentTripId));
 }
 function closeTrip() {
   $('#tripScreen').classList.add('hidden');
@@ -761,16 +805,22 @@ async function playSlideshow() {
   buildProgress(loaded.length);
   showSlide(0);
   startSlideTimer();
+  const a = $('#slideAudio'); if (a.src) a.play().catch(() => {});
 }
 function buildProgress(n) {
   const wrap = $('#slideProgress'); wrap.innerHTML = '';
   for (let i = 0; i < n; i++) { const pip = document.createElement('div'); pip.className = 'pip'; wrap.appendChild(pip); }
 }
+function slideDuration() { return +store.getSetting('slideDuration', '3000') || 3000; }
 function showSlide(i) {
   slide.idx = i;
   const s = slide.photos[i];
   const img = $('#slideImg');
-  img.classList.remove('show');
+  const effect = store.getSetting('slideEffect', 'fade');
+  img.className = '';
+  img.style.setProperty('--slidefx', (slideDuration() + 800) + 'ms');
+  if (effect === 'kenburns') img.classList.add('fx-kenburns');
+  else if (effect === 'slide') img.classList.add('fx-slide');
   setTimeout(() => { img.src = s.url; img.classList.add('show'); }, 60);
   const d = new Date(s.meta.at);
   const time = `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -783,8 +833,67 @@ function startSlideTimer() {
   slide.timer = setInterval(() => {
     if (slide.idx + 1 >= slide.photos.length) { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '↺'; return; }
     showSlide(slide.idx + 1);
-  }, 3000);
+  }, slideDuration());
 }
+
+// ---- BGM ----
+function pickMusic() { $('#slideMusicInput').click(); }
+function onMusicPick(ev) {
+  const f = (ev.target.files || [])[0]; ev.target.value = '';
+  if (!f) return;
+  const a = $('#slideAudio');
+  if (a.src && a.src.startsWith('blob:')) URL.revokeObjectURL(a.src);
+  a.src = URL.createObjectURL(f); a.volume = 0.7;
+  a.play().then(() => toast('BGMを再生します')).catch(() => toast('BGMを設定しました'));
+}
+
+// ---- video export (webm via MediaRecorder) ----
+async function exportVideo() {
+  if (!('MediaRecorder' in window) || !HTMLCanvasElement.prototype.captureStream) { toast('この端末は動画書き出しに未対応です'); return; }
+  const t = trips.get(currentTripId); if (!t) return;
+  let photos = slide.photos;
+  if (!photos.length) { photos = []; for (const p of t.photos) { const url = await trips.photoUrl(p); if (url) photos.push({ meta: p, url }); } }
+  if (!photos.length) { toast('写真がありません'); return; }
+  stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '▶';
+
+  const W = 720, H = 1280;
+  const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const stream = canvas.captureStream(30);
+  let mime = 'video/webm;codecs=vp9';
+  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm;codecs=vp8';
+  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm';
+  let rec;
+  try { rec = new MediaRecorder(stream, { mimeType: mime }); }
+  catch { toast('この端末は動画書き出しに未対応です'); return; }
+  const chunks = [];
+  rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+  const stopped = new Promise(res => (rec.onstop = res));
+  rec.start();
+  toast('動画を作成中…そのままお待ちください');
+  const per = Math.min(slideDuration(), 3000);
+  try {
+    for (const ph of photos) {
+      const img = await loadImg(ph.url);
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+      const s = Math.min(W / img.width, H / img.height);
+      const w = img.width * s, h = img.height * s;
+      ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+      await sleep(per);
+    }
+  } catch { /* continue to stop */ }
+  rec.stop(); await stopped;
+  const blob = new Blob(chunks, { type: 'video/webm' });
+  if (!blob.size) { toast('動画の作成に失敗しました'); return; }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${(t.name || 'trip').replace(/\s+/g, '_')}.webm`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 15000);
+  toast('動画を書き出しました（webm）');
+}
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function stopSlideTimer() { clearInterval(slide.timer); slide.timer = null; }
 function toggleSlide() {
   if (slide.playing) { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '▶'; }
@@ -794,6 +903,7 @@ function nextSlide() { stopSlideTimer(); slide.playing = false; $('#slidePlayPau
 function prevSlide() { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '▶'; showSlide(Math.max(slide.idx - 1, 0)); }
 function closeSlideshow() {
   stopSlideTimer();
+  const a = $('#slideAudio'); try { a.pause(); } catch {}
   $('#slideshow').classList.add('hidden');
   slide.photos.forEach(p => { if (p.url && p.url.startsWith('blob:')) URL.revokeObjectURL(p.url); });
   slide = { photos: [], idx: 0, timer: null, playing: false };
@@ -813,6 +923,8 @@ function geoErr(e) {
 // =====================================================================
 function openSettings() {
   $('#gestureSelect').value = store.getSetting('hiddenGesture', 'tap7');
+  $('#effectSelect').value = store.getSetting('slideEffect', 'fade');
+  $('#durationSelect').value = store.getSetting('slideDuration', '3000');
   $('#settingsModal').classList.remove('hidden');
 }
 function closeSettings() { $('#settingsModal').classList.add('hidden'); }
@@ -884,6 +996,8 @@ function wire() {
 
   // settings
   $('#gestureSelect').addEventListener('change', (e) => store.setSetting('hiddenGesture', e.target.value));
+  $('#effectSelect').addEventListener('change', (e) => store.setSetting('slideEffect', e.target.value));
+  $('#durationSelect').addEventListener('change', (e) => store.setSetting('slideDuration', e.target.value));
   $$('[data-close-settings]').forEach(el => el.onclick = closeSettings);
 
   // budget
@@ -902,6 +1016,7 @@ function wire() {
   $('#recStartPoints').onclick = () => startRecording('points');
   $('#recSetStart').onclick = () => recSetPoint('start');
   $('#recSetGoal').onclick = () => recSetPoint('goal');
+  $('#recBuildRoute').onclick = recBuildRoute;
   $('#recPhotoInput').addEventListener('change', recAddPhotos);
   $('#recFinish').onclick = finishRecording;
   $('#recCancel').onclick = cancelRecording;
@@ -909,11 +1024,16 @@ function wire() {
   $('#tripDelete').onclick = deleteTrip;
   $('#tripPlay').onclick = playSlideshow;
   $('#tripPhotoInput').addEventListener('change', tripAddPhotos);
+  $('#spendAdd').onclick = addSpend;
+  $('#spendMemo').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addSpend(); } });
   // slideshow
   $('#slideClose').onclick = closeSlideshow;
   $('#slidePlayPause').onclick = toggleSlide;
   $('#slideNext').onclick = nextSlide;
   $('#slidePrev').onclick = prevSlide;
+  $('#slideMusic').onclick = pickMusic;
+  $('#slideMusicInput').addEventListener('change', onMusicPick);
+  $('#slideExport').onclick = exportVideo;
 
   setupGesture();
   window.addEventListener('hashchange', checkShareOnLoad);

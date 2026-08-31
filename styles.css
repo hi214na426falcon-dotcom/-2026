@@ -354,8 +354,19 @@ input, textarea { font-family: inherit; }
 .trip-stats .st { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 13px; }
 .trip-stats .st b { font-size: 16px; display: block; }
 
+.trip-spend-total { font-size: 24px; font-weight: 800; }
+.spend-list { display: grid; gap: 6px; }
+.spend-item { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 13.5px; }
+.spend-item .sp-amt { font-weight: 700; }
+.spend-item .sp-memo { flex: 1; color: var(--muted); min-width: 0; }
+.spend-item .sp-del { border: none; background: transparent; color: var(--danger); font-size: 12px; }
+
 /* ===== Slideshow ===== */
 .slideshow { position: fixed; inset: 0; z-index: 1500; background: #000; display: flex; flex-direction: column; }
+.slide-stage img.fx-kenburns.show { animation: kenburns var(--slidefx, 6s) ease forwards; }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.16) translate(2%, -2%); } }
+.slide-stage img.fx-slide { transform: translateX(46px); }
+.slide-stage img.fx-slide.show { transform: translateX(0); transition: opacity .5s ease, transform .55s ease; }
 .slide-map { height: 26%; width: 100%; background: #111; }
 .slide-stage { flex: 1; position: relative; display: grid; place-items: center; overflow: hidden; background: #000; }
 .slide-stage img { max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0; transition: opacity .5s ease; }

@@ -84,7 +84,8 @@
             <div id="recPointsUI" class="hidden">
               <button id="recSetStart" class="btn ghost full">🚩 現在地をスタートに</button>
               <button id="recSetGoal" class="btn ghost full">🏁 現在地をゴールに</button>
-              <small class="muted">※地図タブでピンを置いてからでも指定できます。</small>
+              <button id="recBuildRoute" class="btn ghost full">🛣 道に沿ったルートにする</button>
+              <small class="muted">2地点だけの記録。「道に沿った〜」で実際の道路に沿ったルートを取得します（オンライン時）。</small>
             </div>
             <label class="btn ghost full photo-add" style="justify-content:center;">
               📷 いまの場所で写真を追加
@@ -270,6 +271,21 @@
         </select>
         <small class="muted">上部の 📍 ロゴにこの操作をすると、レシート・使った金額の画面が開きます。</small>
       </label>
+      <label class="field"><span>スライドショーの切替効果</span>
+        <select id="effectSelect" class="select">
+          <option value="fade">フェード</option>
+          <option value="kenburns">ズーム（Ken Burns）</option>
+          <option value="slide">スライド</option>
+        </select>
+      </label>
+      <label class="field"><span>1枚あたりの表示時間</span>
+        <select id="durationSelect" class="select">
+          <option value="2000">2秒</option>
+          <option value="3000">3秒</option>
+          <option value="4000">4秒</option>
+          <option value="5000">5秒</option>
+        </select>
+      </label>
       <div class="sheet-actions"><div class="spacer"></div>
         <button data-close-settings class="btn primary">完了</button>
       </div>
@@ -346,6 +362,16 @@
         📷 この旅に写真を追加
         <input id="tripPhotoInput" type="file" accept="image/*" multiple hidden />
       </label>
+
+      <div class="drawer-section-label">この旅の出費（合計金額）</div>
+      <div id="tripSpendTotal" class="trip-spend-total">¥0</div>
+      <div class="link-row">
+        <input id="spendAmount" type="number" inputmode="numeric" placeholder="金額（円）" />
+        <input id="spendMemo" type="text" placeholder="メモ（任意）" />
+        <button id="spendAdd" class="btn primary small">追加</button>
+      </div>
+      <div id="tripSpendList" class="spend-list"></div>
+
       <div class="drawer-section-label">写真</div>
       <div id="tripPhotoGrid" class="photo-grid"></div>
     </div>
@@ -364,8 +390,12 @@
       <button id="slidePlayPause" class="icon-btn light">⏸</button>
       <button id="slideNext" class="icon-btn light">⏭</button>
       <div class="spacer"></div>
+      <button id="slideMusic" class="icon-btn light" title="BGMを選ぶ">🎵</button>
+      <button id="slideExport" class="icon-btn light" title="動画に書き出し">⬇</button>
       <button id="slideClose" class="icon-btn light">✕</button>
     </div>
+    <input id="slideMusicInput" type="file" accept="audio/*" hidden />
+    <audio id="slideAudio" loop></audio>
   </div>
 
   <!-- Toast -->

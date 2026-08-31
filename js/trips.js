@@ -25,10 +25,23 @@ export function create(name, mode = 'live') {
   const t = {
     id: uid(), name: name || defaultName(), mode, status: 'recording',
     createdAt: Date.now(), startedAt: Date.now(), endedAt: null,
-    start: null, goal: null, track: [], photos: [], distance: 0,
+    start: null, goal: null, track: [], photos: [], distance: 0, spend: [],
   };
   trips.push(t); saveAll(trips); return t;
 }
+
+// ---- per-trip spending (旅ごとの合計金額) ----
+export function addSpend(id, amount, memo) {
+  const t = get(id); if (!t) return null;
+  t.spend = t.spend || [];
+  const e = { id: uid(), amount: amount || 0, memo: memo || '', at: Date.now() };
+  t.spend.unshift(e); saveAll(trips); return e;
+}
+export function deleteSpend(id, spendId) {
+  const t = get(id); if (!t) return;
+  t.spend = (t.spend || []).filter(s => s.id !== spendId); saveAll(trips);
+}
+export function spendTotal(t) { return (t.spend || []).reduce((a, s) => a + (s.amount || 0), 0); }
 export function update(id, patch) { const t = get(id); if (t) { Object.assign(t, patch); saveAll(trips); } return t; }
 export function remove(id) {
   const t = get(id);
@@ -44,8 +57,8 @@ export function finish(id) {
   saveAll(trips); return t;
 }
 
-export function setStart(id, point) { const t = get(id); if (t) { t.start = stamp(point); if (!t.track.length) t.track.push(t.start); saveAll(trips); } }
-export function setGoal(id, point) { const t = get(id); if (t) { t.goal = stamp(point); t.track.push(t.goal); saveAll(trips); } }
+export function setStart(id, point) { const t = get(id); if (t) { t.start = stamp(point); if (!t.track.length) t.track.push(t.start); t.distance = trackDistance(t.track); saveAll(trips); } }
+export function setGoal(id, point) { const t = get(id); if (t) { t.goal = stamp(point); t.track.push(t.goal); t.distance = trackDistance(t.track); saveAll(trips); } }
 
 // Append a track point, skipping near-duplicates (<8m).
 export function addPoint(id, point) {
