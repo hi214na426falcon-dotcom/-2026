@@ -95,12 +95,17 @@
             <button id="recCancel" class="btn danger ghost full">この記録を破棄</button>
           </div>
 
-          <div class="drawer-section-label" style="margin-top:8px;">旅の記録</div>
+          <div class="drawer-section-label" style="margin-top:8px;">旅の記録（この端末）</div>
           <div id="tripList" class="trip-list"></div>
           <div id="tripEmpty" class="empty">
             <div class="empty-emoji">🧳</div>
             <p>まだ旅の記録がありません。</p>
             <p class="muted">上の「ライブ記録を開始」で、移動したルートを記録できます。</p>
+          </div>
+
+          <div id="cloudTripSection" class="hidden">
+            <div class="drawer-section-label" style="margin-top:8px;">☁ クラウドの旅（自分・共有された旅）</div>
+            <div id="cloudTripList" class="trip-list"></div>
           </div>
         </div>
       </section>
@@ -363,9 +368,11 @@
         <input id="tripPhotoInput" type="file" accept="image/*" multiple hidden />
       </label>
 
+      <div id="tripCloudRow" class="cloud-row"></div>
+
       <div class="drawer-section-label">この旅の出費（合計金額）</div>
       <div id="tripSpendTotal" class="trip-spend-total">¥0</div>
-      <div class="link-row">
+      <div class="link-row" id="spendEditRow">
         <input id="spendAmount" type="number" inputmode="numeric" placeholder="金額（円）" />
         <input id="spendMemo" type="text" placeholder="メモ（任意）" />
         <button id="spendAdd" class="btn primary small">追加</button>

@@ -107,9 +107,20 @@ export async function addPhoto(id, file, point) {
   return { ...meta, url };
 }
 export async function photoUrl(meta) {
+  if (meta.url) return meta.url;            // already resolved (e.g. cloud signed URL)
   if (meta.inline) return meta.inline;
   if (idb.available()) { const b = await idb.getBlob(meta.id); if (b) return URL.createObjectURL(b); }
   return null;
+}
+export async function photoBlob(meta) {
+  if (idb.available()) { const b = await idb.getBlob(meta.id); if (b) return b; }
+  if (meta.inline) { try { return await (await fetch(meta.inline)).blob(); } catch { return null; } }
+  return null;
+}
+export function setCloudId(id, cloudId) { const t = get(id); if (t) { t.cloudId = cloudId; saveAll(trips); } }
+export function markPhotoUploaded(id, photoId, path) {
+  const t = get(id); if (!t) return;
+  const p = t.photos.find(x => x.id === photoId); if (p) { p.cloudPath = path; saveAll(trips); }
 }
 export function deletePhoto(id, photoId) {
   const t = get(id); if (!t) return;

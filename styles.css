@@ -354,6 +354,8 @@ input, textarea { font-family: inherit; }
 .trip-stats .st { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 13px; }
 .trip-stats .st b { font-size: 16px; display: block; }
 
+.cloud-row { display: grid; gap: 8px; }
+.cloud-row:empty { display: none; }
 .trip-spend-total { font-size: 24px; font-weight: 800; }
 .spend-list { display: grid; gap: 6px; }
 .spend-item { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 13.5px; }

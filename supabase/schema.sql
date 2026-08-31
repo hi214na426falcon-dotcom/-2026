@@ -207,3 +207,90 @@ create policy whimo_receipts_all on storage.objects for all
   with check (bucket_id = 'whimo'
          and (storage.foldername(name))[1] = 'receipts'
          and owner = auth.uid());
+
+-- =====================================================================
+-- Trips (route recording) — optional cloud sync & album sharing.
+-- =====================================================================
+create table if not exists public.trips (
+  id         uuid primary key default gen_random_uuid(),
+  owner      uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  name       text not null default '旅の記録',
+  mode       text not null default 'live',
+  started_at timestamptz,
+  ended_at   timestamptz,
+  distance   integer not null default 0,
+  track      jsonb not null default '[]',
+  spend      jsonb not null default '[]',
+  created_at timestamptz not null default now()
+);
+create table if not exists public.trip_members (
+  trip_id    uuid not null references public.trips(id) on delete cascade,
+  email      text not null,
+  role       text not null default 'viewer',
+  created_at timestamptz not null default now(),
+  primary key (trip_id, email)
+);
+create table if not exists public.trip_photos (
+  id         uuid primary key default gen_random_uuid(),
+  trip_id    uuid not null references public.trips(id) on delete cascade,
+  path       text not null,
+  lat        double precision,
+  lng        double precision,
+  at         timestamptz,
+  caption    text not null default '',
+  created_by uuid default auth.uid(),
+  created_at timestamptz not null default now()
+);
+create index if not exists trip_photos_trip_idx on public.trip_photos(trip_id);
+create index if not exists trip_members_email_idx on public.trip_members(lower(email));
+
+create or replace function public.can_access_trip(tr uuid)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from trips where id = tr and owner = auth.uid())
+      or exists (select 1 from trip_members m where m.trip_id = tr and lower(m.email) = public.current_email())
+$$;
+create or replace function public.is_trip_owner(tr uuid)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from trips where id = tr and owner = auth.uid())
+$$;
+
+alter table public.trips        enable row level security;
+alter table public.trip_members enable row level security;
+alter table public.trip_photos  enable row level security;
+
+drop policy if exists trips_select on public.trips;
+create policy trips_select on public.trips for select using (public.can_access_trip(id));
+drop policy if exists trips_insert on public.trips;
+create policy trips_insert on public.trips for insert with check (owner = auth.uid());
+drop policy if exists trips_update on public.trips;
+create policy trips_update on public.trips for update using (owner = auth.uid()) with check (owner = auth.uid());
+drop policy if exists trips_delete on public.trips;
+create policy trips_delete on public.trips for delete using (owner = auth.uid());
+
+drop policy if exists trip_members_select on public.trip_members;
+create policy trip_members_select on public.trip_members for select using (public.can_access_trip(trip_id));
+drop policy if exists trip_members_ins on public.trip_members;
+create policy trip_members_ins on public.trip_members for insert with check (public.is_trip_owner(trip_id));
+drop policy if exists trip_members_del on public.trip_members;
+create policy trip_members_del on public.trip_members for delete using (public.is_trip_owner(trip_id));
+
+drop policy if exists trip_photos_select on public.trip_photos;
+create policy trip_photos_select on public.trip_photos for select using (public.can_access_trip(trip_id));
+drop policy if exists trip_photos_ins on public.trip_photos;
+create policy trip_photos_ins on public.trip_photos for insert with check (public.is_trip_owner(trip_id));
+drop policy if exists trip_photos_del on public.trip_photos;
+create policy trip_photos_del on public.trip_photos for delete using (public.is_trip_owner(trip_id) or created_by = auth.uid());
+
+-- Storage: trip photos under trips/<trip_id>/... readable by trip members.
+drop policy if exists whimo_trips_read on storage.objects;
+create policy whimo_trips_read on storage.objects for select
+  using (bucket_id = 'whimo' and (storage.foldername(name))[1] = 'trips'
+         and public.can_access_trip( ((storage.foldername(name))[2])::uuid ));
+drop policy if exists whimo_trips_write on storage.objects;
+create policy whimo_trips_write on storage.objects for insert
+  with check (bucket_id = 'whimo' and (storage.foldername(name))[1] = 'trips'
+              and public.is_trip_owner( ((storage.foldername(name))[2])::uuid ));
+drop policy if exists whimo_trips_delete on storage.objects;
+create policy whimo_trips_delete on storage.objects for delete
+  using (bucket_id = 'whimo' and (storage.foldername(name))[1] = 'trips'
+         and public.is_trip_owner( ((storage.foldername(name))[2])::uuid ));

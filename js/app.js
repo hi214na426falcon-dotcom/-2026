@@ -7,6 +7,7 @@ import * as share from './share.js';
 import * as mapView from './map.js';
 import * as trips from './trips.js';
 import * as route from './route.js';
+import * as tripCloud from './tripCloud.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -588,6 +589,8 @@ let recStop = null;
 let recTimer = null;
 let recMode = 'live';
 let currentTripId = null;
+let viewTrip = null;         // trip object currently shown (local or cloud)
+let viewReadonly = false;
 let tripMapInst = null;
 let slideMapInst = null;
 let slide = { photos: [], idx: 0, timer: null, playing: false };
@@ -600,6 +603,33 @@ function renderTrips() {
   $('#tripEmpty').classList.toggle('hidden', arr.length > 0 || !!recTripId);
   list.innerHTML = '';
   arr.forEach(t => list.appendChild(tripCard(t)));
+  renderCloudTrips();
+}
+
+async function renderCloudTrips() {
+  const sec = $('#cloudTripSection');
+  if (mode !== 'cloud') { sec.classList.add('hidden'); return; }
+  sec.classList.remove('hidden');
+  const list = $('#cloudTripList');
+  list.innerHTML = '<div class="muted small">読み込み中…</div>';
+  try {
+    const arr = await tripCloud.listCloud();
+    list.innerHTML = '';
+    if (!arr.length) { list.innerHTML = '<div class="muted small">クラウドの旅はまだありません。旅の詳細から「☁ クラウドに保存」できます。</div>'; return; }
+    arr.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'trip-card';
+      const d = new Date(t.startedAt || 0);
+      card.innerHTML = `
+        <div class="tc-thumb placeholder">☁</div>
+        <div class="tc-main">
+          <div class="tc-name">${esc(t.name)} ${t.mine ? '' : '<span class="badge-mode">共有</span>'}</div>
+          <div class="tc-meta">${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ・ ${trips.fmtDistance(t.distance || 0)} ・ 写真${t.photoCount}枚</div>
+        </div>`;
+      card.onclick = () => openCloudTrip(t.cloudId);
+      list.appendChild(card);
+    });
+  } catch (e) { list.innerHTML = `<div class="muted small">${esc(errMsg(e))}</div>`; }
 }
 
 function tripCard(t) {
@@ -722,8 +752,15 @@ function cancelRecording() {
 // ---- trip detail ----
 async function openTrip(id) {
   const t = trips.get(id); if (!t) return;
-  currentTripId = id;
-  $('#tripTitle').textContent = t.name;
+  openTripObj(t, false);
+}
+async function openCloudTrip(cloudId) {
+  await mutate(async () => { const t = await tripCloud.download(cloudId); openTripObj(t, true); });
+}
+function openTripObj(t, readonly) {
+  viewTrip = t; viewReadonly = readonly;
+  currentTripId = readonly ? null : t.id;
+  $('#tripTitle').textContent = t.name + (readonly ? '（共有）' : '');
   const dur = t.endedAt ? trips.fmtDuration(t.endedAt - t.startedAt) : '—';
   $('#tripSub').textContent = `${trips.fmtDistance(t.distance || 0)} ・ ${dur}`;
   $('#tripStats').innerHTML = `
@@ -732,10 +769,14 @@ async function openTrip(id) {
     <div class="st"><b>${t.photos.length}</b>写真</div>
     <div class="st"><b>${t.track.length}</b>地点</div>`;
   $('#tripScreen').classList.remove('hidden');
+  $('#tripDelete').style.display = readonly ? 'none' : '';
+  document.querySelector('#tripScreen .photo-add').style.display = readonly ? 'none' : '';
+  $('#spendEditRow').style.display = readonly ? 'none' : '';
   if (tripMapInst) { mapView.disposeMap(tripMapInst); tripMapInst = null; }
   tripMapInst = mapView.makeRouteMap('tripMap', t.track, t.photos);
   renderTripSpend(t);
-  await renderTripPhotos(t);
+  renderCloudRow(t);
+  renderTripPhotos(t);
   $('#tripPlay').disabled = t.photos.length === 0;
 }
 function renderTripSpend(t) {
@@ -744,13 +785,44 @@ function renderTripSpend(t) {
   (t.spend || []).forEach(s => {
     const el = document.createElement('div');
     el.className = 'spend-item';
-    el.innerHTML = `<span class="sp-amt">${yen(s.amount)}</span><span class="sp-memo">${esc(s.memo || '')}</span><button class="sp-del">削除</button>`;
-    el.querySelector('.sp-del').onclick = () => { trips.deleteSpend(t.id, s.id); renderTripSpend(trips.get(t.id)); };
+    el.innerHTML = `<span class="sp-amt">${yen(s.amount)}</span><span class="sp-memo">${esc(s.memo || '')}</span>${viewReadonly ? '' : '<button class="sp-del">削除</button>'}`;
+    const del = el.querySelector('.sp-del');
+    if (del) del.onclick = () => { trips.deleteSpend(t.id, s.id); renderTripSpend(trips.get(t.id)); };
     wrap.appendChild(el);
   });
 }
+function renderCloudRow(t) {
+  const row = $('#tripCloudRow'); row.innerHTML = '';
+  if (viewReadonly) { row.innerHTML = '<div class="muted small">👫 共有された旅（閲覧のみ）</div>'; return; }
+  if (mode !== 'cloud') { row.innerHTML = '<div class="muted small">ログインするとクラウド保存・共有ができます。</div>'; return; }
+  const save = document.createElement('button');
+  save.className = 'btn ghost full';
+  save.textContent = t.cloudId ? '☁ クラウドを更新（写真も同期）' : '☁ クラウドに保存';
+  save.onclick = () => uploadTrip(t.id);
+  row.appendChild(save);
+  if (t.cloudId) {
+    const sh = document.createElement('button');
+    sh.className = 'btn ghost full';
+    sh.textContent = '👫 共有（メールで招待）';
+    sh.onclick = () => shareTrip(t.cloudId);
+    row.appendChild(sh);
+  }
+}
+async function uploadTrip(localId) {
+  await mutate(async () => {
+    await tripCloud.upload(trips.get(localId));
+    toast('クラウドに保存しました');
+    openTripObj(trips.get(localId), false);
+    renderTrips();
+  });
+}
+async function shareTrip(cloudId) {
+  const email = prompt('この旅を共有する相手のメールアドレス');
+  if (!email || !email.includes('@')) return;
+  await mutate(async () => { await tripCloud.addMember(cloudId, email); toast(`${email} と共有しました`); });
+}
 function addSpend() {
-  if (!currentTripId) return;
+  if (!currentTripId || viewReadonly) return;
   const amount = parseInt($('#spendAmount').value, 10);
   if (!amount && amount !== 0) { toast('金額を入力してください'); return; }
   trips.addSpend(currentTripId, amount || 0, $('#spendMemo').value.trim());
@@ -760,7 +832,7 @@ function addSpend() {
 function closeTrip() {
   $('#tripScreen').classList.add('hidden');
   if (tripMapInst) { mapView.disposeMap(tripMapInst); tripMapInst = null; }
-  currentTripId = null;
+  currentTripId = null; viewTrip = null; viewReadonly = false;
   renderTrips();
 }
 async function renderTripPhotos(t) {
@@ -769,8 +841,9 @@ async function renderTripPhotos(t) {
     const url = await trips.photoUrl(p);
     const cell = document.createElement('div');
     cell.className = 'photo-thumb';
-    cell.innerHTML = `${url ? `<img src="${url}" alt="" />` : ''}<button class="ph-del">✕</button>`;
-    cell.querySelector('.ph-del').onclick = () => {
+    cell.innerHTML = `${url ? `<img src="${url}" alt="" />` : ''}${viewReadonly ? '' : '<button class="ph-del">✕</button>'}`;
+    const del = cell.querySelector('.ph-del');
+    if (del) del.onclick = () => {
       if (!confirm('この写真を削除しますか？')) return;
       trips.deletePhoto(t.id, p.id); openTrip(t.id);
     };
@@ -779,7 +852,7 @@ async function renderTripPhotos(t) {
 }
 async function tripAddPhotos(ev) {
   const files = Array.from(ev.target.files || []); ev.target.value = '';
-  if (!files.length || !currentTripId) return;
+  if (!files.length || !currentTripId || viewReadonly) return;
   await mutate(async () => {
     for (const f of files) await trips.addPhoto(currentTripId, f, null);
     await openTrip(currentTripId);
@@ -787,14 +860,14 @@ async function tripAddPhotos(ev) {
   });
 }
 function deleteTrip() {
-  if (!currentTripId) return;
+  if (!currentTripId || viewReadonly) return;
   if (!confirm('この旅の記録を削除しますか？取り消せません。')) return;
   trips.remove(currentTripId); closeTrip(); toast('削除しました');
 }
 
 // ---- slideshow ----
 async function playSlideshow() {
-  const t = trips.get(currentTripId); if (!t || !t.photos.length) { toast('写真がありません'); return; }
+  const t = viewTrip; if (!t || !t.photos.length) { toast('写真がありません'); return; }
   const loaded = [];
   for (const p of t.photos) { const url = await trips.photoUrl(p); if (url) loaded.push({ meta: p, url }); }
   if (!loaded.length) { toast('写真を読み込めませんでした'); return; }
@@ -850,7 +923,7 @@ function onMusicPick(ev) {
 // ---- video export (webm via MediaRecorder) ----
 async function exportVideo() {
   if (!('MediaRecorder' in window) || !HTMLCanvasElement.prototype.captureStream) { toast('この端末は動画書き出しに未対応です'); return; }
-  const t = trips.get(currentTripId); if (!t) return;
+  const t = viewTrip; if (!t) return;
   let photos = slide.photos;
   if (!photos.length) { photos = []; for (const p of t.photos) { const url = await trips.photoUrl(p); if (url) photos.push({ meta: p, url }); } }
   if (!photos.length) { toast('写真がありません'); return; }
