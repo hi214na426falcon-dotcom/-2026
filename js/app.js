@@ -5,6 +5,7 @@ import * as supa from './supa.js';
 import * as geo from './geo.js';
 import * as share from './share.js';
 import * as mapView from './map.js';
+import * as trips from './trips.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -156,7 +157,11 @@ function switchView(view) {
   $$('.seg').forEach(b => b.classList.toggle('active', b.dataset.view === view));
   $('#listView').classList.toggle('hidden', view !== 'list');
   $('#mapView').classList.toggle('hidden', view !== 'map');
+  $('#tripsView').classList.toggle('hidden', view !== 'trips');
+  $('#filterBar').style.display = view === 'trips' ? 'none' : '';
+  $('#addBtn').classList.toggle('hidden', view === 'trips');
   if (view === 'map') { mapView.refresh(); render(); }
+  if (view === 'trips') renderTrips();
 }
 
 // =====================================================================
@@ -575,6 +580,235 @@ function setupGesture() {
 }
 
 // =====================================================================
+// Trips (route recording + slideshow)
+// =====================================================================
+let recTripId = null;
+let recStop = null;
+let recTimer = null;
+let recMode = 'live';
+let currentTripId = null;
+let tripMapInst = null;
+let slideMapInst = null;
+let slide = { photos: [], idx: 0, timer: null, playing: false };
+
+function renderTrips() {
+  $('#recIdle').classList.toggle('hidden', !!recTripId);
+  $('#recActive').classList.toggle('hidden', !recTripId);
+  const arr = trips.list();
+  const list = $('#tripList');
+  $('#tripEmpty').classList.toggle('hidden', arr.length > 0 || !!recTripId);
+  list.innerHTML = '';
+  arr.forEach(t => list.appendChild(tripCard(t)));
+}
+
+function tripCard(t) {
+  const card = document.createElement('div');
+  card.className = 'trip-card';
+  const d = new Date(t.startedAt || t.createdAt);
+  const meta = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ・ ${trips.fmtDistance(t.distance || 0)} ・ 写真${t.photos.length}枚`;
+  card.innerHTML = `
+    <div class="tc-thumb placeholder">🧳</div>
+    <div class="tc-main">
+      <div class="tc-name">${esc(t.name)}</div>
+      <div class="tc-meta">${meta}</div>
+      ${t.status === 'recording' ? '<div class="tc-badge">● 記録中</div>' : ''}
+    </div>`;
+  card.onclick = () => { if (t.status === 'recording' && t.id === recTripId) toast('記録中です。ゴールで終了してください'); else openTrip(t.id); };
+  if (t.photos.length) trips.photoUrl(t.photos[0]).then(url => {
+    if (!url) return;
+    const img = document.createElement('img'); img.className = 'tc-thumb'; img.src = url;
+    const ph = card.querySelector('.tc-thumb'); if (ph) ph.replaceWith(img);
+  });
+  return card;
+}
+
+// ---- recording ----
+function startRecording(mode) {
+  recMode = mode;
+  const t = trips.create('', mode);
+  recTripId = t.id;
+  $('#recName').textContent = t.name + '（記録中）';
+  $('#recPointsUI').classList.toggle('hidden', mode !== 'points');
+  renderTrips();
+  recClock(true);
+  updateRecStats(t);
+  if (mode === 'live') {
+    recStop = trips.startLive(t.id, (trip) => updateRecStats(trip), (err) => toast(geoErr(err)));
+    toast('GPSで記録開始。移動するとルートが記録されます');
+  } else {
+    toast('スタート／ゴールを指定してください');
+  }
+}
+function updateRecStats(t) {
+  if (!t) return;
+  $('#recDist').textContent = trips.fmtDistance(t.distance || 0);
+  $('#recPts').textContent = t.track.length;
+  $('#recPhotos').textContent = t.photos.length;
+}
+function recClock(on) {
+  clearInterval(recTimer); recTimer = null;
+  if (!on) return;
+  recTimer = setInterval(() => {
+    const t = trips.get(recTripId);
+    if (t) $('#recTime').textContent = trips.fmtDuration(Date.now() - t.startedAt);
+  }, 1000);
+}
+async function recSetPoint(which) {
+  try {
+    busy(true);
+    const p = await trips.currentPosition();
+    if (which === 'start') { trips.setStart(recTripId, p); toast('スタート地点を設定しました'); }
+    else { trips.setGoal(recTripId, p); toast('ゴール地点を設定しました'); }
+    updateRecStats(trips.get(recTripId));
+  } catch (e) { toast(geoErr(e)); }
+  finally { busy(false); }
+}
+async function recAddPhotos(ev) {
+  const files = Array.from(ev.target.files || []); ev.target.value = '';
+  if (!files.length || !recTripId) return;
+  let pos = null;
+  const t = trips.get(recTripId);
+  if (t && t.track.length) pos = t.track[t.track.length - 1];
+  else pos = await trips.currentPosition().catch(() => null);
+  await mutate(async () => {
+    for (const f of files) await trips.addPhoto(recTripId, f, pos);
+    updateRecStats(trips.get(recTripId));
+    toast(`写真を${files.length}枚追加しました`);
+  });
+}
+function finishRecording() {
+  if (!recTripId) return;
+  if (recStop) { recStop(); recStop = null; }
+  const t = trips.finish(recTripId);
+  recClock(false);
+  const id = recTripId; recTripId = null;
+  renderTrips();
+  toast('記録を終了しました');
+  if (t && t.track.length < 1) return;
+  openTrip(id);
+}
+function cancelRecording() {
+  if (!recTripId) return;
+  if (!confirm('この記録を破棄しますか？')) return;
+  if (recStop) { recStop(); recStop = null; }
+  trips.remove(recTripId); recTripId = null; recClock(false);
+  renderTrips(); toast('破棄しました');
+}
+
+// ---- trip detail ----
+async function openTrip(id) {
+  const t = trips.get(id); if (!t) return;
+  currentTripId = id;
+  $('#tripTitle').textContent = t.name;
+  const dur = t.endedAt ? trips.fmtDuration(t.endedAt - t.startedAt) : '—';
+  $('#tripSub').textContent = `${trips.fmtDistance(t.distance || 0)} ・ ${dur}`;
+  $('#tripStats').innerHTML = `
+    <div class="st"><b>${trips.fmtDistance(t.distance || 0)}</b>距離</div>
+    <div class="st"><b>${dur}</b>時間</div>
+    <div class="st"><b>${t.photos.length}</b>写真</div>
+    <div class="st"><b>${t.track.length}</b>地点</div>`;
+  $('#tripScreen').classList.remove('hidden');
+  if (tripMapInst) { mapView.disposeMap(tripMapInst); tripMapInst = null; }
+  tripMapInst = mapView.makeRouteMap('tripMap', t.track, t.photos);
+  await renderTripPhotos(t);
+  $('#tripPlay').disabled = t.photos.length === 0;
+}
+function closeTrip() {
+  $('#tripScreen').classList.add('hidden');
+  if (tripMapInst) { mapView.disposeMap(tripMapInst); tripMapInst = null; }
+  currentTripId = null;
+  renderTrips();
+}
+async function renderTripPhotos(t) {
+  const grid = $('#tripPhotoGrid'); grid.innerHTML = '';
+  for (const p of t.photos) {
+    const url = await trips.photoUrl(p);
+    const cell = document.createElement('div');
+    cell.className = 'photo-thumb';
+    cell.innerHTML = `${url ? `<img src="${url}" alt="" />` : ''}<button class="ph-del">✕</button>`;
+    cell.querySelector('.ph-del').onclick = () => {
+      if (!confirm('この写真を削除しますか？')) return;
+      trips.deletePhoto(t.id, p.id); openTrip(t.id);
+    };
+    grid.appendChild(cell);
+  }
+}
+async function tripAddPhotos(ev) {
+  const files = Array.from(ev.target.files || []); ev.target.value = '';
+  if (!files.length || !currentTripId) return;
+  await mutate(async () => {
+    for (const f of files) await trips.addPhoto(currentTripId, f, null);
+    await openTrip(currentTripId);
+    toast(`写真を${files.length}枚追加しました`);
+  });
+}
+function deleteTrip() {
+  if (!currentTripId) return;
+  if (!confirm('この旅の記録を削除しますか？取り消せません。')) return;
+  trips.remove(currentTripId); closeTrip(); toast('削除しました');
+}
+
+// ---- slideshow ----
+async function playSlideshow() {
+  const t = trips.get(currentTripId); if (!t || !t.photos.length) { toast('写真がありません'); return; }
+  const loaded = [];
+  for (const p of t.photos) { const url = await trips.photoUrl(p); if (url) loaded.push({ meta: p, url }); }
+  if (!loaded.length) { toast('写真を読み込めませんでした'); return; }
+  slide = { photos: loaded, idx: 0, timer: null, playing: true };
+  $('#slideshow').classList.remove('hidden');
+  if (slideMapInst) { mapView.disposeMap(slideMapInst); slideMapInst = null; }
+  slideMapInst = mapView.makeRouteMap('slideMap', t.track, t.photos);
+  buildProgress(loaded.length);
+  showSlide(0);
+  startSlideTimer();
+}
+function buildProgress(n) {
+  const wrap = $('#slideProgress'); wrap.innerHTML = '';
+  for (let i = 0; i < n; i++) { const pip = document.createElement('div'); pip.className = 'pip'; wrap.appendChild(pip); }
+}
+function showSlide(i) {
+  slide.idx = i;
+  const s = slide.photos[i];
+  const img = $('#slideImg');
+  img.classList.remove('show');
+  setTimeout(() => { img.src = s.url; img.classList.add('show'); }, 60);
+  const d = new Date(s.meta.at);
+  const time = `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+  $('#slideCaption').textContent = `${i + 1} / ${slide.photos.length}　・　${time}${s.meta.caption ? '　' + s.meta.caption : ''}`;
+  $$('#slideProgress .pip').forEach((p, k) => p.classList.toggle('active', k <= i));
+  if (slideMapInst && typeof s.meta.lat === 'number') mapView.highlightOnMap(slideMapInst, s.meta.lat, s.meta.lng);
+}
+function startSlideTimer() {
+  stopSlideTimer(); slide.playing = true; $('#slidePlayPause').textContent = '⏸';
+  slide.timer = setInterval(() => {
+    if (slide.idx + 1 >= slide.photos.length) { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '↺'; return; }
+    showSlide(slide.idx + 1);
+  }, 3000);
+}
+function stopSlideTimer() { clearInterval(slide.timer); slide.timer = null; }
+function toggleSlide() {
+  if (slide.playing) { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '▶'; }
+  else { if (slide.idx + 1 >= slide.photos.length) showSlide(0); startSlideTimer(); }
+}
+function nextSlide() { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '▶'; showSlide(Math.min(slide.idx + 1, slide.photos.length - 1)); }
+function prevSlide() { stopSlideTimer(); slide.playing = false; $('#slidePlayPause').textContent = '▶'; showSlide(Math.max(slide.idx - 1, 0)); }
+function closeSlideshow() {
+  stopSlideTimer();
+  $('#slideshow').classList.add('hidden');
+  slide.photos.forEach(p => { if (p.url && p.url.startsWith('blob:')) URL.revokeObjectURL(p.url); });
+  slide = { photos: [], idx: 0, timer: null, playing: false };
+  if (slideMapInst) { mapView.disposeMap(slideMapInst); slideMapInst = null; }
+}
+
+function geoErr(e) {
+  if (!e) return '位置情報を取得できませんでした';
+  if (e.code === 1) return '位置情報の利用が許可されていません（設定から許可してください）';
+  if (e.code === 2) return '現在地を取得できませんでした（電波状況をご確認ください）';
+  if (e.code === 3) return '位置情報の取得がタイムアウトしました';
+  return e.message || '位置情報を取得できませんでした';
+}
+
+// =====================================================================
 // Settings
 // =====================================================================
 function openSettings() {
@@ -662,6 +896,24 @@ function wire() {
     expenseVisibility = b.dataset.vis;
     $$('#ex_visibility .vis-chip').forEach(x => x.classList.toggle('active', x === b));
   });
+
+  // trips
+  $('#recStartLive').onclick = () => startRecording('live');
+  $('#recStartPoints').onclick = () => startRecording('points');
+  $('#recSetStart').onclick = () => recSetPoint('start');
+  $('#recSetGoal').onclick = () => recSetPoint('goal');
+  $('#recPhotoInput').addEventListener('change', recAddPhotos);
+  $('#recFinish').onclick = finishRecording;
+  $('#recCancel').onclick = cancelRecording;
+  $('#tripBack').onclick = closeTrip;
+  $('#tripDelete').onclick = deleteTrip;
+  $('#tripPlay').onclick = playSlideshow;
+  $('#tripPhotoInput').addEventListener('change', tripAddPhotos);
+  // slideshow
+  $('#slideClose').onclick = closeSlideshow;
+  $('#slidePlayPause').onclick = toggleSlide;
+  $('#slideNext').onclick = nextSlide;
+  $('#slidePrev').onclick = prevSlide;
 
   setupGesture();
   window.addEventListener('hashchange', checkShareOnLoad);

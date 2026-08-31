@@ -38,6 +38,7 @@
     <nav class="segmented">
       <button data-view="list" class="seg active">📋 リスト</button>
       <button data-view="map" class="seg">🗺 地図</button>
+      <button data-view="trips" class="seg">🧳 旅</button>
     </nav>
 
     <!-- Filter bar -->
@@ -58,6 +59,49 @@
       <section id="mapView" class="view hidden">
         <div id="map"></div>
         <div id="mapHint" class="map-hint hidden">タップした地点にピンを置きます。もう一度タップで場所を確定。</div>
+      </section>
+
+      <section id="tripsView" class="view hidden">
+        <div class="trips-wrap">
+          <!-- recording panel -->
+          <div id="recIdle" class="rec-panel">
+            <strong>旅を記録する</strong>
+            <p class="muted small">移動したルートを記録して、撮った写真でスライドショーを作れます。</p>
+            <button id="recStartLive" class="btn primary full">▶ ライブ記録を開始（GPS）</button>
+            <button id="recStartPoints" class="btn ghost full">📍 スタート／ゴールを指定して記録</button>
+          </div>
+
+          <div id="recActive" class="rec-panel active hidden">
+            <div class="rec-live">
+              <span class="rec-dot"></span><strong id="recName">記録中</strong>
+            </div>
+            <div class="rec-stats">
+              <div><span id="recTime">0:00</span><small>時間</small></div>
+              <div><span id="recDist">0 m</span><small>距離</small></div>
+              <div><span id="recPts">0</span><small>地点</small></div>
+              <div><span id="recPhotos">0</span><small>写真</small></div>
+            </div>
+            <div id="recPointsUI" class="hidden">
+              <button id="recSetStart" class="btn ghost full">🚩 現在地をスタートに</button>
+              <button id="recSetGoal" class="btn ghost full">🏁 現在地をゴールに</button>
+              <small class="muted">※地図タブでピンを置いてからでも指定できます。</small>
+            </div>
+            <label class="btn ghost full photo-add" style="justify-content:center;">
+              📷 いまの場所で写真を追加
+              <input id="recPhotoInput" type="file" accept="image/*" multiple hidden />
+            </label>
+            <button id="recFinish" class="btn primary full">⏹ ゴール（記録を終了）</button>
+            <button id="recCancel" class="btn danger ghost full">この記録を破棄</button>
+          </div>
+
+          <div class="drawer-section-label" style="margin-top:8px;">旅の記録</div>
+          <div id="tripList" class="trip-list"></div>
+          <div id="tripEmpty" class="empty">
+            <div class="empty-emoji">🧳</div>
+            <p>まだ旅の記録がありません。</p>
+            <p class="muted">上の「ライブ記録を開始」で、移動したルートを記録できます。</p>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -281,6 +325,46 @@
           <button id="ex_save" class="btn primary">保存</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== Trip detail screen ===== -->
+  <div id="tripScreen" class="budget hidden" aria-hidden="true">
+    <header class="budget-head">
+      <button id="tripBack" class="icon-btn">←</button>
+      <div class="budget-title">
+        <strong id="tripTitle">旅の記録</strong>
+        <small id="tripSub"></small>
+      </div>
+      <button id="tripDelete" class="icon-btn">🗑</button>
+    </header>
+    <div id="tripMap" class="trip-map"></div>
+    <div class="trip-body">
+      <div class="trip-stats" id="tripStats"></div>
+      <button id="tripPlay" class="btn primary full">▶ スライドショーを再生</button>
+      <label class="btn ghost full photo-add" style="justify-content:center;">
+        📷 この旅に写真を追加
+        <input id="tripPhotoInput" type="file" accept="image/*" multiple hidden />
+      </label>
+      <div class="drawer-section-label">写真</div>
+      <div id="tripPhotoGrid" class="photo-grid"></div>
+    </div>
+  </div>
+
+  <!-- ===== Slideshow overlay ===== -->
+  <div id="slideshow" class="slideshow hidden" aria-hidden="true">
+    <div id="slideMap" class="slide-map"></div>
+    <div class="slide-stage">
+      <img id="slideImg" alt="" />
+      <div id="slideCaption" class="slide-caption"></div>
+    </div>
+    <div class="slide-progress" id="slideProgress"></div>
+    <div class="slide-controls">
+      <button id="slidePrev" class="icon-btn light">⏮</button>
+      <button id="slidePlayPause" class="icon-btn light">⏸</button>
+      <button id="slideNext" class="icon-btn light">⏭</button>
+      <div class="spacer"></div>
+      <button id="slideClose" class="icon-btn light">✕</button>
     </div>
   </div>
 

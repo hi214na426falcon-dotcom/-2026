@@ -114,3 +114,43 @@ function escapeHtml(s = '') {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 function escapeAttr(s = '') { return escapeHtml(s); }
+
+// ---------------------------------------------------------------------
+// Standalone route map (trip detail / slideshow). Independent of the main map.
+// ---------------------------------------------------------------------
+function dot(color, label) {
+  return L.divIcon({
+    className: 'route-dot',
+    html: `<div style="width:22px;height:22px;border-radius:50%;background:${color};color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);display:grid;place-items:center;font-size:11px;font-weight:700;">${label}</div>`,
+    iconSize: [22, 22], iconAnchor: [11, 11],
+  });
+}
+
+export function makeRouteMap(containerId, track = [], photos = []) {
+  if (!leafletReady()) return null;
+  const el = document.getElementById(containerId);
+  if (!el) return null;
+  const map = L.map(containerId, { zoomControl: false, attributionControl: false });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+  const pts = track.filter(p => typeof p.lat === 'number').map(p => [p.lat, p.lng]);
+  if (pts.length > 1) L.polyline(pts, { color: '#0e9f8e', weight: 5, opacity: 0.85 }).addTo(map);
+  if (track[0]) L.marker([track[0].lat, track[0].lng], { icon: dot('#2fa84f', 'S') }).addTo(map);
+  if (track.length > 1) { const g = track[track.length - 1]; L.marker([g.lat, g.lng], { icon: dot('#e5484d', 'G') }).addTo(map); }
+  photos.forEach((p, i) => {
+    if (typeof p.lat === 'number') L.marker([p.lat, p.lng], { icon: dot('#8163d4', String(i + 1)) }).addTo(map);
+  });
+  const all = pts.concat(photos.filter(p => typeof p.lat === 'number').map(p => [p.lat, p.lng]));
+  if (all.length) { try { map.fitBounds(all, { padding: [30, 30], maxZoom: 16 }); } catch { map.setView(all[0], 14); } }
+  else map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+  setTimeout(() => map.invalidateSize(), 60);
+  return map;
+}
+
+let _hi = null;
+export function highlightOnMap(map, lat, lng) {
+  if (!map || typeof lat !== 'number') return;
+  if (_hi) { map.removeLayer(_hi); _hi = null; }
+  _hi = L.circleMarker([lat, lng], { radius: 11, color: '#fff', weight: 3, fillColor: '#8163d4', fillOpacity: 1 }).addTo(map);
+  map.panTo([lat, lng]);
+}
+export function disposeMap(map) { if (map) { try { map.remove(); } catch {} } }

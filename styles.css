@@ -326,6 +326,50 @@ input, textarea { font-family: inherit; }
 .vis-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 .receipt-preview img { max-height: 140px; border-radius: 10px; margin-top: 8px; border: 1px solid var(--line); }
 
+/* ===== Trips ===== */
+.trips-wrap { padding: 12px 12px calc(30px + var(--safe-bottom)); display: grid; gap: 12px; }
+.rec-panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; box-shadow: var(--shadow); }
+.rec-panel.active { border-color: var(--accent); }
+.rec-live { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+.rec-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--danger); animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+.rec-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; }
+.rec-stats > div { background: var(--bg); border-radius: 10px; padding: 8px 4px; }
+.rec-stats span { font-weight: 800; font-size: 16px; display: block; }
+.rec-stats small { color: var(--muted); font-size: 11px; }
+
+.trip-list { display: grid; gap: 10px; }
+.trip-list:empty { display: none; }
+.trip-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; gap: 0; }
+.trip-card .tc-thumb { width: 92px; height: 92px; object-fit: cover; background: var(--bg); flex: 0 0 auto; }
+.trip-card .tc-thumb.placeholder { display: grid; place-items: center; font-size: 30px; }
+.trip-card .tc-main { padding: 10px 12px; flex: 1; min-width: 0; display: grid; gap: 3px; align-content: center; }
+.trip-card .tc-name { font-weight: 700; font-size: 15px; }
+.trip-card .tc-meta { font-size: 12px; color: var(--muted); }
+.trip-card .tc-badge { font-size: 11px; color: var(--danger); font-weight: 700; }
+
+.trip-map { height: 40vh; min-height: 240px; }
+.trip-body { padding: 14px 14px calc(24px + var(--safe-bottom)); display: grid; gap: 10px; overflow-y: auto; }
+.trip-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.trip-stats .st { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 13px; }
+.trip-stats .st b { font-size: 16px; display: block; }
+
+/* ===== Slideshow ===== */
+.slideshow { position: fixed; inset: 0; z-index: 1500; background: #000; display: flex; flex-direction: column; }
+.slide-map { height: 26%; width: 100%; background: #111; }
+.slide-stage { flex: 1; position: relative; display: grid; place-items: center; overflow: hidden; background: #000; }
+.slide-stage img { max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0; transition: opacity .5s ease; }
+.slide-stage img.show { opacity: 1; }
+.slide-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px; color: #fff;
+  background: linear-gradient(transparent, rgba(0,0,0,.7)); font-size: 14px; }
+.slide-progress { display: flex; gap: 4px; padding: 8px 12px; background: #000; }
+.slide-progress .pip { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.25); }
+.slide-progress .pip.active { background: #fff; }
+.slide-controls { display: flex; align-items: center; gap: 8px; padding: 8px 12px calc(14px + var(--safe-bottom)); background: #000; }
+.icon-btn.light { color: #fff; font-size: 22px; }
+.icon-btn.light:active { background: rgba(255,255,255,.15); }
+.slide-controls .spacer { flex: 1; }
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #14181a; --card: #1d2325; --ink: #e8ecea; --muted: #93a19b;
