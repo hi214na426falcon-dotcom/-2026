@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0e9f8e" />
+  <title>Whimo Web — 行きたい場所を保存・共有</title>
+  <meta name="description" content="SNSで見つけた行きたいお店・スポットを保存して、地図やリストで管理・共有できるWebアプリのMVPです。" />
+
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon.svg" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+
+  <!-- Leaflet (map) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+        crossorigin="" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- ===== App shell ===== -->
+  <div id="app" class="app">
+
+    <!-- Header -->
+    <header class="topbar">
+      <button id="menuBtn" class="icon-btn" aria-label="メニュー">☰</button>
+      <div class="brand">
+        <span class="brand-mark">📍</span>
+        <div class="brand-text">
+          <strong id="collectionName">マイリスト</strong>
+          <small id="collectionMeta">0 スポット</small>
+        </div>
+      </div>
+      <button id="shareBtn" class="icon-btn" aria-label="共有">🔗</button>
+    </header>
+
+    <!-- View switch -->
+    <nav class="segmented">
+      <button data-view="list" class="seg active">📋 リスト</button>
+      <button data-view="map" class="seg">🗺 地図</button>
+    </nav>
+
+    <!-- Filter bar -->
+    <div id="filterBar" class="filter-bar"></div>
+
+    <!-- Main -->
+    <main class="content">
+      <section id="listView" class="view">
+        <div id="spotList" class="spot-list"></div>
+        <div id="emptyState" class="empty">
+          <div class="empty-emoji">🗺️</div>
+          <p>まだスポットがありません。</p>
+          <p class="muted">右下の「＋」から、行きたいお店やスポットを追加しましょう。<br>
+          InstagramやTikTokのリンクを貼るだけでもOKです。</p>
+        </div>
+      </section>
+
+      <section id="mapView" class="view hidden">
+        <div id="map"></div>
+        <div id="mapHint" class="map-hint hidden">タップした地点にピンを置きます。もう一度タップで場所を確定。</div>
+      </section>
+    </main>
+
+    <!-- FAB -->
+    <button id="addBtn" class="fab" aria-label="スポットを追加">＋</button>
+  </div>
+
+  <!-- ===== Side drawer (collections) ===== -->
+  <div id="drawer" class="drawer hidden" aria-hidden="true">
+    <div class="drawer-panel">
+      <div class="drawer-head">
+        <strong>リスト一覧</strong>
+        <button id="drawerClose" class="icon-btn">✕</button>
+      </div>
+      <div id="collectionList" class="collection-list"></div>
+      <button id="newCollectionBtn" class="btn ghost full">＋ 新しいリストを作る</button>
+      <div class="drawer-foot">
+        <button id="importBtn" class="btn ghost full">🔗 共有リンクから取り込む</button>
+        <p class="muted small">Whimo Web（非公式クローン / MVP）。データはこの端末のブラウザに保存されます。</p>
+      </div>
+    </div>
+    <div class="drawer-scrim" data-close-drawer></div>
+  </div>
+
+  <!-- ===== Spot editor modal ===== -->
+  <div id="editor" class="modal hidden" aria-hidden="true">
+    <div class="modal-scrim" data-close-editor></div>
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h2 id="editorTitle">スポットを追加</h2>
+
+      <label class="field">
+        <span>SNS / Webリンク</span>
+        <div class="link-row">
+          <input id="f_url" type="url" inputmode="url" placeholder="InstagramやTikTokのURLを貼り付け" />
+          <span id="platformBadge" class="platform-badge">🌐</span>
+        </div>
+        <small class="muted">リンクを貼ると元の投稿にいつでも戻れます。</small>
+      </label>
+
+      <label class="field">
+        <span>スポット名 <em class="req">必須</em></span>
+        <input id="f_name" type="text" placeholder="例）ブルーボトルコーヒー 渋谷" />
+      </label>
+
+      <label class="field">
+        <span>カテゴリー</span>
+        <div id="categoryPicker" class="chip-row"></div>
+      </label>
+
+      <label class="field">
+        <span>場所（住所や店名で検索）</span>
+        <div class="link-row">
+          <input id="f_search" type="text" placeholder="例）渋谷駅 / 店名 / 住所" />
+          <button id="searchBtn" type="button" class="btn small">検索</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+        <small id="locStatus" class="muted">場所は未設定です。検索するか、地図をタップして指定できます。</small>
+      </label>
+
+      <label class="field">
+        <span>メモ</span>
+        <textarea id="f_memo" rows="2" placeholder="おすすめメニュー・営業時間・一緒に行く人など"></textarea>
+      </label>
+
+      <label class="field check">
+        <input id="f_visited" type="checkbox" />
+        <span>もう行った（訪問済み）</span>
+      </label>
+
+      <div class="sheet-actions">
+        <button id="deleteSpotBtn" class="btn danger ghost hidden">削除</button>
+        <div class="spacer"></div>
+        <button id="cancelEditBtn" class="btn ghost">キャンセル</button>
+        <button id="saveSpotBtn" class="btn primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Share modal ===== -->
+  <div id="shareModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-scrim" data-close-share></div>
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h2>リストを共有</h2>
+      <p class="muted">このリンクを知っている人は、あなたのリストを開いて自分のWhimoに取り込めます。</p>
+      <div class="share-link-box">
+        <input id="shareUrl" type="text" readonly />
+        <button id="copyShareBtn" class="btn primary small">コピー</button>
+      </div>
+      <div id="shareInfo" class="muted small"></div>
+      <div class="sheet-actions">
+        <div class="spacer"></div>
+        <button class="btn ghost" data-close-share>閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Leaflet script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+          crossorigin="" referrerpolicy="no-referrer"></script>
+  <!-- App -->
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
