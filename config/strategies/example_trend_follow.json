@@ -1,0 +1,28 @@
+{
+  "name": "EMA trend follow (example / placeholder)",
+  "timeframe": "M5",
+  "expiry_bars": 1,
+  "cooldown_bars": 1,
+  "payout_rate": 0.85,
+  "indicators": {
+    "ema_fast": {"type": "ema", "period": 9},
+    "ema_slow": {"type": "ema", "period": 21},
+    "rsi14": {"type": "rsi", "period": 14}
+  },
+  "filters": [
+    {"left": "rsi14", "op": "between", "right": [20, 80]}
+  ],
+  "call": {
+    "logic": "all",
+    "conditions": [
+      {"left": "ema_fast", "op": "cross_above", "right": "ema_slow"}
+    ]
+  },
+  "put": {
+    "logic": "all",
+    "conditions": [
+      {"left": "ema_fast", "op": "cross_below", "right": "ema_slow"}
+    ]
+  },
+  "_note": "順張り(トレンドフォロー)の雛形。あなたのルールに置き換えて使う。"
+}

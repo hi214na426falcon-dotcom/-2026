@@ -1,0 +1,28 @@
+{
+  "name": "RSI reversal (example / placeholder)",
+  "timeframe": "M1",
+  "expiry_bars": 1,
+  "cooldown_bars": 2,
+  "payout_rate": 0.85,
+  "indicators": {
+    "rsi14": {"type": "rsi", "period": 14},
+    "sma50": {"type": "sma", "period": 50},
+    "bb": {"type": "bollinger", "period": 20, "mult": 2.0}
+  },
+  "filters": [],
+  "call": {
+    "logic": "all",
+    "conditions": [
+      {"left": "rsi14", "op": "<", "right": 30},
+      {"left": "close", "op": "cross_above", "right": "bb.lower"}
+    ]
+  },
+  "put": {
+    "logic": "all",
+    "conditions": [
+      {"left": "rsi14", "op": ">", "right": 70},
+      {"left": "close", "op": "cross_below", "right": "bb.upper"}
+    ]
+  },
+  "_note": "これは動作確認用の仮ルールです。あなたが貼る文字起こしから抽出した『アルパカの考え方』をこの形式に置き換えてください。"
+}
