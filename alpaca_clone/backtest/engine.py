@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence
 
 from ..core.models import AccountState, Candle, Direction, Trade, TradeOutcome
-from ..strategy.engine import RuleEngine, StrategyConfig
+from ..strategy.engine import StrategyConfig, build_engine
 
 
 @dataclass
@@ -130,7 +130,7 @@ class Backtester:
         return self.stake
 
     def run(self, candles: Sequence[Candle]) -> BacktestResult:
-        engine = RuleEngine(self.config, candles)
+        engine = build_engine(self.config, candles)
         account = AccountState(balance=self.starting_balance)
         result = BacktestResult(
             starting_balance=self.starting_balance,

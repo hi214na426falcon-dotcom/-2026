@@ -62,6 +62,46 @@ def _cmd_backtest(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_analyze(args: argparse.Namespace) -> int:
+    """アルパカ式の判定レポート(§16)を出力する。"""
+    from .strategy.alpaca import AlpacaEngine
+
+    config = load_strategy(args.config)
+    if config.strategy_type != "alpaca_scoring":
+        print("analyze は type=alpaca_scoring の戦略にのみ対応しています。")
+        return 2
+    if args.csv:
+        candles = load_candles_csv(args.csv)
+    else:
+        candles = cyclical_feed(n=args.n, seed=args.seed)
+        print(f"(--csv 未指定のため合成データ {len(candles)} 本で判定)\n")
+
+    eng = AlpacaEngine(config, candles)
+    idx = args.index if args.index is not None else len(candles) - 1
+    if idx < eng.warmup:
+        print(f"index={idx} は warmup({eng.warmup}) 未満です。より後方の足を指定してください。")
+        return 2
+    d = eng.decide(idx)
+
+    label = {"HIGH": "▲ HIGH", "LOW": "▼ LOW", "SKIP": "― 見送り"}[d.signal]
+    print(f"=== アルパカ式 判定レポート (index={idx}) ===")
+    print(f"① 上位足        : {d.htf_trend}")
+    print(f"② 高値安値/構造 : {d.trend} (強度 {d.trend_strength}/3)")
+    print(f"③ ベースライン  : {d.baseline}  乖離 {d.deviation_atr} ATR")
+    print(f"④ サポレジ      : S={d.support}  R={d.resistance}")
+    print(f"⑤ ノイズ判定    : {d.noise}")
+    print(f"⑥ スコア        : HIGH+{d.high_score} / LOW+{d.low_score} / net {d.net_score}")
+    print(f"⑦ 根拠          : " + ("; ".join(d.reasons) if d.reasons else "-"))
+    print(f"⑧ 判定          : {label}")
+    print(f"⑨ 確信度        : {d.confidence}% (確率保証ではない)")
+    print(f"⑪ 撤回条件      : " + ("; ".join(d.invalidation_conditions) or "-"))
+    if args.json:
+        Path(args.json).write_text(
+            json.dumps(d.to_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"\n判定JSON 出力: {args.json}")
+    return 0
+
+
 def _cmd_serve(args: argparse.Namespace) -> int:
     from .server.session import PaperSession
     from .server.app import serve
@@ -99,6 +139,15 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--stake-mode", choices=["fixed", "percent"], default="fixed")
     b.add_argument("--json", default=None, help="結果を JSON 出力")
     b.set_defaults(func=_cmd_backtest)
+
+    a = sub.add_parser("analyze", help="アルパカ式の判定レポート(§16)を出力")
+    a.add_argument("config")
+    a.add_argument("--csv", default=None)
+    a.add_argument("--index", type=int, default=None, help="判定する足(既定は最終足)")
+    a.add_argument("--n", type=int, default=400)
+    a.add_argument("--seed", type=int, default=7)
+    a.add_argument("--json", default=None, help="判定JSONを出力")
+    a.set_defaults(func=_cmd_analyze)
 
     s = sub.add_parser("serve", help="ダッシュボードで常駐ペーパー運用")
     s.add_argument("config")

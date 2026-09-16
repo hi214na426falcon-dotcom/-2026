@@ -22,15 +22,32 @@
 
 ## 「アルパカの考え方」はどこにある？
 
-動画から手法を取り込む流れはこうです（私＝Claude は動画を直接視聴できないため）:
+アルパカ式の中核＝**プライスアクション/相場構造**（トレンド＝高値安値の切上げ/切下げ、
+サポレジ、トレンドライン、ベースライン乖離、ノイズ、マルチタイムフレーム）。
+出力は **HIGH / LOW / 見送り の3値＋根拠＋確信度**。この思想は
+**[knowledge/alpaca_method.md](knowledge/alpaca_method.md)** に構造化してある
+（出典レベル 🟢公開 / 🟡解釈 / 🔵設計 を明記）。
 
-1. あなたが動画の**字幕/文字起こし**を貼る
-2. 私がそこから**ロジック**を抽出し、`config/strategies/*.json` のルールに変換する
-3. `backtest` で検証 → `paper` で運用模擬 → 必要なら実弾差込口を配線
+動画から手法を取り込む流れ（私＝Claude は動画を直接視聴できないため）:
+
+1. あなたが動画の**字幕/文字起こし**を `knowledge/transcripts/` に貼る
+2. 私がそこから**ロジック**を抽出し、スコアの重み/しきい値（`config/strategies/*.json`）に反映
+3. `backtest` で検証 → `analyze` で判定レポート確認 → `paper` で運用模擬 → 必要なら実弾差込口を配線
 
 詳しい渡し方は **[docs/STRATEGY_TEMPLATE.md](docs/STRATEGY_TEMPLATE.md)** を参照。
 
+### 2種類のエンジン
+- `type: "alpaca_scoring"` … **アルパカ式スコアリング**（構造検出→§10/§11のスコア→HIGH/LOW/SKIP）
+- `type: "rules"` … 指標ベースの宣言的ルール（RSI/移動平均などの汎用エンジン）
+
 ルールはコードではなく JSON なので、手法の差し替え・微調整はコードを触らずにできます。
+
+```bash
+# アルパカ式でバックテスト
+python3 -m alpaca_clone.cli backtest config/strategies/alpaca_default.json --csv data.csv
+# ある足の判定レポート(§16形式)＋判定JSON(§23)
+python3 -m alpaca_clone.cli analyze  config/strategies/alpaca_default.json --csv data.csv --json out.json
+```
 
 ---
 
@@ -60,16 +77,21 @@ python3 -m unittest discover -s tests
 ```
 alpaca_clone/
 ├── core/         データ型(Candle, Signal, Trade…) と 指標(SMA/EMA/RSI/BB/ATR/…)
-├── strategy/     ルールエンジン ← 「アルパカの考え方」の中身(宣言的JSON)
+├── structure/    相場構造の検出(スイング/トレンド/サポレジ/TL/ベースライン/MTF/ノイズ)
+├── strategy/
+│   ├── engine.py 指標ベースの宣言的ルールエンジン(type=rules)
+│   └── alpaca.py アルパカ式スコアリング(type=alpaca_scoring) ← §10/§11
 ├── data/         CSV読込・検証用の合成データ生成
 ├── backtest/     過去データ検証（勝率/損益分岐/PF/期待値/DD/最大連敗）
 ├── paper/        ペーパートレード（仮想口座で1本ずつ処理）
 ├── execution/    PaperBroker（実装済） / BrowserBrokerAdapter（差込口・既定無効）
 ├── server/       常駐Botの制御ダッシュボード（stdlibのHTTPサーバ）
-└── cli.py        gen-data / backtest / serve
-config/strategies/ 戦略JSON（example_* は動作確認用の仮ルール）
+└── cli.py        gen-data / backtest / analyze / serve
+knowledge/         alpaca_method.md（手法の構造化）/ transcripts（文字起こし置き場）
+config/strategies/ 戦略JSON（alpaca_default.json = アルパカ式 / example_* = 汎用ルール）
 docs/              文字起こし→ルール化テンプレート
-tests/             単体テスト
+tests/             単体テスト（26件）
+CLAUDE.md          プロジェクト規約（禁止事項・実装方針）
 ```
 
 ---

@@ -1,0 +1,36 @@
+{
+  "name": "Alpaca method (structure scoring)",
+  "type": "alpaca_scoring",
+  "timeframe": "M1",
+  "expiry_bars": 1,
+  "cooldown_bars": 3,
+  "payout_rate": 0.85,
+  "structure": {
+    "swing_left": 2,
+    "swing_right": 2,
+    "htf_ratio": 10,
+    "baseline_period": 20,
+    "atr_period": 14,
+    "touch_atr": 0.5,
+    "noise_max": 0.5,
+    "level_tol_atr": 0.4,
+    "tl_swings": 3
+  },
+  "scoring": {
+    "weights": {
+      "htf_trend": 3,
+      "structure_step": 2,
+      "level_touch": 2,
+      "trendline_bounce": 2,
+      "pullback_bounce": 2,
+      "mtf_aligned": 2,
+      "strong_structure": 2
+    },
+    "strong_threshold": 7,
+    "weak_threshold": 4,
+    "allow_weak": false,
+    "min_reasons": 2,
+    "require_mtf_alignment": true
+  },
+  "_note": "§10/§11 のアルパカ式スコアリング。しきい値・重みは実データで最適化する前提の設計値。"
+}

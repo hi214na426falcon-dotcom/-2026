@@ -10,7 +10,7 @@ from typing import Callable, Dict, List, Optional
 
 from ..core.models import Candle, Direction, Trade, TradeOutcome
 from ..execution.broker import Broker, Order, PaperBroker
-from ..strategy.engine import RuleEngine, StrategyConfig
+from ..strategy.engine import StrategyConfig, build_engine
 
 EventCB = Callable[[dict], None]
 
@@ -67,7 +67,7 @@ class PaperTrader:
         if cur <= self._busy_until_index:
             return
 
-        engine = RuleEngine(self.config, self.history)
+        engine = build_engine(self.config, self.history)
         if cur < engine.warmup:
             return
 

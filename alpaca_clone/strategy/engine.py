@@ -57,9 +57,16 @@ _COMPARATORS = {
 
 @dataclass
 class StrategyConfig:
-    """パース済みの戦略設定。"""
+    """パース済みの戦略設定。
+
+    strategy_type:
+      - "rules"          … 宣言的ルールエンジン(RuleEngine, このファイル)
+      - "alpaca_scoring" … アルパカ式スコアリング(structure + alpaca.AlpacaEngine)
+    raw には元の JSON 全体を保持し、各エンジンが必要な追加設定を読む。
+    """
 
     name: str
+    strategy_type: str = "rules"
     expiry_bars: int = 1
     timeframe: str = "M1"
     cooldown_bars: int = 0
@@ -68,11 +75,13 @@ class StrategyConfig:
     filters: List[dict] = field(default_factory=list)
     call: dict = field(default_factory=lambda: {"logic": "all", "conditions": []})
     put: dict = field(default_factory=lambda: {"logic": "all", "conditions": []})
+    raw: dict = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, d: dict) -> "StrategyConfig":
         return cls(
             name=d.get("name", "unnamed"),
+            strategy_type=d.get("type", "rules"),
             expiry_bars=int(d.get("expiry_bars", 1)),
             timeframe=d.get("timeframe", "M1"),
             cooldown_bars=int(d.get("cooldown_bars", 0)),
@@ -81,6 +90,7 @@ class StrategyConfig:
             filters=d.get("filters", []),
             call=d.get("call", {"logic": "all", "conditions": []}),
             put=d.get("put", {"logic": "all", "conditions": []}),
+            raw=dict(d),
         )
 
 
@@ -271,3 +281,16 @@ class RuleEngine:
         conds = block.get("conditions", [])
         parts = [f"{c['left']} {c['op']} {c.get('right')}" for c in conds]
         return f"{block.get('logic', 'all')}[{', '.join(parts)}]"
+
+
+def build_engine(config: StrategyConfig, candles):
+    """設定の strategy_type に応じてエンジンを生成する共通ファクトリ。
+
+    どのエンジンも `.warmup`(int) と `.evaluate(index) -> Signal` を備える。
+    """
+    if config.strategy_type == "alpaca_scoring":
+        from .alpaca import AlpacaEngine  # 遅延 import(循環回避)
+        return AlpacaEngine(config, candles)
+    if config.strategy_type in ("rules", "", None):
+        return RuleEngine(config, candles)
+    raise ValueError(f"未知の strategy type: {config.strategy_type!r}")
