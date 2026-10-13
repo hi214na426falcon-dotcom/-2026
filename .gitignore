@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.ex4
+*.ex5
+*.mq4
+/reports/

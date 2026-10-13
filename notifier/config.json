@@ -1,0 +1,59 @@
+{
+  "_comment": "Mr.2 Gold 運用ナビの設定。値を変えれば判定ルールを調整できます（時間は分単位）。資金とロットは GitHub の Variables（EA_CAPITAL_JPY / EA_LOT）で上書きできます。",
+  "capital_jpy": 100000,
+  "lot": 0.01,
+  "watch_currencies": [
+    "USD"
+  ],
+  "red_keywords": [
+    "Non-Farm Employment Change",
+    "CPI m/m",
+    "CPI y/y",
+    "Federal Funds Rate",
+    "FOMC Statement",
+    "FOMC Press Conference",
+    "FOMC Economic Projections"
+  ],
+  "red_exclude_keywords": [
+    "ADP"
+  ],
+  "red_window": {
+    "before_min": 120,
+    "after_min": 180
+  },
+  "yellow_impacts": [
+    "High"
+  ],
+  "yellow_keywords": [
+    "Fed Chair",
+    "FOMC Meeting Minutes",
+    "Core PCE Price Index"
+  ],
+  "yellow_window": {
+    "before_min": 30,
+    "after_min": 60
+  },
+  "info_impacts": [
+    "Medium"
+  ],
+  "_stop_dates_comment": "終日停止する日（米国の休場・短縮取引日）。毎年更新してください。",
+  "stop_dates": {
+    "2026-11-26": "米感謝祭（NY休場・金は短縮取引）",
+    "2026-11-27": "感謝祭翌日（NY短縮取引・薄商い）",
+    "2027-03-26": "グッドフライデー（NY休場）"
+  },
+  "seasonal_stop_periods": [
+    {
+      "from": "12-23",
+      "to": "01-03",
+      "reason": "クリスマス〜年末年始（流動性低下・スプレッド拡大）"
+    }
+  ],
+  "volatility": {
+    "atr_ratio_caution": 1.3,
+    "atr_ratio_danger": 1.8,
+    "range_ratio_caution": 1.8,
+    "range_ratio_danger": 2.5
+  },
+  "mention_on_red": ""
+}

@@ -1,0 +1,54 @@
+name: Gold EA daily brief
+
+on:
+  schedule:
+    # 月〜金 05:07 JST に起動し、05:58 JST まで待ってから Discord に送信（Actions の起動遅延対策）
+    - cron: "7 20 * * 0-4"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Discord に送らずログに表示する"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: gold-ea-brief
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Send daily brief
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          EA_CAPITAL_JPY: ${{ vars.EA_CAPITAL_JPY }}
+          EA_LOT: ${{ vars.EA_LOT }}
+          EVENT_NAME: ${{ github.event_name }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            python notifier/daily_brief.py --wait-until 05:58
+          elif [ "$DRY_RUN" = "true" ]; then
+            python notifier/daily_brief.py --dry-run --force
+          else
+            python notifier/daily_brief.py --force
+          fi
+
+      # 公開リポジトリは 60 日間更新が無いと定期実行が止まるため、毎回ワークフローを再有効化しておく
+      - name: Keep schedule alive
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/daily-gold-brief.yml/enable" || true

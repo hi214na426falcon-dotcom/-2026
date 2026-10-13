@@ -1,0 +1,17 @@
+{
+  "_comment": "ForexFactory が取得できない日・来週以降の予備スケジュール（米国の最重要指標のみ, 米東部時間）。毎年更新してください。CPI/雇用統計の日付は BLS 公表予定に基づく（要確認）。",
+  "events": [
+    {"title": "CPI m/m", "country": "USD", "date": "2026-10-14T08:30:00-04:00", "impact": "High"},
+    {"title": "Core CPI m/m", "country": "USD", "date": "2026-10-14T08:30:00-04:00", "impact": "High"},
+    {"title": "Federal Funds Rate", "country": "USD", "date": "2026-10-28T14:00:00-04:00", "impact": "High"},
+    {"title": "FOMC Press Conference", "country": "USD", "date": "2026-10-28T14:30:00-04:00", "impact": "High"},
+    {"title": "Non-Farm Employment Change", "country": "USD", "date": "2026-11-06T08:30:00-05:00", "impact": "High"},
+    {"title": "CPI m/m", "country": "USD", "date": "2026-11-10T08:30:00-05:00", "impact": "High"},
+    {"title": "Bank Holiday", "country": "USD", "date": "2026-11-26T00:00:00-05:00", "impact": "Holiday"},
+    {"title": "Non-Farm Employment Change", "country": "USD", "date": "2026-12-04T08:30:00-05:00", "impact": "High"},
+    {"title": "Federal Funds Rate", "country": "USD", "date": "2026-12-09T14:00:00-05:00", "impact": "High"},
+    {"title": "FOMC Economic Projections", "country": "USD", "date": "2026-12-09T14:00:00-05:00", "impact": "High"},
+    {"title": "FOMC Press Conference", "country": "USD", "date": "2026-12-09T14:30:00-05:00", "impact": "High"},
+    {"title": "CPI m/m", "country": "USD", "date": "2026-12-10T08:30:00-05:00", "impact": "High"}
+  ]
+}
