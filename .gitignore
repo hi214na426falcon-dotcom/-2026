@@ -4,3 +4,7 @@ __pycache__/
 *.ex5
 *.mq4
 /reports/
+automation/config.json
+/data/
+*.hst
+*.bi5
