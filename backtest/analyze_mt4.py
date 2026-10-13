@@ -768,6 +768,8 @@ def sec_metrics(c: dict) -> list[str]:
 def sec_wf(c: dict) -> list[str]:
     wf, cur, is_m, oos_m = c["wf"], c["cur"], c["is_m"], c["oos_m"]
     out = [f"## 3. ウォークフォワード分析（IS {is_m}ヶ月 → OOS {oos_m}ヶ月、{oos_m}ヶ月ずつずらす）", ""]
+    if c.get("wf_skipped"):
+        return out + ["このレポートでは省略しました（--no-wf）。", ""]
     if not wf:
         return out + [f"データ期間が IS+OOS（{is_m + oos_m}ヶ月）に満たないため省略しました。", ""]
     out += ["IS（インサンプル＝評価・調整に使う期間）の直後の OOS（アウトオブサンプル＝未知の期間）で成績が再現するかを、"
@@ -932,7 +934,7 @@ def collect_warnings(ds: Dataset, trades: list[Trade], cur: str, usdjpy: float |
     return w
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog="analyze_mt4.py", description=__doc__, add_help=False,
                                  usage="%(prog)s ファイル [ファイル ...] [オプション]",
                                  formatter_class=JaHelpFormatter)
@@ -949,6 +951,7 @@ def main(argv: list[str] | None = None) -> int:
     g = ap.add_argument_group("ウォークフォワード")
     g.add_argument("--is-months", type=int, default=12, help="IS（評価期間）の月数（既定 12）")
     g.add_argument("--oos-months", type=int, default=3, help="OOS（検証期間）の月数＝ずらし幅（既定 3）")
+    g.add_argument("--no-wf", action="store_true", help="ウォークフォワード分析を省略する")
     g = ap.add_argument_group("モンテカルロ・推奨ロット")
     g.add_argument("--mc-runs", type=int, default=10000, help="モンテカルロ試行回数（既定 10000）")
     g.add_argument("--seed", type=int, default=42, help="乱数シード（既定 42、同じ値なら同じ結果）")
@@ -960,17 +963,12 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--out", help="Markdown レポートの保存先（画面にも表示します）")
     g.add_argument("--csv", help="ウォークフォワード各ウィンドウの指標を CSV で保存")
     g.add_argument("-h", "--help", action="help", help="このヘルプを表示して終了")
-    args = ap.parse_args(argv)
-    try:
-        sys.stdout.reconfigure(errors="replace")
-    except (AttributeError, ValueError):
-        pass
+    return ap
 
-    try:
-        ds = load_all(args.files)
-    except (OSError, ValueError) as e:
-        print(f"エラー: {e}", file=sys.stderr)
-        return 1
+
+def run_analysis(args: argparse.Namespace) -> dict:
+    """読み込みから推奨ロットまで計算し、レポート用のコンテキストを返す（失敗時は OSError / ValueError）."""
+    ds = load_all(args.files)
     if args.deposit:
         ds.deposit = args.deposit
     if args.usdjpy:
@@ -987,8 +985,7 @@ def main(argv: list[str] | None = None) -> int:
     end = parse_day(args.end) + timedelta(days=1) if args.end else None
     tr = [t for t in all_tr if (not start or t.close_time >= start) and (not end or t.close_time < end)]
     if not tr:
-        print("エラー: 指定期間に取引がありません", file=sys.stderr)
-        return 1
+        raise ValueError("指定期間に取引がありません")
     dep0 = balance_at(all_tr, deposit, start) if start else deposit
     filter_text = " ".join(x for x in (f"{args.start} から" if args.start else "", f"{args.end} まで" if args.end else "") if x)
 
@@ -1000,13 +997,12 @@ def main(argv: list[str] | None = None) -> int:
     rec = [t for t in tr if t.close_time >= r_start]
     span_start = max(r_start, start) if start else r_start
 
-    print("分析中（モンテカルロは少し時間がかかります）...", file=sys.stderr)
     periods = {}
     for key, trades, dep, s in (("A", tr, dep0, start), ("B", rec, balance_at(tr, dep0, r_start), span_start)):
         baskets = group_baskets(trades)
         periods[key] = {"metrics": compute_metrics(trades, dep, s, end - timedelta(seconds=1) if end else None),
                         "baskets": baskets, "mc": monte_carlo(baskets, dep, args.mc_runs, args.seed)}
-    wf = walk_forward(tr, dep0, args.is_months, args.oos_months)
+    wf = [] if args.no_wf else walk_forward(tr, dep0, args.is_months, args.oos_months)
     wf_sum = (wf_summary(wf, "is", "oos", args.is_months, args.oos_months),
               wf_summary(wf, "is_blk", "oos_blk", args.is_months, args.oos_months)) if wf else None
 
@@ -1018,7 +1014,7 @@ def main(argv: list[str] | None = None) -> int:
         ratio = eq[0] / bal_dd_all
         safety = max(args.safety, ratio)
         safety_reason = f"テスターの含み損DD ÷ 残高DD = {ratio:.2f} と {args.safety:g} の大きい方"
-    lot_text = "-"
+    lot_text, lot = "-", None
     if dd99 is not None:
         lot = recommend_lot(args.capital, dd99, args.max_dd_pct, safety)
         if math.isinf(lot):
@@ -1029,21 +1025,58 @@ def main(argv: list[str] | None = None) -> int:
             need = [required_capital(x, dd99, args.max_dd_pct, safety) for x in (0.01, 0.02)]
             lot_text = (f"**資金不足**（0.01ロットに必要な資金 {need[0]:,.0f} 円、0.02ロットなら {need[1]:,.0f} 円）")
 
-    ctx = {"ds": ds, "files": args.files, "trades": tr, "cur": cur, "deposit": deposit, "usdjpy": args.usdjpy,
-           "filter_text": filter_text, "A": periods["A"], "B": periods["B"],
-           "label_a": "全期間" if not filter_text else "指定期間", "label_b": label_b,
-           "wf": wf, "wf_sum": wf_sum, "is_m": args.is_months, "oos_m": args.oos_months,
-           "dd99": dd99, "safety": safety, "safety_reason": safety_reason, "capital": args.capital,
-           "max_dd_pct": args.max_dd_pct, "lot_text": lot_text, "bal_dd_all": bal_dd_all,
-           "warnings": collect_warnings(ds, tr, cur, args.usdjpy)}
+    return {"ds": ds, "files": args.files, "trades": tr, "cur": cur, "deposit": deposit, "usdjpy": args.usdjpy,
+            "filter_text": filter_text, "A": periods["A"], "B": periods["B"],
+            "label_a": "全期間" if not filter_text else "指定期間", "label_b": label_b,
+            "wf": wf, "wf_sum": wf_sum, "wf_skipped": args.no_wf, "is_m": args.is_months, "oos_m": args.oos_months,
+            "dd99": dd99, "safety": safety, "safety_reason": safety_reason, "capital": args.capital,
+            "max_dd_pct": args.max_dd_pct, "lot_text": lot_text, "lot": lot, "bal_dd_all": bal_dd_all,
+            "warnings": collect_warnings(ds, tr, cur, args.usdjpy)}
+
+
+def summarize(c: dict) -> dict:
+    """自動実行・通知用の要約（金額は c["cur"] 建て、% は数値、不明は None）."""
+    def pick(m: dict) -> dict:
+        return {k: m[k] for k in ("trades", "net", "pf", "win_rate", "max_dd_pct", "sharpe", "cagr")} | {
+            "start": f"{m['start']:%Y-%m-%d}" if m["start"] else None, "end": f"{m['end']:%Y-%m-%d}" if m["end"] else None}
+
+    eq = c["ds"].meta.get("eq_dd") if c["ds"].kind == "tester" else None
+    s0 = c["wf_sum"][0] if c["wf_sum"] else {}
+    s1 = c["wf_sum"][1] if c["wf_sum"] else {}
+    return {"currency": c["cur"], "all": pick(c["A"]["metrics"]), "recent": pick(c["B"]["metrics"]),
+            "recent_label": c["label_b"], "eq_dd_pct": eq[1] if eq else None,
+            "quality": c["ds"].meta.get("quality"), "wf_windows": len(c["wf"]),
+            "wf_verdict": s0.get("verdict"), "wf_verdict_block": s1.get("verdict"), "wfe": s0.get("wfe"),
+            "wf_profitable_pct": s0.get("profitable_pct"), "dd99_001": c["dd99"], "lot": c["lot"],
+            "lot_text": c["lot_text"].replace("**", ""), "warnings": list(c["warnings"])}
+
+
+def analyze(argv: list[str]) -> tuple[str, dict]:
+    """CLI と同じ引数で分析し (Markdown レポート, 要約 dict) を返す。画面表示・ファイル保存はしない."""
+    ctx = run_analysis(build_parser().parse_args(argv))
+    return build_report(ctx), summarize(ctx)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    try:
+        sys.stdout.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
+    print("分析中（モンテカルロは少し時間がかかります）...", file=sys.stderr)
+    try:
+        ctx = run_analysis(args)
+    except (OSError, ValueError) as e:
+        print(f"エラー: {e}", file=sys.stderr)
+        return 1
     report = build_report(ctx)
     print(report)
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             f.write(report)
         print(f"レポートを保存しました: {args.out}", file=sys.stderr)
-    if args.csv and wf:
-        write_wf_csv(args.csv, wf)
+    if args.csv and ctx["wf"]:
+        write_wf_csv(args.csv, ctx["wf"])
         print(f"ウィンドウ別CSVを保存しました: {args.csv}", file=sys.stderr)
     return 0
 
