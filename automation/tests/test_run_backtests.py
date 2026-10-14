@@ -7,6 +7,7 @@ from __future__ import annotations
 import contextlib
 import email.parser
 import email.policy
+import http.client
 import io
 import json
 import os
@@ -204,6 +205,18 @@ class LaunchTests(unittest.TestCase):
         self.assertIn("強制終了", str(cm.exception))
         self.assertFalse(os.path.exists(os.path.join(self.mt4, "auto", "5y.ini")))
 
+    def test_dry_run_ini_has_no_password(self):
+        os.makedirs(os.path.dirname(self.report))
+        open(self.report, "w").close()
+        cfg = {**self.cfg, "login": "12345", "password": "S3cret!"}
+        with mock.patch.object(rb.subprocess, "run") as run, contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(rb.run_tester(cfg, self.plan, dry_run=True), self.report)
+        run.assert_not_called()
+        with open(os.path.join(self.mt4, "auto", "5y.ini"), encoding="cp932") as f:
+            ini = f.read()
+        self.assertIn("Password=********", ini)
+        self.assertNotIn("S3cret", ini + out.getvalue())
+
     def test_setup_problems(self):
         probs = rb.setup_problems({**self.cfg, "parameters_file": "mr2.set"})
         self.assertEqual(len(probs), 3)  # terminal.exe / EA / .set
@@ -244,7 +257,35 @@ class AlertTests(unittest.TestCase):
         self.assertEqual(self.level(result("recent12m"), result("5y_stress", lot=0.0, stress=True)), "green")
         self.assertEqual(self.level(result("recent12m"), result("5y_stress", pf=0.9, stress=True)), "yellow")
         self.assertEqual(self.level(result("recent12m", prev={"date": "2026-10-10", "pf": 1.9})), "yellow")
-        self.assertEqual(self.level(rb.RunResult(result("x").plan, error="boom")), "red")
+
+    def test_failures_are_gray_not_red(self):
+        failed = rb.RunResult(result("recent12m").plan, error="MT4 already running")
+        level, reasons = rb.evaluate([failed, rb.RunResult(result("5y").plan, error="x")], self.cfg)
+        self.assertEqual(level, "gray")  # ツールの失敗で「稼働停止を検討」にしない
+        self.assertIn("EA の成績が悪いという意味ではありません", reasons[0])
+        # 判定基準の直近ランだけ失敗 → 他が良くても「このまま稼働」にしない
+        level, reasons = rb.evaluate([result("5y", wfa=True, verdict="合格"), failed], self.cfg)
+        self.assertEqual(level, "gray")
+        self.assertIn("直近（recent12m）のテストが失敗したため", reasons[0])
+        # 成績の黄が別にあれば黄。失敗も理由に残る
+        level, reasons = rb.evaluate([result("5y", wfa=True, verdict="要注意"), failed], self.cfg)
+        self.assertEqual(level, "yellow")
+        self.assertTrue(any("失敗" in x for x in reasons))
+        level, reasons = rb.evaluate([result("recent12m"), rb.RunResult(result("since_v2").plan, error="x")], self.cfg)
+        self.assertEqual(level, "gray")
+        self.assertIn("since_v2 のテストが失敗しました", reasons[0])
+
+    def test_deposit_mismatch(self):
+        cfg = make_cfg()  # USD 口座・140000円 ÷ 158.4 = 883.84 USD
+        self.assertIsNone(rb.deposit_mismatch(cfg, {"tester_deposit": 885.0}))
+        self.assertIsNone(rb.deposit_mismatch(cfg, {"tester_deposit": None}))
+        self.assertEqual(rb.deposit_mismatch(cfg, {"tester_deposit": 140000.0}), 140000.0)
+        r = result("recent12m", dd=10, eq=None)
+        r.summary["deposit_mismatch"] = 140000.0  # analyze_report が含み損DD% を消した後の状態
+        level, reasons = rb.evaluate([r], cfg)
+        self.assertEqual(level, "yellow")
+        self.assertIn("テスターの初期証拠金 140,000.00 USD が設定の資金 883.84 USD と違います", reasons[0])
+        self.assertIn("含み損込み: テスターの初期証拠金が違うため不明", rb.run_value(r))
 
     def test_reasons_text(self):
         level, reasons = rb.evaluate([result("recent12m", pf=1.05, dd=30)], self.cfg)
@@ -297,12 +338,18 @@ class DiscordTests(unittest.TestCase):
         p = rb.build_payload(self.results, level, reasons, [], self.cfg, date(2026, 10, 17))
         emb = p["embeds"][0]
         self.assertEqual(len(emb["fields"]), 3)
-        self.assertEqual(level, "green")
-        self.assertIn("このまま稼働", emb["description"])
-        self.assertIn("一部のテストが失敗", emb["description"])
-        self.assertEqual(emb["color"], rb.LEVELS["yellow"][0])  # 失敗があれば緑にはしない
+        self.assertEqual(level, "gray")  # 失敗があれば「このまま稼働」にはしない
+        self.assertEqual(emb["color"], rb.LEVELS["gray"][0])
+        self.assertTrue(emb["description"].startswith("⚪ **判定: 保留"))
+        self.assertIn("since_v2 のテストが失敗しました", emb["description"])
+        self.assertNotIn("問題なし", emb["description"])
+        level, reasons = rb.evaluate(self.results[:2], self.cfg)
         ok = rb.build_payload(self.results[:2], level, reasons, [], self.cfg, date(2026, 10, 17))["embeds"][0]
-        self.assertEqual(ok["color"], rb.LEVELS["green"][0])
+        self.assertEqual((level, ok["color"]), ("green", rb.LEVELS["green"][0]))
+        self.assertIn("・直近成績・ウォークフォワード・PF・推奨ロットに問題なし", ok["description"])
+        only5y = rb.build_payload(self.results[:1], "green", [], [], self.cfg, date(2026, 10, 17))["embeds"][0]
+        self.assertIn("直近 recent12m は今回実行していません", only5y["description"])
+        self.assertNotIn("直近成績", only5y["description"])
         v = emb["fields"][0]["value"]
         for s in ("PF 1.60", "純損益 +50,000円", "DD 10.0%（含み損込み 18.0%）", "シャープ 1.50", "WF 合格",
                   "推奨ロット 0.02", "前週比（2026-10-10）: PF +0.10", "DD +1.0pt"):
@@ -313,8 +360,12 @@ class DiscordTests(unittest.TestCase):
         red = rb.build_payload(self.results, "red", ["x"], [], self.cfg, date(2026, 10, 17))["embeds"][0]
         self.assertEqual(red["color"], rb.LEVELS["red"][0])
         self.assertIn("稼働停止を検討", red["description"])
-        noted = rb.build_payload(self.results, "green", [], ["ヒストリー失敗"], self.cfg, date(2026, 10, 17))
-        self.assertEqual(noted["embeds"][0]["color"], rb.LEVELS["yellow"][0])
+        noted = rb.build_payload(self.results[:2], "green", [], ["ヒストリー失敗"], self.cfg, date(2026, 10, 17))
+        self.assertEqual(noted["embeds"][0]["color"], rb.LEVELS["green"][0])  # 色とアイコン・文面を一致させる
+        self.assertIn("⚠️ ヒストリー失敗", noted["embeds"][0]["description"])
+        fail = rb.failure_payload("設定エラー", date(2026, 10, 17))["embeds"][0]
+        self.assertEqual(fail["color"], rb.LEVELS["gray"][0])
+        self.assertNotIn("稼働停止", fail["description"])
         self.assertIn("判定", rb.payload_text(p))
 
     def test_multipart(self):
@@ -359,6 +410,31 @@ class DiscordTests(unittest.TestCase):
         with self.assertRaises(rb.RunError) as cm:
             rb.post_discord("https://example.com/secret-hook", {"content": "x"}, opener=opener)
         self.assertNotIn("secret-hook", str(cm.exception))
+
+    def test_webhook_format(self):
+        ok = (WEBHOOK, WEBHOOK + "?wait=true", "https://canary.discord.com/api/webhooks/1/x",
+              "https://discordapp.com/api/webhooks/1/x?thread_id=123")
+        bad = (WEBHOOK + " abc", WEBHOOK + "\n", WEBHOOK + " " + WEBHOOK, WEBHOOK + "日本", "http://discord.com/api/webhooks/1/x")
+        self.assertTrue(all(rb.WEBHOOK_RE.fullmatch(u) for u in ok))
+        self.assertFalse(any(rb.WEBHOOK_RE.fullmatch(u) for u in bad))
+        for u in bad:
+            with self.assertRaises(rb.RunError) as cm:
+                rb.post_discord(u, {"content": "x"}, opener=lambda *a, **k: self.fail("送信してはいけない"))
+            self.assertNotIn("abc-DEF", str(cm.exception))
+
+    def test_invalid_url_error_hides_token(self):
+        def opener(req, timeout):
+            raise http.client.InvalidURL(f"URL can't contain control characters. {req.selector!r}")
+
+        with self.assertRaises(rb.RunError) as cm:
+            rb.post_discord(WEBHOOK, {"content": "x"}, opener=opener, sleep=lambda s: None)
+        self.assertNotIn("abc-DEF", str(cm.exception))
+        with mock.patch.object(rb, "post_discord", side_effect=ValueError(WEBHOOK)), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            rb.notify_failure(WEBHOOK, "x", date(2026, 10, 17))  # 例外を外に出さない
+        self.assertNotIn("abc-DEF", out.getvalue())
+        self.assertEqual(rb.redact(f"boom {WEBHOOK} '/api/webhooks/123456/abc-DEF_ghi x'", WEBHOOK).count("abc-DEF"), 0)
+        self.assertNotIn("TOKEN", rb.redact("'/api/webhooks/99/TOKEN abc'"))
 
 
 class EndToEndTests(unittest.TestCase):
@@ -464,6 +540,41 @@ class EndToEndTests(unittest.TestCase):
         self.assertIsNone(hist[1]["wf_verdict"])
         self.assertEqual(hist[2]["delta"]["pf"], 0)  # 同じレポートなので差は 0
         self.assertNotIn(WEBHOOK, out2)
+
+    def test_tester_deposit_mismatch(self):
+        cfg = rb.normalize_config({"mt4_dir": self.mt4, "reports_dir": self.reports, "mc_runs": 50})  # USD・883.84
+        plan = rb.RunPlan("recent12m", date(2022, 1, 7), date(2023, 1, 6), 34)
+        with contextlib.redirect_stdout(io.StringIO()):
+            md, s = rb.analyze_report(cfg, plan, self.sample, os.path.join(self.reports, "d"))
+        self.assertEqual(s["tester_deposit"], ms.DEPOSIT)  # 換算前のレポート記載値
+        self.assertEqual(s["deposit_mismatch"], ms.DEPOSIT)
+        self.assertIsNone(s["eq_dd_pct"])  # 別の証拠金で計算された含み損DD% は判定に使わない
+        with open(md, encoding="utf-8") as f:
+            self.assertIn("テスターの初期証拠金 1,000,000.00 USD", f.read())
+        self.assertEqual(rb.history_entry(date(2023, 1, 7), plan, s)["tester_deposit"], ms.DEPOSIT)
+
+    def test_unexpected_error_and_bad_webhook_hide_token(self):
+        posted = []
+        with mock.patch.object(rb, "run_all", side_effect=ValueError(f"boom '/api/webhooks/123456/abc-DEF_ghi'")), \
+                mock.patch.object(rb, "post_discord", side_effect=lambda url, p, *a, **k: posted.append(p)):
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+                os.environ.pop("DISCORD_WEBHOOK_URL", None)
+                rc = rb.main(["--config", self.cfg_path, "--today", "2023-01-07"])
+        self.assertEqual(rc, 1)
+        self.assertIn("ValueError", err.getvalue())
+        self.assertNotIn("abc-DEF", err.getvalue() + json.dumps(posted, ensure_ascii=False))
+        with open(self.cfg_path, encoding="utf-8") as f:
+            cfg = json.load(f)
+        cfg["discord_webhook_url"] = WEBHOOK + " abc"  # 余計な空白（貼り付けミス）
+        with open(self.cfg_path, "w", encoding="utf-8") as f:
+            json.dump(cfg, f)
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            rc, out = self.run_main("--today", "2023-01-07", "--skip-history")
+        self.assertEqual(rc, 1)  # 落ちずに終了する
+        self.assertIn("形式が正しくありません", out)
+        self.assertNotIn("abc-DEF", out + err.getvalue())
 
     def test_failure_notice(self):
         posted = []

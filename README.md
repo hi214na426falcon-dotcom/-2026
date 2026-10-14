@@ -6,7 +6,8 @@ XAUUSD 1分足EA「Mr.2 Gold」（MT4 / HFM専用）を安全に運用するた�
 |---|---|
 | `notifier/` | 毎朝 6:00 ごろ、当日の米国経済指標と金のボラティリティから「稼働 / 時間帯停止 / 終日停止」を判定して Discord に通知 |
 | `backtest/` | MT4 のバックテスト・取引履歴を読み込み、最大ドローダウン・シャープレシオ・PF・ウォークフォワード・モンテカルロ・推奨ロットを計算 |
-| `docs/` | ロットと資金量の考え方、ウォークフォワードテストの手順 |
+| `automation/` | あなたの PC で毎週、5年分の1分足ヒストリー更新 → MT4 バックテスト → ウォークフォワード分析 → Discord 報告 を自動実行 |
+| `docs/` | ロットと資金量の考え方、ウォークフォワードテストの手順、自動バックテストの設定手順 |
 
 > EA 本体（.ex4）や付属 PDF は販売元の配布物なので、このリポジトリ（公開）には置いていません。
 
@@ -71,3 +72,6 @@ python -m unittest discover -s notifier/tests -v                      # テス�
 
 ## 3. ウォークフォワードテスト・成績分析
 → [docs/walkforward.md](docs/walkforward.md)
+
+## 4. 毎週の自動バックテスト（PC側）
+→ [docs/automation.md](docs/automation.md)

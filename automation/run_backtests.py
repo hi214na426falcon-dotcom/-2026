@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import calendar
+import http.client
 import json
 import math
 import ntpath
@@ -33,12 +34,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 USER_AGENT = "Mozilla/5.0 (compatible; mr2-weekly-backtest/1.0)"
 NAME_RE = re.compile(r"^[A-Za-z0-9_-]{1,40}$")
-WEBHOOK_RE = re.compile(r"^https://(?:(?:ptb|canary)\.)?discord(?:app)?\.com/api/webhooks/\d+/[\w-]+")
+WEBHOOK_RE = re.compile(r"https://(?:(?:ptb|canary)\.)?discord(?:app)?\.com/api/webhooks/\d+/[\w-]+(?:\?[\w=&-]*)?",
+                        re.ASCII)  # fullmatch で使う（空白・2つ貼り付けなどを弾く）
+WEBHOOK_TOKEN_RE = re.compile(r"(webhooks/\d+/)[^\s'\"<>]+")
 SECRET_KEYS = ("Login", "Password", "Server")
-LEVELS = {  # 色, アイコン, 推奨アクション
+DEPOSIT_TOLERANCE = 0.02  # テスターの初期証拠金と分析用資金の許容差（2%）
+LEVELS = {  # 色, アイコン, 推奨アクション（赤・黄は成績が理由のときだけ使う）
     "green": (0x2ECC71, "🟢", "このまま稼働"),
     "yellow": (0xF1C40F, "🟡", "ロットを下げる"),
     "red": (0xE74C3C, "🔴", "稼働停止を検討"),
+    "gray": (0x95A5A6, "⚪", "保留（テストの失敗を確認してください）"),
 }
 DEFAULT_RUNS = [
     {"name": "5y", "years": 5, "wfa": True},
@@ -100,6 +105,14 @@ class RunResult:
 
 def log(msg: str) -> None:
     print(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] {msg}", flush=True)
+
+
+def redact(text: str, webhook: str = "") -> str:
+    """ログ・通知に Webhook のトークンを残さない."""
+    tail = webhook[webhook.find("/api/"):] if "/api/" in webhook else ""
+    for secret in filter(None, (webhook, tail)):
+        text = text.replace(secret, "<Webhook URL>")
+    return WEBHOOK_TOKEN_RE.sub(r"\1***", text)
 
 
 # ---------------------------------------------------------------- 日付・サーバー時間
@@ -222,6 +235,12 @@ def analysis_deposit(cfg: dict) -> float:
     return float(cfg["capital_jpy"]) / float(cfg["usdjpy"]) if usd else float(cfg["capital_jpy"])
 
 
+def deposit_mismatch(cfg: dict, summary: dict) -> float | None:
+    """レポートの初期証拠金（テスター設定）が分析用の資金と 2% 超ずれていれば、その金額を返す."""
+    td, dep = summary.get("tester_deposit"), analysis_deposit(cfg)
+    return float(td) if td and abs(float(td) - dep) > DEPOSIT_TOLERANCE * dep else None
+
+
 # ---------------------------------------------------------------- MT4
 
 def ini_text(cfg: dict, plan: RunPlan) -> str:
@@ -289,7 +308,8 @@ def missing_report_message(cfg: dict, name: str, elapsed: float) -> str:
              if elapsed < 30 else "")
     return (f"レポート {report_candidates(cfg, name)[0]} が作成されませんでした。{quick}"
             f"主な原因: (1) {mt4} の MT4 がすでに起動していた（起動中の画面が前に出るだけでテストは始まりません。閉じてから再実行）"
-            f" (2) EA「{cfg['expert']}」が MQL4\\Experts にない (3) {cfg['symbol']} 1分足のヒストリーがない"
+            f" (2) EA「{cfg['expert']}」が MQL4\\Experts にない・読み込めない（docs/automation.md の「うまくいかないとき」参照）"
+            f" (3) {cfg['symbol']} 1分足のヒストリーがない"
             f" (4) デモ口座にログインできない。{mt4}\\tester\\logs と {mt4}\\logs のログを確認してください")
 
 
@@ -315,7 +335,7 @@ def run_tester(cfg: dict, plan: RunPlan, dry_run: bool) -> str:
     if dry_run:
         print(f"----- {ini_path} -----\n{mask_secrets(text)}", flush=True)
         if os.path.isdir(cfg["mt4_dir"]):
-            write_ini(ini_path, text)
+            write_ini(ini_path, mask_secrets(text))  # 確認用。パスワードはファイルにも残さない
         if not (htm := find_report(cfg, plan.name)):
             raise RunError(f"既存のレポート {report_candidates(cfg, plan.name)[0]} がありません（ドライランのため MT4 は起動していません）")
         log(f"[{plan.name}] ドライラン: MT4 は起動せず既存のレポートを分析します")
@@ -391,11 +411,23 @@ def analyze_report(cfg: dict, plan: RunPlan, htm: str, day_dir: str) -> tuple[st
         report, summary = load_analyzer().analyze(argv)
     except (OSError, ValueError, SystemExit) as e:
         raise RunError(f"レポートの分析に失敗しました: {e}") from None
+    head = (f"> 自動バックテスト「{plan.name}」: {plan.start} 〜 {plan.end}（スプレッド {plan.spread}、"
+            f"{datetime.now():%Y-%m-%d %H:%M} 実行）\n")
+    if (td := deposit_mismatch(cfg, summary)) is not None:
+        summary["deposit_mismatch"] = td
+        summary["eq_dd_pct"] = None  # テスターの含み損DD% は別の証拠金で計算されているので判定に使わない
+        head += f">\n> **注意: {deposit_note(cfg, td)}**\n"
+        log(f"[{plan.name}] 警告: {deposit_note(cfg, td)}")
     md = os.path.join(day_dir, f"mr2_{plan.name}.md")
     with open(md, "w", encoding="utf-8") as f:
-        f.write(f"> 自動バックテスト「{plan.name}」: {plan.start} 〜 {plan.end}（スプレッド {plan.spread}、"
-                f"{datetime.now():%Y-%m-%d %H:%M} 実行）\n\n{report}")
+        f.write(f"{head}\n{report}")
     return md, summary
+
+
+def deposit_note(cfg: dict, tester_deposit: float) -> str:
+    cur = cfg["account_currency"]
+    return (f"テスターの初期証拠金 {tester_deposit:,.2f} {cur} が設定の資金 {analysis_deposit(cfg):,.2f} {cur} と違います"
+            "（含み損込みDD%・証拠金不足・ロスカットが正しく再現されません。docs/automation.md の手順1-7で直してください）")
 
 
 def finite(x, digits: int = 2):
@@ -408,7 +440,7 @@ def history_entry(today: date, plan: RunPlan, s: dict) -> dict:
             "spread": plan.spread, "trades": m["trades"], "net_jpy": finite(m["net"], 0), "pf": finite(m["pf"], 3),
             "max_dd_pct": finite(m["max_dd_pct"]), "eq_dd_pct": finite(s["eq_dd_pct"]), "sharpe": finite(m["sharpe"]),
             "wf_verdict": s["wf_verdict"] if plan.wfa else None, "dd99_001_jpy": finite(s["dd99_001"], 0),
-            "lot": finite(s["lot"]), "quality": finite(s["quality"])}
+            "lot": finite(s["lot"]), "quality": finite(s["quality"]), "tester_deposit": finite(s.get("tester_deposit"))}
 
 
 def load_history(path: str) -> list[dict]:
@@ -452,26 +484,13 @@ def append_history(path: str, entries: list[dict]) -> None:
 # ---------------------------------------------------------------- 判定
 
 def evaluate(results: list[RunResult], cfg: dict) -> tuple[str, list[str]]:
-    """(green / yellow / red, 理由のリスト)."""
-    a, red, yellow = cfg["alerts"], [], []
+    """(green / yellow / red / gray, 理由のリスト)。赤・黄は成績が理由、灰はテストの失敗（ツール側の問題）."""
+    a, red, yellow, gray = cfg["alerts"], [], [], []
     ok = [r for r in results if r.summary]
     if not ok:
-        return "red", ["すべてのテストが失敗したため成績を確認できません"]
+        return "gray", ["すべてのテストが失敗したため今週の成績を確認できません（EA の成績が悪いという意味ではありません）"]
     if rec := next((r for r in ok if r.plan.name == a["recent_run"]), None):
-        m, eq = rec.summary["all"], rec.summary["eq_dd_pct"]
-        pf, dd = m["pf"], max(m["max_dd_pct"] or 0.0, eq or 0.0)
-        tag = f"直近（{rec.plan.name}）"
-        if pf is not None and pf < a["red_pf_below"]:
-            red.append(f"{tag}の PF {pf:.2f} が {a['red_pf_below']} 未満")
-        elif pf is not None and pf < a["yellow_pf_below"]:
-            yellow.append(f"{tag}の PF {pf:.2f} が {a['yellow_pf_below']} 未満")
-        if dd > a["red_dd_pct_above"]:
-            red.append(f"{tag}の最大DD {dd:.1f}% が {a['red_dd_pct_above']}% 超")
-        elif dd > a["yellow_dd_pct_above"]:
-            yellow.append(f"{tag}の最大DD {dd:.1f}% が {a['yellow_dd_pct_above']}% 超")
-        prev_pf = (rec.prev or {}).get("pf")
-        if pf is not None and math.isfinite(pf) and isinstance(prev_pf, (int, float)) and prev_pf - pf >= a["yellow_pf_drop"]:
-            yellow.append(f"{tag}の PF が前週 {prev_pf:.2f} → {pf:.2f} に低下")
+        red, yellow = recent_alerts(rec, a)
     for r in ok:
         s, n = r.summary, r.plan.name
         if r.plan.wfa and s["wf_verdict"] and s["wf_verdict"] != "合格":
@@ -480,8 +499,46 @@ def evaluate(results: list[RunResult], cfg: dict) -> tuple[str, list[str]]:
             yellow.append(f"{n} の PF {s['all']['pf']:.2f} が 1.0 未満（負け）")
         lot = s["lot"]
         if not r.plan.stress and lot is not None and math.isfinite(lot) and lot < float(cfg["current_lot"]):
-            yellow.append(f"{n} の推奨ロット {fmt_lot(lot)} が運用ロット {float(cfg['current_lot']):.2f} を下回る")
-    return ("red" if red else "yellow" if yellow else "green"), red + yellow
+            yellow.append(f"{n} の推奨ロットが 0.01 未満（資金不足）" if lot < 0.01 else
+                          f"{n} の推奨ロット {lot:.2f} が運用ロット {float(cfg['current_lot']):.2f} を下回る")
+    if bad := [r for r in ok if r.summary.get("deposit_mismatch") is not None]:
+        names = ", ".join(r.plan.name for r in bad)
+        yellow.append(f"{deposit_note(cfg, bad[0].summary['deposit_mismatch'])}（対象: {names}）")
+    for r in results:
+        if not r.summary:
+            gray.append(f"直近（{r.plan.name}）のテストが失敗したため稼働判断の基準になる成績を確認できません"
+                        if r.plan.name == a["recent_run"] else f"{r.plan.name} のテストが失敗しました（下の ❌ を確認）")
+    return ("red" if red else "yellow" if yellow else "gray" if gray else "green"), red + yellow + gray
+
+
+def recent_alerts(rec: RunResult, a: dict) -> tuple[list[str], list[str]]:
+    """直近ランの PF・DD・前週比から (赤の理由, 黄の理由) を返す."""
+    red, yellow = [], []
+    m, eq = rec.summary["all"], rec.summary["eq_dd_pct"]
+    pf, dd = m["pf"], max(m["max_dd_pct"] or 0.0, eq or 0.0)
+    tag = f"直近（{rec.plan.name}）"
+    if pf is not None and pf < a["red_pf_below"]:
+        red.append(f"{tag}の PF {pf:.2f} が {a['red_pf_below']} 未満")
+    elif pf is not None and pf < a["yellow_pf_below"]:
+        yellow.append(f"{tag}の PF {pf:.2f} が {a['yellow_pf_below']} 未満")
+    if dd > a["red_dd_pct_above"]:
+        red.append(f"{tag}の最大DD {dd:.1f}% が {a['red_dd_pct_above']}% 超")
+    elif dd > a["yellow_dd_pct_above"]:
+        yellow.append(f"{tag}の最大DD {dd:.1f}% が {a['yellow_dd_pct_above']}% 超")
+    prev_pf = (rec.prev or {}).get("pf")
+    if (pf is not None and math.isfinite(pf) and isinstance(prev_pf, (int, float))
+            and prev_pf - pf >= a["yellow_pf_drop"]):
+        yellow.append(f"{tag}の PF が前週 {prev_pf:.2f} → {pf:.2f} に低下")
+    return red, yellow
+
+
+def ok_line(results: list[RunResult], cfg: dict) -> str:
+    """問題がないときの1行。実際に確認できた項目だけを書く."""
+    recent = cfg["alerts"]["recent_run"]
+    done = {r.plan.name for r in results if r.summary}
+    items = (["直近成績"] if recent in done else []) + (["ウォークフォワード"] if any(
+        r.plan.wfa and r.summary and r.summary["wf_verdict"] for r in results) else []) + ["PF・推奨ロット"]
+    return "・".join(items) + "に問題なし" + ("" if recent in done else f"（直近 {recent} は今回実行していません）")
 
 
 # ---------------------------------------------------------------- Discord
@@ -520,6 +577,8 @@ def run_value(r: RunResult) -> str:
     dd = f"DD {fmt_num(m['max_dd_pct'], 1)}%"
     if s["eq_dd_pct"] is not None:
         dd += f"（含み損込み {s['eq_dd_pct']:.1f}%）"
+    elif s.get("deposit_mismatch") is not None:
+        dd += "（含み損込み: テスターの初期証拠金が違うため不明）"
     parts = [f"PF {fmt_num(m['pf'])}", f"純損益 {fmt_money(m['net'], s['currency'])}", dd,
              f"シャープ {fmt_num(m['sharpe'])}"]
     if r.plan.wfa:
@@ -530,12 +589,9 @@ def run_value(r: RunResult) -> str:
 
 def build_payload(results: list[RunResult], level: str, reasons: list[str], notes: list[str],
                   cfg: dict, today: date) -> dict:
+    """色・アイコン・推奨アクションは level（evaluate の結果）だけで決める. notes は ⚠️ 行として添える."""
     color, icon, action = LEVELS[level]
-    if any(r.error for r in results):
-        notes = [*notes, "一部のテストが失敗しました（下の ❌ を確認）"]
-    if notes and level == "green":
-        color = LEVELS["yellow"][0]
-    desc = [f"{icon} **判定: {action}**", *(f"・{x}" for x in reasons or ["直近成績・ウォークフォワード・推奨ロットに問題なし"])]
+    desc = [f"{icon} **判定: {action}**", *(f"・{x}" for x in reasons or [ok_line(results, cfg)])]
     desc += [f"⚠️ {n}" for n in notes]
     lots = [r.summary["lot"] for r in results if r.summary and not r.plan.stress and r.summary["lot"] is not None]
     if lots:
@@ -554,8 +610,9 @@ def build_payload(results: list[RunResult], level: str, reasons: list[str], note
 
 def failure_payload(message: str, today: date) -> dict:
     return {"username": "Mr.2 Gold バックテスト", "allowed_mentions": {"parse": []}, "embeds": [{
-        "title": f"Mr.2 Gold 週次バックテスト失敗（{today}）", "color": LEVELS["red"][0],
-        "description": f"🔴 自動バックテストが失敗しました。\n{message[:3500]}\n\n詳細は reports\\last_run.log を確認してください。"}]}
+        "title": f"Mr.2 Gold 週次バックテスト失敗（{today}）", "color": LEVELS["gray"][0],
+        "description": f"{LEVELS['gray'][1]} 自動バックテストが失敗しました（ツール側の問題で、EA の成績が悪いという意味ではありません）。"
+                       f"\n{message[:3500]}\n\n詳細は reports\\last_run.log を確認してください。"}]}
 
 
 def payload_text(payload: dict) -> str:
@@ -589,8 +646,9 @@ def multipart_body(payload: dict, files: list[tuple[str, bytes]], boundary: str 
 def post_discord(url: str, payload: dict, files: list[tuple[str, bytes]] | None = None, retries: int = 4,
                  opener=urllib.request.urlopen, sleep=time.sleep) -> None:
     """Webhook に送信する（429 は retry_after だけ待って再送）。エラー文に URL は含めない."""
-    if not WEBHOOK_RE.match(url):
-        raise RunError("Discord の Webhook URL の形式が正しくありません（https://discord.com/api/webhooks/... ）")
+    if not WEBHOOK_RE.fullmatch(url):
+        raise RunError("Discord の Webhook URL の形式が正しくありません（https://discord.com/api/webhooks/... の1つだけを、"
+                       "空白や改行を入れずに書いてください）")
     if files:
         data, ctype = multipart_body(payload, files[:10])
     else:
@@ -614,7 +672,9 @@ def post_discord(url: str, payload: dict, files: list[tuple[str, bytes]] | None 
                 continue
             detail = e.read()[:200].decode("utf-8", "replace")
             raise RunError(f"Discord への送信に失敗しました（HTTP {e.code}）: {detail}") from None
-        except (urllib.error.URLError, OSError) as e:
+        except (http.client.InvalidURL, ValueError):  # 例外の文面に URL（トークン）が入るので握りつぶす
+            raise RunError("Discord の Webhook URL に使えない文字が含まれています。config.json を確認してください") from None
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as e:
             reason = getattr(e, "reason", e)
             log(f"Discord への接続に失敗（{type(reason).__name__}）。再試行します")
             sleep(2 * (attempt + 1))
@@ -629,6 +689,8 @@ def notify_failure(webhook: str, message: str, today: date) -> None:
         log("Discord に失敗通知を送信しました")
     except RunError as e:
         log(f"Discord への失敗通知も送れませんでした: {e}")
+    except Exception as e:  # 失敗通知の失敗で落ちない（文面に URL が入りうるので型名だけ）
+        log(f"Discord への失敗通知も送れませんでした（{type(e).__name__}）")
 
 
 # ---------------------------------------------------------------- メイン
@@ -731,11 +793,11 @@ def main(argv: list[str] | None = None) -> int:
         return run_all(cfg, args, today, webhook)
     except Exception as e:  # 想定外の例外も含め、失敗は必ず通知する
         if isinstance(e, RunError):
-            msg = str(e)
+            msg = redact(str(e), webhook)
             log(f"エラー: {msg}")
         else:
-            traceback.print_exc()
-            msg = f"想定外のエラー: {type(e).__name__}: {e}"
+            print(redact(traceback.format_exc(), webhook), file=sys.stderr, end="", flush=True)
+            msg = redact(f"想定外のエラー: {type(e).__name__}: {e}", webhook)
         if not args.dry_run:
             notify_failure(webhook, msg, today)
         return 1

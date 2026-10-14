@@ -1045,6 +1045,7 @@ def summarize(c: dict) -> dict:
     s1 = c["wf_sum"][1] if c["wf_sum"] else {}
     return {"currency": c["cur"], "all": pick(c["A"]["metrics"]), "recent": pick(c["B"]["metrics"]),
             "recent_label": c["label_b"], "eq_dd_pct": eq[1] if eq else None,
+            "tester_deposit": c["ds"].meta.get("deposit"),  # レポート記載の初期証拠金（換算前・--deposit の影響なし）
             "quality": c["ds"].meta.get("quality"), "wf_windows": len(c["wf"]),
             "wf_verdict": s0.get("verdict"), "wf_verdict_block": s1.get("verdict"), "wfe": s0.get("wfe"),
             "wf_profitable_pct": s0.get("profitable_pct"), "dd99_001": c["dd99"], "lot": c["lot"],

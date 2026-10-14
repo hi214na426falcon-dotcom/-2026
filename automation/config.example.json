@@ -34,7 +34,7 @@
   "_capital_jpy": "運用資金（円）。推奨ロットの計算に使います。",
   "capital_jpy": 140000,
 
-  "_analysis_deposit": "分析に使う初期資金（口座通貨）。null なら capital_jpy ÷ usdjpy（USD 口座の場合）。",
+  "_analysis_deposit": "分析に使う初期資金（口座通貨）。null なら capital_jpy ÷ usdjpy（USD 口座の場合。140000 ÷ 158.4 = 883.84 USD）。テスター画面の「初期証拠金」もこの金額にしてください（2% 以上違うと黄色の警告）。",
   "analysis_deposit": null,
 
   "_current_lot": "実際に運用している初期ロット。推奨ロットがこれを下回ると「ロットを下げる」と通知します。",
@@ -63,7 +63,7 @@
   "_discord_webhook_url": "結果を送る Discord チャンネルの Webhook URL。環境変数 DISCORD_WEBHOOK_URL があればそちらを優先。空欄なら送信しません。",
   "discord_webhook_url": "",
 
-  "_alerts": "通知の色と推奨アクションの基準。赤 = 稼働停止を検討、黄 = ロットを下げる、緑 = このまま稼働。DD は残高ベースとテスターの含み損込みの大きい方。",
+  "_alerts": "通知の色と推奨アクションの基準。赤 = 稼働停止を検討、黄 = ロットを下げる、緑 = このまま稼働（灰 = テスト失敗で判定保留。成績の問題ではありません）。DD は残高ベースとテスターの含み損込みの大きい方。",
   "alerts": {
     "_recent_run": "「直近成績」として判定に使うテストの name",
     "recent_run": "recent12m",
